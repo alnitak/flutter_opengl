@@ -1,0 +1,2 @@
+[1/2] Building CXX object CMakeFiles/native-lib.dir/cpp/RendererController.cpp.o
+[2/2] Linking CXX shared library /home/deimos/Documents/workspace/FLUTTER/opengl/example/build/opengl/intermediates/cmake/debug/obj/x86_64/libnative-lib.so

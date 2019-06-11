@@ -1,0 +1,6 @@
+# ninja log v5
+0	198	0	CMakeFiles/native-lib.dir/cpp/RendererController.cpp.o	cc618e155c24e919
+0	208	0	CMakeFiles/native-lib.dir/cpp/native-lib.cpp.o	f98bf3f2f2495b67
+0	276	0	CMakeFiles/native-lib.dir/cpp/shaders.cpp.o	5b9882a2d1b494ee
+0	362	0	CMakeFiles/native-lib.dir/cpp/renderer.cpp.o	87dafe6bf7bf06b
+362	420	0	/home/deimos/Documents/workspace/FLUTTER/opengl/example/build/opengl/intermediates/cmake/release/obj/x86/libnative-lib.so	8c17678c3bdf0a89
