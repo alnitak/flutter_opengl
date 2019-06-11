@@ -2,7 +2,10 @@
 
 OpenGL Android NDK plugin.
 
-[video](https://www.youtube.com/watch?v=GKEdwZsAb0s)
+
+[YT video](https://www.youtube.com/watch?v=GKEdwZsAb0s)
+
+![Image](https://github.com/alnitak/flutter_opengl/blob/master/flutter_01.png?raw=true)
 
 ## Getting Started
 
