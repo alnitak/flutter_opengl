@@ -2,6 +2,8 @@
 
 OpenGL Android NDK plugin.
 
+[video](https://www.youtube.com/watch?v=GKEdwZsAb0s)
+
 ## Getting Started
 
 This plugin is only for Android. Is greatly appreciated any help!  
