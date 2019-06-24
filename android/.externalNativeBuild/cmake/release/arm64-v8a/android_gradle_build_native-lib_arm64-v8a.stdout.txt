@@ -1,1 +1,0 @@
-[1/1] Linking CXX shared library /home/deimos/Documents/workspace/FLUTTER/opengl/example/build/opengl/intermediates/cmake/release/obj/arm64-v8a/libnative-lib.so

@@ -1,8 +1,0 @@
-Executable : /opt/android-sdk/cmake/3.6.4111459/bin/cmake
-arguments : 
---build
-/home/deimos/Documents/workspace/FLUTTER/opengl/android/.externalNativeBuild/cmake/release/x86_64
---target
-native-lib
-jvmArgs : 
-
