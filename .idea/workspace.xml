@@ -4,7 +4,144 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c3ee29fa-54c5-4657-a6e4-89bf2db2741a" name="Default Changelist" comment="" />
+    <list default="true" id="c3ee29fa-54c5-4657-a6e4-89bf2db2741a" name="Default Changelist" comment="code rearranged">
+      <change afterPath="$PROJECT_DIR$/android/cpp/Shader.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/Shader.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/ndk/common.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/ndk/native-lib.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/ndk/texture.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/ndk/texture.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/shaders/Cube.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/shaders/Cube.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/shaders/Shader1.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/shaders/Shader1.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/shaders/Shader2.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/shaders/Shader2.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/shaders/Shader3.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/cpp/shaders/Shader3.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/bavagnoli/opengl/BmpManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/assets/texture.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/native-lib.dir/cpp/RendererController.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/native-lib.dir/cpp/RendererController.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/native-lib.dir/cpp/renderer.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/native-lib.dir/cpp/renderer.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/native-lib.dir/cpp/shaders.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/native-lib.dir/cpp/shaders.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/android_gradle_build.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/android_gradle_build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/android_gradle_build_native-lib_arm64-v8a.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/android_gradle_build_native-lib_arm64-v8a.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/android_gradle_generate_cmake_ninja_json_arm64-v8a.stderr.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/android_gradle_generate_cmake_ninja_json_arm64-v8a.stderr.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/android_gradle_generate_cmake_ninja_json_arm64-v8a.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/android_gradle_generate_cmake_ninja_json_arm64-v8a.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/build.ninja" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/cmake_build_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/arm64-v8a/cmake_build_output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/native-lib.dir/cpp/RendererController.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/native-lib.dir/cpp/RendererController.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/native-lib.dir/cpp/renderer.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/native-lib.dir/cpp/renderer.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/native-lib.dir/cpp/shaders.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/native-lib.dir/cpp/shaders.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/android_gradle_build.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/android_gradle_build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/android_gradle_build_native-lib_armeabi-v7a.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/android_gradle_build_native-lib_armeabi-v7a.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/android_gradle_generate_cmake_ninja_json_armeabi-v7a.stderr.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/android_gradle_generate_cmake_ninja_json_armeabi-v7a.stderr.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/android_gradle_generate_cmake_ninja_json_armeabi-v7a.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/android_gradle_generate_cmake_ninja_json_armeabi-v7a.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/build.ninja" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/cmake_build_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/armeabi-v7a/cmake_build_output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/CMakeFiles/3.6.0-rc2/CMakeSystem.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/CMakeFiles/3.6.0-rc2/CMakeSystem.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/CMakeFiles/native-lib.dir/cpp/RendererController.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/CMakeFiles/native-lib.dir/cpp/RendererController.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/CMakeFiles/native-lib.dir/cpp/native-lib.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/CMakeFiles/native-lib.dir/cpp/renderer.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/CMakeFiles/native-lib.dir/cpp/renderer.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/CMakeFiles/native-lib.dir/cpp/shaders.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/android_gradle_build.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/android_gradle_build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/android_gradle_build_native-lib_x86.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/android_gradle_build_native-lib_x86.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86/build.ninja" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/native-lib.dir/cpp/RendererController.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/native-lib.dir/cpp/RendererController.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/native-lib.dir/cpp/renderer.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/native-lib.dir/cpp/renderer.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/native-lib.dir/cpp/shaders.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/native-lib.dir/cpp/shaders.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/android_gradle_build.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/android_gradle_build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/android_gradle_build_native-lib_x86_64.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/android_gradle_build_native-lib_x86_64.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/android_gradle_generate_cmake_ninja_json_x86_64.stderr.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/android_gradle_generate_cmake_ninja_json_x86_64.stderr.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/android_gradle_generate_cmake_ninja_json_x86_64.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/android_gradle_generate_cmake_ninja_json_x86_64.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/build.ninja" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/cmake_build_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/debug/x86_64/cmake_build_output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/CMakeFiles/3.6.0-rc2/CMakeSystem.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/CMakeFiles/3.6.0-rc2/CMakeSystem.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/android_gradle_build.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/android_gradle_build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/android_gradle_generate_cmake_ninja_json_arm64-v8a.command.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/android_gradle_generate_cmake_ninja_json_arm64-v8a.command.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/android_gradle_generate_cmake_ninja_json_arm64-v8a.stderr.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/android_gradle_generate_cmake_ninja_json_arm64-v8a.stderr.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/android_gradle_generate_cmake_ninja_json_arm64-v8a.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/android_gradle_generate_cmake_ninja_json_arm64-v8a.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/build.ninja" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/cmake_build_command.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/cmake_build_command.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/cmake_build_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/arm64-v8a/cmake_build_output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/armeabi-v7a/android_gradle_build.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/armeabi-v7a/android_gradle_build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/armeabi-v7a/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/armeabi-v7a/build.ninja" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/CMakeFiles/3.6.0-rc2/CMakeSystem.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/CMakeFiles/3.6.0-rc2/CMakeSystem.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/android_gradle_build.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/android_gradle_build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/android_gradle_generate_cmake_ninja_json_x86.command.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/android_gradle_generate_cmake_ninja_json_x86.command.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/android_gradle_generate_cmake_ninja_json_x86.stderr.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/android_gradle_generate_cmake_ninja_json_x86.stderr.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/android_gradle_generate_cmake_ninja_json_x86.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/android_gradle_generate_cmake_ninja_json_x86.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/build.ninja" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/cmake_build_command.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/cmake_build_command.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/cmake_build_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86/cmake_build_output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/CMakeFiles/3.6.0-rc2/CMakeSystem.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/CMakeFiles/3.6.0-rc2/CMakeSystem.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/android_gradle_build.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/android_gradle_build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/android_gradle_generate_cmake_ninja_json_x86_64.command.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/android_gradle_generate_cmake_ninja_json_x86_64.command.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/android_gradle_generate_cmake_ninja_json_x86_64.stderr.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/android_gradle_generate_cmake_ninja_json_x86_64.stderr.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/android_gradle_generate_cmake_ninja_json_x86_64.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/android_gradle_generate_cmake_ninja_json_x86_64.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/build.ninja" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/cmake_build_command.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/cmake_build_command.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/cmake_build_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/profile/x86_64/cmake_build_output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/arm64-v8a/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/arm64-v8a/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/arm64-v8a/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/arm64-v8a/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/arm64-v8a/android_gradle_build.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/arm64-v8a/android_gradle_build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/arm64-v8a/android_gradle_build_native-lib_arm64-v8a.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/arm64-v8a/android_gradle_build_native-lib_arm64-v8a.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/arm64-v8a/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/arm64-v8a/build.ninja" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/armeabi-v7a/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/armeabi-v7a/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/armeabi-v7a/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/armeabi-v7a/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/armeabi-v7a/android_gradle_build.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/armeabi-v7a/android_gradle_build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/armeabi-v7a/android_gradle_build_native-lib_armeabi-v7a.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/armeabi-v7a/android_gradle_build_native-lib_armeabi-v7a.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/armeabi-v7a/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/armeabi-v7a/build.ninja" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86/android_gradle_build.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86/android_gradle_build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86/android_gradle_build_native-lib_x86.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86/android_gradle_build_native-lib_x86.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86/build.ninja" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86_64/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86_64/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86_64/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86_64/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86_64/android_gradle_build.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86_64/android_gradle_build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86_64/android_gradle_build_native-lib_x86_64.stdout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86_64/android_gradle_build_native-lib_x86_64.stdout.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86_64/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/android/.externalNativeBuild/cmake/release/x86_64/build.ninja" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/cpp/RendererController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/android/cpp/RendererController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/cpp/RendererController.h" beforeDir="false" afterPath="$PROJECT_DIR$/android/cpp/RendererController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/cpp/common.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/cpp/native-lib.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/cpp/renderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/android/cpp/renderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/cpp/renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/android/cpp/renderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/cpp/shaders.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/cpp/shaders.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/bavagnoli/opengl/OpenglPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/bavagnoli/opengl/OpenglPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_01.png" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_01.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
     <ignored path="$PROJECT_DIR$/.pub/" />
@@ -21,37 +158,14 @@
     <favorites_list name="opengl" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.42350018">
+    <splitter split-orientation="horizontal" split-proportion="0.22540846">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/lib/opengl.dart">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="154">
-                  <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
-                  <folding>
-                    <element signature="e#0#20#0" expanded="true" />
-                    <element signature="e#246#434#0" expanded="true" />
-                    <element signature="e#461#542#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/android/cpp/shaders.cpp">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="660">
-                  <caret line="525" selection-start-line="525" selection-end-line="525" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1056">
-                  <caret line="48" column="33" selection-start-line="48" selection-start-column="33" selection-end-line="48" selection-end-column="33" />
+                <state relative-caret-position="226">
+                  <caret line="107" column="19" selection-start-line="107" selection-start-column="19" selection-end-line="107" selection-end-column="19" />
                   <folding>
                     <element signature="e#0#39#0" expanded="true" />
                     <element signature="e#378#452#0" expanded="true" />
@@ -62,27 +176,10 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/android/build.gradle">
+            <entry file="file://$PROJECT_DIR$/example/pubspec.yaml">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="528">
-                  <caret line="59" column="9" selection-start-line="59" selection-start-column="9" selection-end-line="59" selection-end-column="9" />
-                  <folding>
-                    <element signature="e#65#211#0" expanded="true" />
-                    <element signature="e#84#126#0" expanded="true" />
-                    <element signature="e#145#209#0" expanded="true" />
-                    <element signature="e#145#209#0" expanded="true" />
-                    <element signature="e#237#300#0" expanded="true" />
-                    <element signature="e#256#298#0" expanded="true" />
-                    <element signature="e#393#909#0" expanded="true" />
-                    <element signature="e#533#903#0" expanded="true" />
-                    <element signature="e#553#893#0" expanded="true" />
-                    <element signature="e#926#966#0" expanded="true" />
-                    <element signature="e#926#966#0" expanded="true" />
-                    <element signature="e#992#1059#0" expanded="true" />
-                    <element signature="e#1008#1053#0" expanded="true" />
-                    <element signature="e#1008#1053#0" expanded="true" />
-                    <element signature="e#1094#1105#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="660">
+                  <caret line="30" column="6" selection-start-line="30" selection-start-column="6" selection-end-line="30" selection-end-column="13" />
                 </state>
               </provider>
             </entry>
@@ -91,12 +188,46 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/example/android/app/build.gradle">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="726">
+                  <caret line="44" column="16" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="16" />
+                  <folding>
+                    <element signature="e#182#236#0" expanded="true" />
+                    <element signature="e#182#236#0" expanded="true" />
+                    <element signature="e#901#941#0" expanded="true" />
+                    <element signature="e#901#941#0" expanded="true" />
+                    <element signature="e#962#1370#0" expanded="true" />
+                    <element signature="e#1405#1621#0" expanded="true" />
+                    <element signature="e#1642#1664#0" expanded="true" />
+                    <element signature="e#1642#1664#0" expanded="true" />
+                    <element signature="e#1679#1880#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/README.md">
               <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
                 <state split_layout="SPLIT">
-                  <first_editor relative-caret-position="220">
-                    <caret line="13" column="63" selection-start-line="13" selection-start-column="63" selection-end-line="13" selection-end-column="63" />
+                  <first_editor relative-caret-position="484">
+                    <caret line="22" selection-start-line="22" selection-end-line="22" />
+                  </first_editor>
+                  <second_editor>
+                    <markdownNavigatorState />
+                  </second_editor>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/CHANGELOG.md">
+              <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+                <state split_layout="SPLIT">
+                  <first_editor relative-caret-position="110">
+                    <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
                   </first_editor>
                   <second_editor>
                     <markdownNavigatorState />
@@ -106,24 +237,8 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/example/android/app/build.gradle">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="726">
-                  <caret line="44" column="6" selection-start-line="44" selection-start-column="6" selection-end-line="44" selection-end-column="6" />
-                  <folding>
-                    <element signature="e#182#236#0" expanded="true" />
-                    <element signature="e#182#236#0" expanded="true" />
-                    <element signature="e#901#941#0" expanded="true" />
-                    <element signature="e#901#941#0" expanded="true" />
-                    <element signature="e#962#1370#0" expanded="true" />
-                    <element signature="e#1387#1628#0" expanded="true" />
-                    <element signature="e#1405#1621#0" expanded="true" />
-                    <element signature="e#1642#1664#0" expanded="true" />
-                    <element signature="e#1642#1664#0" expanded="true" />
-                    <element signature="e#1679#1880#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
+            <entry file="file://$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml">
+              <provider selected="true" editor-type-id="text-editor" />
             </entry>
           </file>
         </leaf>
@@ -147,19 +262,22 @@
         <option value="$PROJECT_DIR$/android/key.properties" />
         <option value="$PROJECT_DIR$/android/gradle.properties" />
         <option value="$PROJECT_DIR$/lib/opengl.dart" />
-        <option value="$PROJECT_DIR$/example/android/app/build.gradle" />
         <option value="$PROJECT_DIR$/android/build.gradle" />
         <option value="$PROJECT_DIR$/LICENSE" />
+        <option value="$PROJECT_DIR$/android/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/example/android/app/build.gradle" />
+        <option value="$PROJECT_DIR$/example/pubspec.yaml" />
         <option value="$PROJECT_DIR$/example/lib/main.dart" />
-        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/CHANGELOG.md" />
         <option value="$PROJECT_DIR$/pubspec.yaml" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="441" />
+    <option name="x" value="765" />
     <option name="y" value="28" />
-    <option name="width" value="2999" />
+    <option name="width" value="2675" />
     <option name="height" value="1412" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -195,6 +313,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="Scope">
         <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
@@ -217,32 +337,31 @@
               <item name="opengl" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
               <item name="android" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="cpp" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="shaders" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
             <path>
               <item name="opengl" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="ios" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="example" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
             <path>
               <item name="opengl" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="ios" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="Classes" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="example" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="assets" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="AnalyzeApkAction.lastApkPath" value="$PROJECT_DIR$/example/build/app/outputs/apk/app.apk" />
+    <property name="AnalyzeApkAction.lastApkPath" value="$PROJECT_DIR$/example/build/app/outputs/apk/release/app-arm64-v8a-release.apk" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/example/build/app/outputs/apk/app.apk" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/example/build/app/outputs/apk/release/app-arm64-v8a-release.apk" />
     <property name="project.structure.last.edited" value="Problems" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -250,12 +369,13 @@
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/example/android" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/android" />
       <recent name="$PROJECT_DIR$/android/src/main/java/com/bavagnoli/opengl" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/android/cpp/android" />
+      <recent name="$PROJECT_DIR$/example/android" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -281,13 +401,21 @@
       <option name="presentableId" value="Default" />
       <updated>1559675947487</updated>
     </task>
+    <task id="LOCAL-00001" summary="first commit">
+      <created>1560284735072</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1560284735072</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="441" y="28" width="2999" height="1412" extended-state="0" />
+    <frame x="765" y="28" width="2675" height="1412" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4987745" visible="true" weight="0.15280136" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4987745" visible="true" weight="0.100343384" />
       <window_info id="Designer" order="1" />
       <window_info id="Captures" order="2" side_tool="true" />
       <window_info id="Resources Explorer" order="3" />
@@ -297,17 +425,18 @@
       <window_info id="Capture Tool" order="7" />
       <window_info id="Favorites" order="8" sideWeight="0.5012255" side_tool="true" weight="0.23847377" />
       <window_info anchor="bottom" id="Dart Analysis" order="0" weight="0.32823813" />
-      <window_info anchor="bottom" id="Run" order="1" weight="0.34343433" />
+      <window_info anchor="bottom" id="Run" order="1" weight="0.33009708" />
       <window_info anchor="bottom" id="TODO" order="2" />
       <window_info anchor="bottom" id="Android Profiler" order="3" show_stripe_button="false" />
       <window_info anchor="bottom" id="Regex Tester" order="4" />
       <window_info anchor="bottom" id="Debug" order="5" />
       <window_info anchor="bottom" id="Find" order="6" weight="0.32957292" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.21116139" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.28074434" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Flutter Performance" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info anchor="bottom" id="Logcat" order="11" weight="0.32984716" />
+      <window_info anchor="bottom" id="Version Control" order="10" visible="true" weight="0.33009708" />
+      <window_info anchor="bottom" id="Logcat" order="11" weight="0.32822582" />
+      <window_info active="true" anchor="bottom" id="Messages" order="12" visible="true" weight="0.32928804" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
       <window_info anchor="right" id="Theme Preview" order="1" />
       <window_info anchor="right" id="Flutter Inspector" order="2" />
@@ -315,6 +444,50 @@
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Flutter Outline" order="5" />
     </layout>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="first commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="first commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -404,11 +577,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/android/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1272" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/example/android/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="572">
@@ -429,7 +597,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/example/build/app/outputs/apk/release/app-release.apk" />
     <entry file="file://$PROJECT_DIR$/android/gradle.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="22">
@@ -440,85 +607,10 @@
     <entry file="file://$PROJECT_DIR$/example/android/app/app.iml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/example/build/app/outputs/apk/app.apk" />
     <entry file="file://$PROJECT_DIR$/LICENSE">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret selection-end-line="12" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/opengl.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#246#434#0" expanded="true" />
-            <element signature="e#461#542#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1056">
-          <caret line="48" column="33" selection-start-line="48" selection-start-column="33" selection-end-line="48" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-            <element signature="e#378#452#0" expanded="true" />
-            <element signature="e#483#534#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="59" column="9" selection-start-line="59" selection-start-column="9" selection-end-line="59" selection-end-column="9" />
-          <folding>
-            <element signature="e#65#211#0" expanded="true" />
-            <element signature="e#84#126#0" expanded="true" />
-            <element signature="e#145#209#0" expanded="true" />
-            <element signature="e#145#209#0" expanded="true" />
-            <element signature="e#237#300#0" expanded="true" />
-            <element signature="e#256#298#0" expanded="true" />
-            <element signature="e#393#909#0" expanded="true" />
-            <element signature="e#533#903#0" expanded="true" />
-            <element signature="e#553#893#0" expanded="true" />
-            <element signature="e#926#966#0" expanded="true" />
-            <element signature="e#926#966#0" expanded="true" />
-            <element signature="e#992#1059#0" expanded="true" />
-            <element signature="e#1008#1053#0" expanded="true" />
-            <element signature="e#1008#1053#0" expanded="true" />
-            <element signature="e#1094#1105#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/cpp/shaders.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="525" selection-start-line="525" selection-end-line="525" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/android/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="726">
-          <caret line="44" column="6" selection-start-line="44" selection-start-column="6" selection-end-line="44" selection-end-column="6" />
-          <folding>
-            <element signature="e#182#236#0" expanded="true" />
-            <element signature="e#182#236#0" expanded="true" />
-            <element signature="e#901#941#0" expanded="true" />
-            <element signature="e#901#941#0" expanded="true" />
-            <element signature="e#962#1370#0" expanded="true" />
-            <element signature="e#1387#1628#0" expanded="true" />
-            <element signature="e#1405#1621#0" expanded="true" />
-            <element signature="e#1642#1664#0" expanded="true" />
-            <element signature="e#1642#1664#0" expanded="true" />
-            <element signature="e#1679#1880#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -539,18 +631,125 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/example/build/app/outputs/apk/release/app-release.apk" />
+    <entry file="file://$PROJECT_DIR$/example/build/app/outputs/apk/release/app-armeabi-v7a-release.apk" />
+    <entry file="file://$PROJECT_DIR$/example/build/app/outputs/apk/release/app-arm64-v8a-release.apk" />
+    <entry file="file://$PROJECT_DIR$/example/build/app/outputs/apk/app.apk" />
+    <entry file="file://$PROJECT_DIR$/android/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="550">
+          <caret line="25" column="15" lean-forward="true" selection-start-line="25" selection-start-column="15" selection-end-line="25" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/assets/avatar.png" />
+    <entry file="file://$PROJECT_DIR$/android/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="840">
+          <caret line="57" column="37" selection-start-line="57" selection-start-column="37" selection-end-line="57" selection-end-column="37" />
+          <folding>
+            <element signature="e#65#211#0" expanded="true" />
+            <element signature="e#84#126#0" expanded="true" />
+            <element signature="e#145#209#0" expanded="true" />
+            <element signature="e#145#209#0" expanded="true" />
+            <element signature="e#237#300#0" expanded="true" />
+            <element signature="e#256#298#0" expanded="true" />
+            <element signature="e#393#909#0" expanded="true" />
+            <element signature="e#533#903#0" expanded="true" />
+            <element signature="e#553#893#0" expanded="true" />
+            <element signature="e#926#966#0" expanded="true" />
+            <element signature="e#926#966#0" expanded="true" />
+            <element signature="e#992#1059#0" expanded="true" />
+            <element signature="e#1008#1053#0" expanded="true" />
+            <element signature="e#1008#1053#0" expanded="true" />
+            <element signature="e#1094#1105#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/cpp/shaders.cpp" />
     <entry file="file://$PROJECT_DIR$/pubspec.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="18" column="9" lean-forward="true" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
+        <state relative-caret-position="44">
+          <caret line="2" column="14" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/flutter_02.log">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/opengl.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="528">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#246#434#0" expanded="true" />
+            <element signature="e#461#542#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/flutter_01.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="107" column="19" selection-start-line="107" selection-start-column="19" selection-end-line="107" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#378#452#0" expanded="true" />
+            <element signature="e#483#534#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/pubspec.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="30" column="6" selection-start-line="30" selection-start-column="6" selection-end-line="30" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/android/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="726">
+          <caret line="44" column="16" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="16" />
+          <folding>
+            <element signature="e#182#236#0" expanded="true" />
+            <element signature="e#182#236#0" expanded="true" />
+            <element signature="e#901#941#0" expanded="true" />
+            <element signature="e#901#941#0" expanded="true" />
+            <element signature="e#962#1370#0" expanded="true" />
+            <element signature="e#1405#1621#0" expanded="true" />
+            <element signature="e#1642#1664#0" expanded="true" />
+            <element signature="e#1642#1664#0" expanded="true" />
+            <element signature="e#1679#1880#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="220">
-            <caret line="13" column="63" selection-start-line="13" selection-start-column="63" selection-end-line="13" selection-end-column="63" />
+          <first_editor relative-caret-position="484">
+            <caret line="22" selection-start-line="22" selection-end-line="22" />
+          </first_editor>
+          <second_editor>
+            <markdownNavigatorState />
+          </second_editor>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CHANGELOG.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="110">
+            <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
           </first_editor>
           <second_editor>
             <markdownNavigatorState />

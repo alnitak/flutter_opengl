@@ -1,6 +1,6 @@
-set(CMAKE_HOST_SYSTEM "Linux-4.19.45-1-MANJARO")
+set(CMAKE_HOST_SYSTEM "Linux-4.19.49-1-MANJARO")
 set(CMAKE_HOST_SYSTEM_NAME "Linux")
-set(CMAKE_HOST_SYSTEM_VERSION "4.19.45-1-MANJARO")
+set(CMAKE_HOST_SYSTEM_VERSION "4.19.49-1-MANJARO")
 set(CMAKE_HOST_SYSTEM_PROCESSOR "x86_64")
 
 include("/opt/android-sdk/ndk-bundle/build/cmake/android.toolchain.cmake")

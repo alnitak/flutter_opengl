@@ -22,7 +22,13 @@
 				
 				{
 					"flags" : "  --target=aarch64-none-linux-android21 --gcc-toolchain=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot  -Dnative_lib_EXPORTS -I../../../../src/main/cpp  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security  -std=c++11 -fexceptions -frtti -O0 -fno-limit-debug-info  -fPIC    -c ",
-					"src" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/cpp/native-lib.cpp",
+					"src" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/cpp/ndk/native-lib.cpp",
+					"workingDirectory" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/.externalNativeBuild/cmake/debug/arm64-v8a"
+				},
+				
+				{
+					"flags" : "  --target=aarch64-none-linux-android21 --gcc-toolchain=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot  -Dnative_lib_EXPORTS -I../../../../src/main/cpp  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security  -std=c++11 -fexceptions -frtti -O0 -fno-limit-debug-info  -fPIC    -c ",
+					"src" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/cpp/ndk/texture.cpp",
 					"workingDirectory" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/.externalNativeBuild/cmake/debug/arm64-v8a"
 				},
 				
@@ -40,7 +46,31 @@
 				
 				{
 					"flags" : "  --target=aarch64-none-linux-android21 --gcc-toolchain=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot  -Dnative_lib_EXPORTS -I../../../../src/main/cpp  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security  -std=c++11 -fexceptions -frtti -O0 -fno-limit-debug-info  -fPIC    -c ",
-					"src" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/cpp/shaders.cpp",
+					"src" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/cpp/Shader.cpp",
+					"workingDirectory" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/.externalNativeBuild/cmake/debug/arm64-v8a"
+				},
+				
+				{
+					"flags" : "  --target=aarch64-none-linux-android21 --gcc-toolchain=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot  -Dnative_lib_EXPORTS -I../../../../src/main/cpp  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security  -std=c++11 -fexceptions -frtti -O0 -fno-limit-debug-info  -fPIC    -c ",
+					"src" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/cpp/shaders/Cube.cpp",
+					"workingDirectory" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/.externalNativeBuild/cmake/debug/arm64-v8a"
+				},
+				
+				{
+					"flags" : "  --target=aarch64-none-linux-android21 --gcc-toolchain=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot  -Dnative_lib_EXPORTS -I../../../../src/main/cpp  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security  -std=c++11 -fexceptions -frtti -O0 -fno-limit-debug-info  -fPIC    -c ",
+					"src" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/cpp/shaders/Shader1.cpp",
+					"workingDirectory" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/.externalNativeBuild/cmake/debug/arm64-v8a"
+				},
+				
+				{
+					"flags" : "  --target=aarch64-none-linux-android21 --gcc-toolchain=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot  -Dnative_lib_EXPORTS -I../../../../src/main/cpp  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security  -std=c++11 -fexceptions -frtti -O0 -fno-limit-debug-info  -fPIC    -c ",
+					"src" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/cpp/shaders/Shader2.cpp",
+					"workingDirectory" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/.externalNativeBuild/cmake/debug/arm64-v8a"
+				},
+				
+				{
+					"flags" : "  --target=aarch64-none-linux-android21 --gcc-toolchain=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=/opt/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot  -Dnative_lib_EXPORTS -I../../../../src/main/cpp  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security  -std=c++11 -fexceptions -frtti -O0 -fno-limit-debug-info  -fPIC    -c ",
+					"src" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/cpp/shaders/Shader3.cpp",
 					"workingDirectory" : "/home/deimos/Documents/workspace/FLUTTER/opengl/android/.externalNativeBuild/cmake/debug/arm64-v8a"
 				}
 			],

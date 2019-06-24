@@ -16,8 +16,11 @@
 #ifndef ANDROID_RENDERERCONTROLLER_H
 #define ANDROID_RENDERERCONTROLLER_H
 
-#include "common.hpp"
+#include "ndk/common.hpp"
 #include "renderer.h"
+
+#include "Shader.h"
+#include "shaders/Cube.h"
 
 
 class RendererController {
@@ -46,6 +49,8 @@ public:
 private:
     pthread_t _renderer_thread;
     pthread_mutex_t _mutex_controller;
+
+    Shader *shader;
 };
 
 

@@ -1,6 +1,6 @@
 name: opengl
-description: A new Flutter plugin.
-version: 0.0.1
+description: Flutter OpenGL plugin
+version: 0.0.2
 author:
 homepage:
 

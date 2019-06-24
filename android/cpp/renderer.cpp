@@ -25,15 +25,15 @@
 #include <android/native_window_jni.h>
 
 #include <malloc.h>
-#include <string>
 #include <math.h>
 #include <ios>
+#include <android/log.h>
 
-#include "common.hpp"
-#include "shaders.h"
+#include "ndk/common.hpp"
+#include "Shader.h"
 #include "renderer.h"
 
-#define LOG_TAG_RENDERER "renderer"
+#define LOG_TAG_RENDERER "native renderer"
 
 #define DEBUG true
 
@@ -69,8 +69,7 @@ float clearColorA;
  * @param clearA clear color
  */
 Renderer::Renderer(int ES_version,
-                   bool (*shaderFunc)(void *args),
-                   void (*drawFunc)(void *args),
+                   Shader *shader,
                    bool continuous,
                    const char *name,
                    int width, int height,
@@ -78,7 +77,7 @@ Renderer::Renderer(int ES_version,
                    int clearR, int clearG, int clearB, int clearA)
     : _msg(MSG_NONE), _display(0), _surface(0), _context(0), _window(0), _args(0)
 {
-    if (DEBUG) LOGI("Renderer instance created");
+    if (DEBUG) LOGI(LOG_TAG_RENDERER, "Renderer instance created");
     pthread_mutex_init(&_mutexRenderer, 0);
     RENDERER_EGL_VERSION = ES_version;
     loopRunning = false;
@@ -91,18 +90,21 @@ Renderer::Renderer(int ES_version,
     isContinuous = continuous;
     strcpy(debugName, name);
 
-    setFunctions(shaderFunc, drawFunc);
+    this->shader = shader;
+//    initShader=&Shader::initShader;
+//    drawFrame=&Shader::drawFrame;
+//    setFunctions( initShader, drawFrame );
+
     setClearColor((const unsigned char)clearR,(const unsigned char)clearG,(const unsigned char)clearB,(const unsigned char)clearA);
 }
 
 Renderer::~Renderer()
 {
     if (this == NULL) return;
-    if (DEBUG) LOGI("~Renderer ~instance ~destroyed");
+    if (DEBUG) LOGI(LOG_TAG_RENDERER, "~Renderer ~instance ~destroyed");
     while (isLoopingRunning());
     pthread_mutex_lock(&_mutexRenderer);
     _window = NULL;
-    glDeleteProgram(getShadersCommonParams().programObject);
     pthread_mutex_unlock(&_mutexRenderer);
     pthread_mutex_destroy(&_mutexRenderer);
 }
@@ -113,24 +115,24 @@ void Renderer::setNativeWindow(JNIEnv* jenv, jobject surface)
     if (this == NULL) return;
     pthread_mutex_lock(&_mutexRenderer);
     if (_window!=NULL) {
-        if (DEBUG) LOGI("setNativeWindow() stopping");
+        if (DEBUG) LOGI(LOG_TAG_RENDERER, "setNativeWindow() stopping");
         pthread_mutex_unlock(&_mutexRenderer);
         stop();
         pthread_mutex_lock(&_mutexRenderer);
     }
     _window = ANativeWindow_fromSurface(jenv, surface);
     pthread_mutex_unlock(&_mutexRenderer);
-    if (DEBUG) LOGI("setNativeWindow() Got window %p", _window);
+    if (DEBUG) LOGI(LOG_TAG_RENDERER, "setNativeWindow() Got window %p", _window);
 }
 
 void Renderer::start()
 {
     if (this == NULL) return;
-    pthread_mutex_lock(&_mutexRenderer);
     if (threadRunning) return;
     if (_window == NULL) return;
+    pthread_mutex_lock(&_mutexRenderer);
 
-    if (DEBUG) LOGI("start() Renderer thread start - Creating renderer thread");
+    if (DEBUG) LOGI(LOG_TAG_RENDERER, "start() Renderer thread start - Creating renderer thread");
 
 
 //    pthread_attr_t tattr;
@@ -150,7 +152,7 @@ void Renderer::start()
 //
 //    /* setting the new scheduling param */
 //    ret = pthread_attr_setschedparam (&tattr, &param);
-////
+//
 //    /* with new priority specified */
 //    ret = pthread_create (&_threadId, &tattr, threadStartCallback, this);
 
@@ -162,19 +164,20 @@ void Renderer::start()
 //    setpriority();
 //    nice(+10);
 
-    _msg = MSG_WINDOW_SET;
-    pthread_mutex_unlock(&_mutexRenderer);
 
     int ret = pthread_create(&_threadId, 0, threadStartCallback, this);
     if ( ret != 0) {
-        if (DEBUG) LOGI("start() Failed to create thread: %d", ret);
+        if (DEBUG) LOGI(LOG_TAG_RENDERER, "start() Failed to create thread: %d", ret);
         return;
     } else {
-        if (DEBUG) LOGI("start() Renderer thread started");
+        if (DEBUG) LOGI(LOG_TAG_RENDERER, "start() Renderer thread started");
         if ( ! pthread_detach(_threadId) ) {
-            if (DEBUG) LOGI("start() Thread detached successfully !!!\n");
+            if (DEBUG) LOGI(LOG_TAG_RENDERER, "start() Thread detached successfully !!!\n");
         }
     }
+
+    _msg = MSG_WINDOW_SET;
+    pthread_mutex_unlock(&_mutexRenderer);
 
 }
 
@@ -182,7 +185,7 @@ void Renderer::stop()
 {
     if (this == NULL) return;
 //    if (_window == NULL) return;
-    if (DEBUG) LOGI("stop() Stopping");
+    if (DEBUG) LOGI(LOG_TAG_RENDERER, "stop() Stopping");
 
     if (threadRunning) {
         loopRunning = false;
@@ -190,28 +193,28 @@ void Renderer::stop()
         int ret;
         clock_gettime(CLOCK_REALTIME, &wait);
         wait.tv_sec++;
-        if (DEBUG) LOGI("stop() Stopping2  %ld", wait.tv_sec);
+        if (DEBUG) LOGI(LOG_TAG_RENDERER, "stop() Stopping2  %ld", wait.tv_sec);
         ret = pthread_mutex_timedlock(&_mutexRenderer, &wait);
-        if (DEBUG) LOGI("stop() Stopping3");
+        if (DEBUG) LOGI(LOG_TAG_RENDERER, "stop() Stopping3");
         if (ret == 0) { // ret!=0  = timed out
-            if (DEBUG) LOGI("stop() Stopping4 %ld", _threadId);
+            if (DEBUG) LOGI(LOG_TAG_RENDERER, "stop() Stopping4 %ld", _threadId);
 //            if (threadRunning)
     //            pthread_join(_threadId, 0);
                 pthread_kill(_threadId, 0);
-            if (DEBUG) LOGI("stop() Stopping5");
+            if (DEBUG) LOGI(LOG_TAG_RENDERER, "stop() Stopping5");
             _threadId = 0;
         }
         pthread_mutex_unlock(&_mutexRenderer);
-        if (DEBUG) LOGI("stop() Stopping  RET=%d", ret);
+        if (DEBUG) LOGI(LOG_TAG_RENDERER, "stop() Stopping  RET=%d", ret);
     }
 
-    if (DEBUG) LOGI("stop() Stopped");
+    if (DEBUG) LOGI(LOG_TAG_RENDERER, "stop() Stopped");
 }
 
 
 void Renderer::destroy() {
     if (this == NULL) return;
-    if (DEBUG) LOGD("destroy()");
+    if (DEBUG) LOGD(LOG_TAG_RENDERER, "destroy()");
     if (_display != EGL_NO_DISPLAY)
         eglMakeCurrent(_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     if (_display != EGL_NO_DISPLAY && _context != EGL_NO_CONTEXT)
@@ -226,12 +229,12 @@ void Renderer::destroy() {
     _context = EGL_NO_CONTEXT;
 
     if (_window != NULL) {
-        if (DEBUG) LOGD("WINDOW  %p", _window);
+        if (DEBUG) LOGD(LOG_TAG_RENDERER, "WINDOW  %p", _window);
         ANativeWindow_release(_window);
     }
     _window = NULL;
 
-    if (DEBUG) LOGD("destroyED");
+    if (DEBUG) LOGD(LOG_TAG_RENDERER, "destroyED");
 }
 
 
@@ -239,7 +242,7 @@ void Renderer::clear()
 {
     if (this == NULL) return;
     if (_window == NULL) return;
-    if (DEBUG) LOGI("clear()");
+    if (DEBUG) LOGI(LOG_TAG_RENDERER, "clear()");
 
     // send message to render thread to clear view with the given clear color
     pthread_mutex_lock(&_mutexRenderer);
@@ -281,24 +284,6 @@ int Renderer::getWindowHeight()
 }
 
 
-
-void Renderer::setFunctions(bool (*shaderFunc)(void *args),
-                            void (*drawFunc)(void *args)) {
-    if (this == NULL) return;
-    if (threadRunning && loopRunning) {
-        pthread_mutex_lock(&_mutexRenderer);
-        if (this->drawFrame != drawFrame) {
-            this->drawFrame = drawFrame;
-            this->initShaderFunc = initShaderFunc;
-            _msg = MSG_INIT_SHADER;
-        }
-        pthread_mutex_unlock(&_mutexRenderer);
-    } else {
-        this->drawFrame = drawFunc;
-        this->initShaderFunc = shaderFunc;
-    }
-}
-
 // return 0 if args need to be deleted
 int Renderer::processNewData(void *args) {
 
@@ -335,7 +320,7 @@ void Renderer::renderLoop()
     loopRunning = true;
     isDrawing = false;
 
-    if (DEBUG) LOGI("LOOP ENTER");
+    if (DEBUG) LOGI(LOG_TAG_RENDERER, "LOOP ENTER");
 
     while (loopRunning) {
 
@@ -348,61 +333,61 @@ void Renderer::renderLoop()
         switch (_msg) {
 
             case MSG_WINDOW_SET:
-                if (DEBUG) LOGI("Initializing context");
+                _msg = MSG_NONE;
+                if (DEBUG) LOGI(LOG_TAG_RENDERER, "MSG_WINDOW_SET Initializing context");
                 isDrawing = true;
                 initializeGL();
                 isDrawing = false;
-                if (DEBUG) LOGI("InitializED context");
+                if (DEBUG) LOGI(LOG_TAG_RENDERER, "MSG_WINDOW_SET InitializED context");
                 break;
 
             case MSG_RENDER_LOOP_EXIT_AND_DESTROY:
-                if (DEBUG) LOGI("Destroying context");
+                _msg = MSG_NONE;
+                if (DEBUG) LOGI(LOG_TAG_RENDERER, "MSG_RENDER_LOOP_EXIT_AND_DESTROY Destroying context");
                 destroy();
                 loopRunning = false;
-                if (DEBUG) LOGI("Destroyed context");
+                if (DEBUG) LOGI(LOG_TAG_RENDERER, "MSG_RENDER_LOOP_EXIT_AND_DESTROY Destroyed context");
                 break;
 
             case MSG_INIT_SHADER:
-                if (!initShaderFunc(NULL)) {
-                    if (DEBUG) LOGE("Cannot initialize shader  context: %d  window: %d", _context, _window);
+                _msg = MSG_NONE;
+                if (!shader->initShader(NULL)) {
+                    if (DEBUG)
+                        LOGE(LOG_TAG_RENDERER, "MSG_INIT_SHADER Cannot initialize shader  context: %d  window: %d", _context, _window);
+
                     loopRunning = false;
                     pthread_join(_threadId, 0);
                     _threadId = 0;
-//                    destroy();
-//                    delete this;
-
-//                    if (_context == NULL) {
-//                        LOGE("DESTROYING & reINITIALIZING");
-//                        destroy();
-//                        initializeGL();
-//                    }
                     stop();
                     break;
-                }
+                } else
+                    if (DEBUG) LOGI(LOG_TAG_RENDERER, "MSG_INIT_SHADER ok");
                 break;
 
             case MSG_RENDER_CLEAR_VIEW:
-                if (DEBUG) LOGI("LOOP clear view");
+                _msg = MSG_NONE;
+                if (DEBUG) LOGI(LOG_TAG_RENDERER, " MSG_RENDER_CLEAR_VIEWLOOP clear view");
                 glClearColor(clearColorR, clearColorG, clearColorB, clearColorA);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 if (!eglSwapBuffers(_display, _surface)) {
-                    LOGE("eglSwapBuffers() returned error %d", eglGetError());
+                    LOGE(LOG_TAG_RENDERER, "eglSwapBuffers() returned error %d", eglGetError());
                 }
                 break;
 
 
             case MSG_RENDER_LOOP_EXIT:
-                if (DEBUG) LOGI("LOOP exiting");
+                _msg = MSG_NONE;
+                if (DEBUG) LOGI(LOG_TAG_RENDERER, "MSG_RENDER_LOOP_EXIT LOOP exiting");
                 loopRunning = false;
                 break;
 
             case MSG_DATA_RECEIVED:
-
-                if (_display && !isDrawing && drawFrame!=NULL && _args!=NULL) {
+                _msg = MSG_NONE;
+                if (_display && !isDrawing  && _args!=NULL) {
                     isDrawing=true;
-                    (*drawFrame)(_args);
+                    shader->drawFrame(_args);
                     if (!eglSwapBuffers(_display, _surface)) {
-                        eglPrintError("eglSwapBuffers()", eglGetError());
+                        Shader::eglPrintError("eglSwapBuffers()", eglGetError());
                     }
                     _args = NULL;
                     isDrawing=false;
@@ -411,11 +396,11 @@ void Renderer::renderLoop()
 
             default:
                 if (isContinuous) {
-                    if (_display && !isDrawing && drawFrame != NULL) {
+                    if (_display && !isDrawing) {
                         isDrawing = true;
-                        (*drawFrame)(_args);
+                        shader->drawFrame(_args);
                         if (!eglSwapBuffers(_display, _surface)) {
-                            eglPrintError("eglSwapBuffers()", eglGetError());
+                            Shader::eglPrintError("eglSwapBuffers()", eglGetError());
                         }
                         _args = NULL;
                         isDrawing = false;
@@ -423,11 +408,10 @@ void Renderer::renderLoop()
                 }
                 break;
         }
-        _msg = MSG_NONE;
 
         pthread_mutex_unlock(&_mutexRenderer);
     }
-    if (DEBUG) LOGI("LOOP EXITED");
+    if (DEBUG) LOGI(LOG_TAG_RENDERER, "LOOP EXITED");
 }
 
 bool Renderer::initializeGL()
@@ -452,25 +436,25 @@ bool Renderer::initializeGL()
 
 
     if (DEBUG)
-        LOGI("****************initializeGL()");
+        LOGI(LOG_TAG_RENDERER, "****************initializeGL()");
 
     if ((display = eglGetDisplay(EGL_DEFAULT_DISPLAY)) == EGL_NO_DISPLAY) {
-        eglPrintError("eglGetDisplay()", eglGetError());
+        Shader::eglPrintError("eglGetDisplay()", eglGetError());
         return false;
     }
     if (!eglInitialize(display, 0, 0)) {
-        eglPrintError("eglInitialize()", eglGetError());
+        Shader::eglPrintError("eglInitialize()", eglGetError());
         return false;
     }
 
     if (!eglChooseConfig(display, attribs, &config, 1, &numConfigs)) {
-        eglPrintError("eglChooseConfig()", eglGetError());
+        Shader::eglPrintError("eglChooseConfig()", eglGetError());
         destroy();
         return false;
     }
 
     if (!eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format)) {
-        eglPrintError("eglGetConfigAttrib()", eglGetError());
+        Shader::eglPrintError("eglGetConfigAttrib()", eglGetError());
         destroy();
         return false;
     }
@@ -483,7 +467,7 @@ bool Renderer::initializeGL()
     ANativeWindow_setBuffersGeometry(_window, mBufferWidth, mBufferHeight, format);
 
     if (!(surface = eglCreateWindowSurface(display, config, _window, 0))) {
-        eglPrintError("eglCreateWindowSurface()", eglGetError());
+        Shader::eglPrintError("eglCreateWindowSurface()", eglGetError());
         destroy();
         return false;
     }
@@ -501,20 +485,20 @@ bool Renderer::initializeGL()
             EGL_CONTEXT_CLIENT_VERSION, RENDERER_EGL_VERSION, EGL_NONE
     };
     if (!(context = eglCreateContext(display, config, 0, context_attribs))) {
-        eglPrintError("eglCreateContext()", eglGetError());
+        Shader::eglPrintError("eglCreateContext()", eglGetError());
         destroy();
         return false;
     }
 
     if (!eglMakeCurrent(display, surface, surface, context)) {
-        eglPrintError("eglMakeCurrent()", eglGetError());
+        Shader::eglPrintError("eglMakeCurrent()", eglGetError());
         destroy();
         return false;
     }
 
     if (!eglQuerySurface(display, surface, EGL_WIDTH, &width) ||
         !eglQuerySurface(display, surface, EGL_HEIGHT, &height)) {
-        eglPrintError("eglQuerySurface()", eglGetError());
+        Shader::eglPrintError("eglQuerySurface()", eglGetError());
         destroy();
         return false;
     }
@@ -523,33 +507,26 @@ bool Renderer::initializeGL()
     _surface = surface;
     _context = context;
 
-    setShadersCommonParamsWidth(width);
-    setShadersCommonParamsHeight(height);
-
-    if (!(initShaderFunc)(NULL)) {
-        eglPrintError("initShader()", eglGetError());
-        destroy();
-        return false;
-    }
+//    if (!shader->initShader(NULL)) {
+//        Shader::eglPrintError("initShader()", eglGetError());
+//        destroy();
+//        return false;
+//    }
 
     if (DEBUG)
-        LOGI("initializeGL() context: %d windows: %p  %d   %dx%d",
-                    _context, _window, initShaderFunc, width, height);
+        LOGI(LOG_TAG_RENDERER, "initializeGL() context: %d windows: %p   %dx%d",
+                    _context, _window, width, height);
 
 
     glClearColor(clearColorR, clearColorG, clearColorB, clearColorA);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-//    glViewport(0, 0, width, height);
-//    glMatrixMode(GL_MODELVIEW);
-//    glLoadIdentity();
-
-
-
-    // to get clear to be set
+    // swap to clear window
     if (!eglSwapBuffers(_display, _surface)) {
-        eglPrintError("eglSwapBuffers()", eglGetError());
+        Shader::eglPrintError("eglSwapBuffers()", eglGetError());
     }
+
+    _msg = MSG_INIT_SHADER;
 
     return true;
 }
@@ -580,51 +557,6 @@ void Renderer::setClearColor(const unsigned char r, const unsigned char g, const
     clearColorA=(float)a/255.0f;
     pthread_mutex_unlock(&_mutexRenderer);
 }
-
-
-
-
-///////////////////////////////////
-/// OpenGL ES 2
-///////////////////////////////////
-void setOrtho(GLfloat *m, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near,
-               GLfloat far)
-{
-    GLfloat tx = - (right + left)/(right - left);
-    GLfloat ty = - (top + bottom)/(top - bottom);
-    GLfloat tz = - (far + near)/(far - near);
-
-    m[0] = 2.0f/(right-left);
-    m[1] = 0;
-    m[2] = 0;
-    m[3] = tx;
-
-    m[4] = 0;
-    m[5] = 2.0f/(top-bottom);
-    m[6] = 0;
-    m[7] = ty;
-
-    m[8] = 0;
-    m[9] = 0;
-    m[10] = -2.0f/(far-near);
-    m[11] = tz;
-
-    m[12] = 0;
-    m[13] = 0;
-    m[14] = 0;
-    m[15] = 1;
-
-//    ( 2.0/768.0, 0.0,        0.0,    -1.0,
-//      0.0,       2.0/1024.0, 0.0,    -1.0,
-//      0.0,       0.0,        -1.0,   0.0,
-//      0.0,       0.0,        0.0,    1.0);
-}
-
-
-
-
-
-
 
 
 

@@ -18,13 +18,17 @@
 #include <android/native_window_jni.h>
 #include <cstdlib>
 
-#include "RendererController.h"
+#include "../RendererController.h"
 #include "common.hpp"
+#include "texture.h"
+
+#define LOG_TAG_NATIVELIB "native-lib"
+#define DEBUG_NATIVE_LIB false
 
 #define JAVA(X) JNIEXPORT Java_com_bavagnoli_opengl_JNIUtils_##X
 
-static JavaVM* jvm = 0;
-static JNIEnv *env;
+//static JavaVM* jvm = 0;
+//static JNIEnv *env;
 
 RendererController *rendererController;
 
@@ -32,20 +36,23 @@ RendererController *rendererController;
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved)
 {
-    jvm = vm;
-    if (jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK)
-        return -1;
+//    jvm = vm;
+//    if (jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK)
+//        return -1;
 
-    LOGI("JNI INIT");
+    setVM(vm);
+
+    if (DEBUG_NATIVE_LIB) LOGI(LOG_TAG_NATIVELIB, "JNI INIT");
 
     return JNI_VERSION_1_6;
 }
 
 
+
+extern "C" {
 ////////////////////////////////
 /// renderer
 ////////////////////////////////
-extern "C" {
     void JAVA(nativeSetSurface)(JNIEnv *jenv, jobject obj,
                                 jobject surface,
                                 jint func,
@@ -54,12 +61,10 @@ extern "C" {
                                 jfloat scaleX, jfloat scaleY,
                                 jint clearR, jint clearG, jint clearB,
                                 jint clearA) {
-    //    LOGI("nativeSetSurface1");
         const char *jName = jenv->GetStringUTFChars(name, JNI_FALSE);
         if (rendererController == NULL) {
             rendererController = new RendererController();
         }
-    //    LOGI("nativeSetSurface2");
 
         rendererController->nativeSetSurface(jenv,
                                              surface,
@@ -70,17 +75,17 @@ extern "C" {
                                              clearR, clearG, clearB, clearA);
 
         jenv->ReleaseStringUTFChars(name, jName);
-    //    LOGI("nativeSetSurface3 fine");
+
     }
 
     void JAVA(nativeOnStop)(JNIEnv *jenv, jobject obj) {
         if (rendererController == NULL) return;
-        LOGI("nativeOnStop1");
+        if (DEBUG_NATIVE_LIB) LOGI(LOG_TAG_NATIVELIB, "nativeOnStop1");
         rendererController->nativeOnStop();
-        LOGI("nativeOnStop2");
+        if (DEBUG_NATIVE_LIB) LOGI(LOG_TAG_NATIVELIB, "nativeOnStop2");
         free(rendererController);
         rendererController = NULL;
-        LOGI("nativeOnStop3 fine");
+        if (DEBUG_NATIVE_LIB) LOGI(LOG_TAG_NATIVELIB, "nativeOnStop3 fine");
     }
 
 
@@ -115,5 +120,6 @@ extern "C" {
                                                     (const unsigned char) clearA);
     //    pthread_mutex_unlock(&_mutex_controller);
     }
+
 
 }

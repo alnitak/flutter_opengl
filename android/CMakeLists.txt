@@ -24,12 +24,18 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             cpp/native-lib.cpp
-             cpp/common.hpp
+             cpp/ndk/native-lib.cpp
+             cpp/ndk/common.hpp
+             cpp/ndk/texture.cpp
 
              cpp/RendererController.cpp
              cpp/renderer.cpp
-             cpp/shaders.cpp
+             cpp/Shader.cpp
+
+             cpp/shaders/Cube.cpp
+             cpp/shaders/Shader1.cpp
+             cpp/shaders/Shader2.cpp
+             cpp/shaders/Shader3.cpp
              )
 
 

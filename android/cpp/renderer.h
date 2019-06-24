@@ -24,6 +24,8 @@
 #include <jni.h>
 #include <memory>
 
+#include "Shader.h"
+
 
 enum CurrDrawingFunc {
     FUNC_DEFAULT = 0,
@@ -49,8 +51,7 @@ class Renderer {
 public:
 
     Renderer(int ES_version,
-             bool (*shaderFunc)(void *args),
-             void (*drawFunc)(void *args),
+             Shader *shader,
              bool continuous,
              const char *name,
              int width, int height,
@@ -73,8 +74,6 @@ public:
 
     bool isFrameDrawing();
 
-    void setFunctions(bool (*shaderFunc)(void *args),
-                      void (*drawFunc)(void *args));
     int processNewData(void *args);
 
     int isContextValid();
@@ -121,11 +120,9 @@ private:
 
     bool isContinuous;
 
+    Shader *shader;
     void *_args;
-    void (*drawFrame)(void *args);
-    bool (*initShaderFunc)(void *args);
     bool isDrawing;
-
 
 
     // RenderLoop is called in a rendering thread started in start() method
@@ -134,12 +131,8 @@ private:
     
     bool initializeGL();
 
-
-
-    // Helper method for starting the thread 
+    // Helper method for starting the thread
     static void* threadStartCallback(void *myself);
-
-
 
 };
 

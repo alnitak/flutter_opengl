@@ -14,13 +14,12 @@
 
 package com.bavagnoli.opengl;
 
+import android.app.Activity;
 import android.graphics.SurfaceTexture;
 import android.util.Log;
 import android.util.LongSparseArray;
 
 import java.util.Map;
-
-import javax.security.auth.login.LoginException;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -28,6 +27,8 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.view.TextureRegistry;
+
+import com.bavagnoli.opengl.BmpManager;
 
 /** OpenglPlugin */
 public class OpenglPlugin implements MethodCallHandler {
@@ -42,6 +43,9 @@ public class OpenglPlugin implements MethodCallHandler {
   public static void registerWith(Registrar registrar) {
     final MethodChannel channel = new MethodChannel(registrar.messenger(), "opengl");
     channel.setMethodCallHandler(new OpenglPlugin(registrar.textures()));
+
+    // initialize BmpManager's AssetManager for future textures use
+    BmpManager.setAssetsManager(registrar);
   }
 
   private float getFloat(Object obj) {

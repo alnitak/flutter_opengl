@@ -14,7 +14,14 @@
 
 
 #include "RendererController.h"
-#include "shaders.h"
+#ifdef __ANDROID__
+#include "ndk/texture.h"
+#endif
+#include "shaders/Cube.h"
+#include "shaders/Shader1.h"
+#include "shaders/Shader2.h"
+#include "shaders/Shader3.h"
+
 
 RendererController::RendererController()
                             : renderer(NULL) {
@@ -25,6 +32,7 @@ RendererController::RendererController()
 
     if (pthread_mutex_init(&_mutex_controller, &attr) != 0)
         __android_log_print(ANDROID_LOG_DEBUG,"RendererController: ", "RendererController() _mutex_controller init failed");
+
 }
 
 RendererController::~RendererController() {
@@ -40,6 +48,7 @@ void RendererController::nativeSetSurface(JNIEnv* jenv,
                                           float scaleX, float scaleY,
                                           int clearR, int clearG, int clearB, int clearA) {
 
+
     pthread_mutex_lock(&_mutex_controller);
     if (renderer != NULL) {
         renderer->stop();
@@ -49,43 +58,41 @@ void RendererController::nativeSetSurface(JNIEnv* jenv,
         }
     }
 
+
     // set shader and draw frame functions
-    typedef bool (*sf)(void *);
-    typedef void (*df)(void *);
-    sf shaderFunc;
-    df drawFunc;
     int ES_version;
     bool continuous;
     switch (func) {
         case 1:
             ES_version = 2;
             continuous = true;
-            shaderFunc = &initShader1;
-            drawFunc = &drawFrame1;
+            shader = new Shader1(width, height);
             break;
         case 2:
             ES_version = 2;
             continuous = true;
-            shaderFunc = &initShader2;
-            drawFunc = &drawFrame2;
+#ifdef __ANDROID__
+            // since this shader uses a texture, setBmpManagerEnvironment() must be
+            // called to initialize future calls to loadTexture()
+            setBmpManagerEnvironment();
+#endif
+            shader = new Shader2(width, height);
             break;
         case 3:
             ES_version = 2;
             continuous = true;
-            shaderFunc = &initShader3;
-            drawFunc = &drawFrame3;
+            shader = new Shader3(width, height);
             break;
         case 0:
         default:
             ES_version = 1;
             continuous = true;
-            shaderFunc = &initShaderDefaults;
-            drawFunc = &defaultDrawFrame;
+            shader = new Cube(width, height);
             break;
     }
 
     renderer = new Renderer(ES_version,
-                            shaderFunc, drawFunc,
+                            shader,
                             continuous,
                             name,
                             width, height,
@@ -93,10 +100,6 @@ void RendererController::nativeSetSurface(JNIEnv* jenv,
                             clearR,clearG,clearB,clearA);
 
     renderer->setNativeWindow(jenv, surface);
-
-
-
-
 
     renderer->start();
     pthread_mutex_unlock(&_mutex_controller);
@@ -108,7 +111,9 @@ void RendererController::nativeOnStop() {
     if (renderer!=NULL) {
         renderer->stop();
         renderer->destroy();
-        free(renderer);
+        delete renderer;
+        delete shader;
+        renderer = NULL;
     }
     pthread_mutex_unlock(&_mutex_controller);
 }
