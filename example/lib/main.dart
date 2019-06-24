@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:opengl/opengl.dart';
+import 'package:opengl/flutter_opengl.dart';
 
 void main() => runApp(MyApp());
 

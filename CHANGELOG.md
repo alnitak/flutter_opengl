@@ -1,4 +1,4 @@
-## 0.0.2
+## 0.0.3
 
 * code rearranged.
 * every shader can now be written separately subclassing the Shader class and passing it to the renderer.
