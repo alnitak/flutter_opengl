@@ -1,6 +1,6 @@
-# opengl_example
+# flutteropengl_example
 
-Demonstrates how to use the opengl plugin.
+Demonstrates how to use the flutteropengl plugin.
 
 ## Getting Started
 

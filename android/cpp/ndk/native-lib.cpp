@@ -25,7 +25,7 @@
 #define LOG_TAG_NATIVELIB "native-lib"
 #define DEBUG_NATIVE_LIB false
 
-#define JAVA(X) JNIEXPORT Java_com_bavagnoli_opengl_JNIUtils_##X
+#define JAVA(X) JNIEXPORT Java_com_bavagnoli_flutteropengl_JNIUtils_##X
 
 //static JavaVM* jvm = 0;
 //static JNIEnv *env;

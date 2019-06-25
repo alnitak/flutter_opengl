@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/opengl.iml" filepath="$PROJECT_DIR$/opengl.iml" />
-      <module fileurl="file://$PROJECT_DIR$/android/opengl_android.iml" filepath="$PROJECT_DIR$/android/opengl_android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example/android/opengl_example_android.iml" filepath="$PROJECT_DIR$/example/android/opengl_example_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flutteropengl.iml" filepath="$PROJECT_DIR$/flutteropengl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/flutteropengl_android.iml" filepath="$PROJECT_DIR$/android/flutteropengl_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example/android/flutteropengl_example_android.iml" filepath="$PROJECT_DIR$/example/android/flutteropengl_example_android.iml" />
     </modules>
   </component>
 </project>

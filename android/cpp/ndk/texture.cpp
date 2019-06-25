@@ -27,7 +27,7 @@ bool setBmpManagerEnvironment() {
     if (g_ctx.javaVM->GetEnv((void**)&g_ctx.g_env, JNI_VERSION_1_6) != JNI_OK)
         return false;
 
-    g_ctx.cls = g_ctx.g_env->FindClass("com/bavagnoli/opengl/BmpManager");
+    g_ctx.cls = g_ctx.g_env->FindClass("com/bavagnoli/flutteropengl/BmpManager");
     g_ctx.cls = reinterpret_cast<jclass>(g_ctx.g_env->NewGlobalRef(g_ctx.cls));
     if (g_ctx.cls == nullptr)
         return false;

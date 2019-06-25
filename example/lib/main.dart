@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
-import 'package:opengl/flutter_opengl.dart';
+import 'package:flutter/services.dart';
+import 'package:flutteropengl/flutteropengl.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,7 +13,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String notes;
-  final controller = Opengl();
+  final controller = Flutteropengl();
   final _width = 300.0;
   final _height = 300.0;
 
@@ -60,80 +62,80 @@ class _MyAppState extends State<MyApp> {
 
   Widget _buildControls() {
     return
-        Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Text(notes),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text("stop"),
-                  color: Colors.red,
-                  textColor: Colors.white,
-                  onPressed: () {
-                    stopNDKController();
-                  },
-                ),
-                SizedBox(width: 20),
-                RaisedButton(
-                  child: Text("re-create"),
-                  color: Colors.green,
-                  textColor: Colors.white,
-                  onPressed: () {
-                    initializeNDKController();
-                  },
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text("OpenGL ES 1\nfunc 1"),
-                  onPressed: () {
-                    setNDKRenderFuncController(0);
-                    notes = "";
-                    setState(() {});
-                  },
-                ),
-                SizedBox(width: 6),
-                RaisedButton(
-                  child: Text("OpenGL ES 2\nshader 1"),
-                  onPressed: () {
-                    setNDKRenderFuncController(1);
-                    notes = "COMPUTATIONAL INTENSIVE\nhttps://www.shadertoy.com/view/3l23Rh";
-                    setState(() {});
-                  },
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text("OpenGL ES 2\ntexture shader 2"),
-                  onPressed: () {
-                    setNDKRenderFuncController(2);
-                    notes = "https://www.shadertoy.com/view/llj3Dz";
-                    setState(() {});
-                  },
-                ),
-                SizedBox(width: 6),
-                RaisedButton(
-                  child: Text("OpenGL ES 2\nshader 3"),
-                  onPressed: () {
-                    setNDKRenderFuncController(3);
-                    notes = "https://www.shadertoy.com/view/ttlGDf";
-                    setState(() {});
-                  },
-                ),
-              ],
-            ),
-          ],
-        );
+      Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Text(notes),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RaisedButton(
+                child: Text("stop"),
+                color: Colors.red,
+                textColor: Colors.white,
+                onPressed: () {
+                  stopNDKController();
+                },
+              ),
+              SizedBox(width: 20),
+              RaisedButton(
+                child: Text("re-create"),
+                color: Colors.green,
+                textColor: Colors.white,
+                onPressed: () {
+                  initializeNDKController();
+                },
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RaisedButton(
+                child: Text("OpenGL ES 1\nfunc 1"),
+                onPressed: () {
+                  setNDKRenderFuncController(0);
+                  notes = "";
+                  setState(() {});
+                },
+              ),
+              SizedBox(width: 6),
+              RaisedButton(
+                child: Text("OpenGL ES 2\nshader 1"),
+                onPressed: () {
+                  setNDKRenderFuncController(1);
+                  notes = "COMPUTATIONAL INTENSIVE\nhttps://www.shadertoy.com/view/3l23Rh";
+                  setState(() {});
+                },
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RaisedButton(
+                child: Text("OpenGL ES 2\ntexture shader 2"),
+                onPressed: () {
+                  setNDKRenderFuncController(2);
+                  notes = "https://www.shadertoy.com/view/llj3Dz";
+                  setState(() {});
+                },
+              ),
+              SizedBox(width: 6),
+              RaisedButton(
+                child: Text("OpenGL ES 2\nshader 3"),
+                onPressed: () {
+                  setNDKRenderFuncController(3);
+                  notes = "https://www.shadertoy.com/view/ttlGDf";
+                  setState(() {});
+                },
+              ),
+            ],
+          ),
+        ],
+      );
   }
 
 

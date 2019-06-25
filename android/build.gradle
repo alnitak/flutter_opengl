@@ -1,4 +1,4 @@
-group 'com.bavagnoli.opengl'
+group 'com.bavagnoli.flutteropengl'
 version '1.0-SNAPSHOT'
 
 buildscript {
