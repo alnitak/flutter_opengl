@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.bavagnoli.opengl;
+package com.bavagnoli.flutteropengl;
 
-import android.app.Activity;
 import android.graphics.SurfaceTexture;
 import android.util.Log;
 import android.util.LongSparseArray;
@@ -28,21 +27,20 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.view.TextureRegistry;
 
-import com.bavagnoli.opengl.BmpManager;
-
-/** OpenglPlugin */
-public class OpenglPlugin implements MethodCallHandler {
-  private static String TAG = OpenglPlugin.class.getSimpleName();
+/** FlutteropenglPlugin */
+public class FlutteropenglPlugin implements MethodCallHandler {
+  private static String TAG = FlutteropenglPlugin.class.getSimpleName();
   private final TextureRegistry textures;
   private LongSparseArray<OpenGLNDKController> rendersNDK = new LongSparseArray<>();
 
-  public OpenglPlugin(TextureRegistry textures) {
+  public FlutteropenglPlugin(TextureRegistry textures) {
     this.textures = textures;
   }
-
+  
+  /** Plugin registration. */
   public static void registerWith(Registrar registrar) {
-    final MethodChannel channel = new MethodChannel(registrar.messenger(), "opengl");
-    channel.setMethodCallHandler(new OpenglPlugin(registrar.textures()));
+    final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutteropengl");
+    channel.setMethodCallHandler(new FlutteropenglPlugin(registrar.textures()));
 
     // initialize BmpManager's AssetManager for future textures use
     BmpManager.setAssetsManager(registrar);
@@ -76,7 +74,7 @@ public class OpenglPlugin implements MethodCallHandler {
   public void onMethodCall(MethodCall call, Result result) {
     Map<String, Object> arguments = (Map<String, Object>) call.arguments;
     if (arguments != null)
-      Log.d("OpenglPlugin", call.method + " " + call.arguments.toString());
+      Log.d("FlutteropenglPlugin", call.method + " " + call.arguments.toString());
     OpenGLNDKController renderNDK;
     TextureRegistry.SurfaceTextureEntry entry;
     SurfaceTexture surfaceTexture;
