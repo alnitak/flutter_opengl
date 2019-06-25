@@ -1,3 +1,8 @@
+## 0.0.4
+* I had to change the plugin name because the underscore in the name is causing problems in Android NDK.
+  Since I had previously uploaded the package with the old name, I must update it with that old name.
+  So "name: flutteropengl" in pubspec.yaml must be uncommented
+
 ## 0.0.3
 
 * code rearranged.
