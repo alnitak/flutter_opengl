@@ -8,7 +8,7 @@ Flutter OpenGL ES plugin.
 | ---- | ---- | ---- | ---- | ---- | ---- |
 | ✅  | ✅ | ✅ | x | x | x|
 
-![gif](https://github.com/alnitak/flutter_opengl/blob/master/img/flutter_opengl.gif?raw=true "Flutter OpenGL Demo")
+![gif](https://github.com/alnitak/flutter_opengl/blob/master/images/flutter_opengl.gif?raw=true "Flutter OpenGL Demo")
 
 The main workflow of the plugin is:
 
