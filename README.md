@@ -24,7 +24,7 @@ The starting idea developing this plugin, was not just to use GLSL, but also tak
 
 For now it's possible to copy/paste shaders from ShaderToy, but only those which have only one layer (ie no iChannelN, iSound etc).
 
-On a real device, many of them could be very slow because they are hungry of power and some others needs ES 3 and for now it cannot be compiled on Android (ie shaders 13, 14 and 15 in the example).
+Be aware that on a real device, many shaders could be very slow because they are hungry of power and some others needs ES 3 and for now is not supported on Android (ie shaders 13, 14 and 15 in the example).
 
 ***iResolution***, ***iTime*** and ***iMouse*** are supported, other uniforms can be added at run-time.
 
