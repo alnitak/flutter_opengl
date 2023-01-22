@@ -8,6 +8,7 @@ Flutter OpenGL ES plugin.
 | ---- | ---- | ---- | ---- | ---- | ---- |
 | ✅  | ✅ | ✅ | x | x | x|
 
+![gif](https://github.com/alnitak/flutter_opengl/blob/master/img/flutter_opengl.gif?raw=true "Flutter OpenGL Demo")
 
 The main workflow of the plugin is:
 
@@ -20,9 +21,13 @@ The main workflow of the plugin is:
 All functionalities, but the first call to the first method channel, use FFI calls.
 
 The starting idea developing this plugin, was not just to use GLSL, but also take advantage of the wonderful [ShaderToy](https://www.shadertoy.com/) web site.
+
 For now it's possible to copy/paste shaders from ShaderToy, but only those which have only one layer (ie no iChannelN, iSound etc).
+
 On a real device, many of them could be very slow because they are hungry of power and some others needs ES 3 and for now it cannot be compiled on Android (ie shaders 13, 14 and 15 in the example).
+
 ***iResolution***, ***iTime*** and ***iMouse*** are supported, other uniforms can be added at run-time.
+
 - ***iResolution*** is a vec3 uniform which represents the texture size
 - ***iTime*** is a float which represents the time since the shader was created
 - ***iMouse*** is a vec4 which the x and y values represent the coordinates where the mouse or the touch is grabbed hover the *Texture()* widget
