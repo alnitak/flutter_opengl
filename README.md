@@ -1,6 +1,6 @@
 # flutter_opengl
 
-Flutter OpenGL ES plugin.
+A Flutter OpenGL ES plugin using a Texture() widget. Supports Android, Linux and Windows. Many shaders from ShaderToy.com can be copy/pasted 
 
 ## Getting Started
 
