@@ -1,60 +1,67 @@
-# OpenGL Flutter plugin
+# flutter_opengl
 
-OpenGL Android NDK plugin.
-
-
-[YT video](https://www.youtube.com/watch?v=GKEdwZsAb0s)
-
-![Image](https://github.com/alnitak/flutter_opengl/blob/master/flutter_01.png?raw=true)
+Flutter OpenGL ES plugin.
 
 ## Getting Started
 
-This plugin is only for Android. Is greatly appreciated any help!  
-This is an early stage of a plugin for Flutter to let the developers to use an OpenGL widget.
-This is not a binding to let the devs to write OpenGL code within Flutter,
-but lets to write shader and drawing frame functions in C/C++ code.
-The plugin is only available for Android OS, looking forward for someone to make it cross-platform!
-  
-The example provides 4 drawing shaders classes. They are subclass of `Shader.cpp`.
-Each of them need an `initShader(void *args)` and a `drawFrame(void *args)` functions which are used by the
-renderer.cpp engine at creation time. `RendererController::nativeSetSurface()` has the task to crate
-the renderer engine.  
+| Android | Windows | Linux | iOS | MacOS | Web|
+| ---- | ---- | ---- | ---- | ---- | ---- |
+| ✅  | ✅ | ✅ | x | x | x|
+
+
+The main workflow of the plugin is:
+
+- ask to native code with a MethodChannel for a texture ID
+- use the texture ID in a Texture() widget
+- set a vertex and a fragment sources
+- start the renderer
+- change shader sources on the fly
+
+All functionalities, but the first call to the first method channel, use FFI calls.
+
+The starting idea developing this plugin, was not just to use GLSL, but also take advantage of the wonderful [ShaderToy](https://www.shadertoy.com/) web site.
+For now it's possible to copy/paste shaders from ShaderToy, but only those which have only one layer (ie no iChannelN, iSound etc).
+On a real device, many of them could be very slow because they are hungry of power and some others needs ES 3 and for now it cannot be compiled on Android (ie shaders 13, 14 and 15 in the example).
+***iResolution***, ***iTime*** and ***iMouse*** are supported, other uniforms can be added at run-time.
+- ***iResolution*** is a vec3 uniform which represents the texture size
+- ***iTime*** is a float which represents the time since the shader was created
+- ***iMouse*** is a vec4 which the x and y values represent the coordinates where the mouse or the touch is grabbed hover the *Texture()* widget
 
 
 
-The 3 example shaders are taken from https://www.shadertoy.com/
-https://www.shadertoy.com/view/3l23Rh by nimitz https://www.shadertoy.com/user/nimitz
-https://www.shadertoy.com/view/llj3Dz by Darthmarshie https://www.shadertoy.com/user/Darthmarshie
-https://www.shadertoy.com/view/ttlGDf by alro https://www.shadertoy.com/user/alro
 
-(more to come)
+# Setup
+
+## Linux
+Be sure you have installed **glew** and **glm** packages.
 
 
-##### ISSUEs:
-Currently NDK builds for x86_64, x86, arm64-v8a and armeabi-v7a and libnative-lib.so is available on all ABI lib subfolders
-but libflutter.so is missing in armeabi-v7a.
-In example or plugin build.gradle or both, forcing gradle to build only for armeabi-v7a with
-```
-ndk {
-    abiFilters 'armeabi-v7a'
-}
-```
-doesn't work and libflutter.so is missing in the lib folder, but works with command line:
-```
-flutter run --debug --target-platform android-arm
-```
+## Windows
+Go into the windows folder from the project root.
+-  clone **Native_SDK**:
 
-(more to come)
- 
-##### TODO: 
-`Renderer::getWindowWidth()` and `Renderer::getWindowHeight()` doesn't work correctly:  
-they are used in `Renderer::initializeGL()` to set window buffer size with `ANativeWindow_setBuffersGeometry()`,
-without it the window `surface` is not working and nothing is displayed.
-___
-Add source comments.
-___
-Implement a way to pass an OpenGL texture from Flutter to NDK.
-___
-Implement iOS layer plugin.
+```git clone https://github.com/powervr-graphics/Native_SDK.git```
 
-(more to come)
+you can safely delete all but the *lib* and *include* directories from the cloned repo
+
+- clone **glm**
+
+```git clone https://github.com/g-truc/glm.git```
+
+- download **glew** *Binaries for Windows 32-bit and 64-bit* from here:
+
+[https://glew.sourceforge.net](https://glew.sourceforge.net/) (sources at https://github.com/nigels-com/glew)
+
+extract the zip and rename its main directory to "glew"
+
+## Android
+Should be ok.
+
+# TODO
+- the c/c++ code is not "state of the art" written! PRs are welcomed :smile:
+- iOS, Mac and Web support
+- add textures (ie iChannel0 used on ShaderToy). A texture of 2^N x 2 could be used for example for FFT audio samples on iSound ShaderToy uniform.
+- more then one parallel shaders
+- ES 3 on Android (now supports 2)
+- displayed FPS seems not to be correct
+- use of this plugin not just for shader but also for 3D models

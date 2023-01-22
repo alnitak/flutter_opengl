@@ -1,28 +1,35 @@
-name: flutteropengl_example
-description: Demonstrates how to use the flutteropengl plugin.
-publish_to: 'none'
+name: flutter_opengl_example
+description: Demonstrates how to use the flutter_opengl plugin.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: '>=2.18.4 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  flutter_opengl:
+    path: ../
+
+  cupertino_icons: ^1.0.2
+
+  #https://pub.dev/packages/url_launcher
+  url_launcher: ^6.1.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutteropengl:
-    path: ../
+  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/texture.png
+    - assets/
 
+  fonts:
+   - family: JetBrains
+     fonts:
+       - asset: assets/JetBrainsMono-Regular.ttf

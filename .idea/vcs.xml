@@ -2,5 +2,11 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/windows/Native_SDK" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/windows/Native_SDK/external/VulkanMemoryAllocator/source" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/windows/Native_SDK/external/glm/source" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/windows/Native_SDK/external/glslang/source" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/windows/Native_SDK/external/pugixml/source" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/windows/glm" vcs="Git" />
   </component>
 </project>
