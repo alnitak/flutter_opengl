@@ -268,6 +268,7 @@ void Renderer::stop() {
     msg = MSG_STOP_RENDERER;
 }
 
+// Set the message for the main loop that a new shader should be used
 std::string Renderer::setShader(bool isContinuous,
                                 const char *vertexSource,
                                 const char *fragmentSource) {
@@ -283,6 +284,7 @@ std::string Renderer::setShader(bool isContinuous,
     return compileError;
 }
 
+// Set the message for the main loop that a new ShaderToy shader should be used
 std::string Renderer::setShaderToy(const char *fragmentSource) {
     compileError = "";
     isShaderToy = true;
@@ -296,6 +298,7 @@ std::string Renderer::setShaderToy(const char *fragmentSource) {
     return compileError;
 }
 
+// The main renderiing loop
 void Renderer::loop() {
     if (DEBUG)
         LOGD(LOG_TAG_RENDERER, "ENTERING LOOP");

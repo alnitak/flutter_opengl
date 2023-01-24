@@ -24,26 +24,90 @@ void UniformQueue::debug(const string &name) {
     auto uniform = uniforms[name];
     const type_info &t = uniforms[name].type();
     cout;
+    if (t == typeid(UNIFORM_BOOL_t)) {
+        cout << left << setw(15) << name <<
+             left << setw(7) << "bool: " <<
+             left << setw(10) << CAST(UNIFORM_BOOL_t &, uniform).val <<
+             endl;
+    } else
+    if (t == typeid(UNIFORM_INT_t)) {
+        cout << left << setw(15) << name <<
+             left << setw(7) << "int: " <<
+             left << setw(10) << CAST(UNIFORM_INT_t &, uniform).val <<
+             endl;
+    } else
     if (t == typeid(UNIFORM_FLOAT_t)) {
         cout << left << setw(15) << name <<
              left << setw(7) << "float: " <<
              left << setw(10) << CAST(UNIFORM_FLOAT_t &, uniform).val <<
              endl;
-    } else if (t == typeid(UNIFORM_VEC3_t)) {
+    } else 
+    if (t == typeid(UNIFORM_VEC2_t)) {
+        cout << left << setw(15) << name <<
+             left << setw(7) << "vec2: " <<
+             left << setw(10) << CAST(UNIFORM_VEC2_t &, uniform).val.x << " " <<
+             left << setw(10) << CAST(UNIFORM_VEC2_t &, uniform).val.y <<
+             endl;
+    } else 
+    if (t == typeid(UNIFORM_VEC3_t)) {
         cout << left << setw(15) << name <<
              left << setw(7) << "vec3: " <<
              left << setw(10) << CAST(UNIFORM_VEC3_t &, uniform).val.x << " " <<
              left << setw(10) << CAST(UNIFORM_VEC3_t &, uniform).val.y << " " <<
              left << setw(10) << CAST(UNIFORM_VEC3_t &, uniform).val.z <<
              endl;
-
-    } else if (t == typeid(UNIFORM_VEC4_t)) {
+    } else 
+    if (t == typeid(UNIFORM_VEC4_t)) {
         cout << left << setw(15) << name <<
              left << setw(7) << "vec4: " <<
              left << setw(10) << CAST(UNIFORM_VEC4_t &, uniform).val.x << " " <<
              left << setw(10) << CAST(UNIFORM_VEC4_t &, uniform).val.y << " " <<
              left << setw(10) << CAST(UNIFORM_VEC4_t &, uniform).val.z << " " <<
              left << setw(10) << CAST(UNIFORM_VEC4_t &, uniform).val.w <<
+             endl;
+    } else 
+    if (t == typeid(UNIFORM_MAT2_t)) {
+        cout << left << setw(15) << name <<
+             left << setw(7) << "mat2: " <<
+             left << setw(10) << CAST(UNIFORM_MAT2_t &, uniform).val[0][0] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT2_t &, uniform).val[0][1] << " " << endl <<
+             left << setw(10) << CAST(UNIFORM_MAT2_t &, uniform).val[1][0] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT2_t &, uniform).val[1][1] <<
+             endl;
+    } else 
+    if (t == typeid(UNIFORM_MAT3_t)) {
+        cout << left << setw(15) << name <<
+             left << setw(7) << "mat3: " <<
+             left << setw(10) << CAST(UNIFORM_MAT3_t &, uniform).val[0][0] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT3_t &, uniform).val[0][1] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT3_t &, uniform).val[0][2] << " " << endl <<
+             left << setw(10) << CAST(UNIFORM_MAT3_t &, uniform).val[1][0] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT3_t &, uniform).val[1][1] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT3_t &, uniform).val[1][2] << " " << endl <<
+             left << setw(10) << CAST(UNIFORM_MAT3_t &, uniform).val[2][0] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT3_t &, uniform).val[2][1] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT3_t &, uniform).val[2][2] <<
+             endl;
+    } else 
+    if (t == typeid(UNIFORM_MAT4_t)) {
+        cout << left << setw(15) << name <<
+             left << setw(7) << "mat4: " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[0][0] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[0][1] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[0][2] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[0][3] << " " << endl <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[1][0] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[1][1] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[1][2] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[1][3] << " " << endl <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[2][0] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[2][1] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[2][2] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[2][3] << " " << endl <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[3][0] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[3][1] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[3][2] << " " <<
+             left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[3][3] <<
              endl;
     }
 }
@@ -82,25 +146,53 @@ void UniformQueue::addUniform(string name, UniformType type, void *val) {
 bool UniformQueue::setUniformValue(const string &name, void *val) {
     bool found = false;
     const type_info &t = uniforms[name].type();
+
+    if (t == typeid(UNIFORM_BOOL_t)) {
+        float f = *(float *) val;
+        CAST(UNIFORM_BOOL_t &, uniforms[name]).val = f;
+        found = true;
+    } else 
+    if (t == typeid(UNIFORM_INT_t)) {
+        float f = *(float *) val;
+        CAST(UNIFORM_INT_t &, uniforms[name]).val = f;
+        found = true;
+    } else 
     if (t == typeid(UNIFORM_FLOAT_t)) {
         float f = *(float *) val;
         CAST(UNIFORM_FLOAT_t &, uniforms[name]).val = f;
-        // reinterpret_cast<UNIFORM_FLOAT_t&>(uniforms[name]).val = f;
-        // any_cast<UNIFORM_FLOAT_t&>(uniforms[name]).val = f;
         found = true;
-    } else if (t == typeid(UNIFORM_VEC3_t)) {
+    } else 
+    if (t == typeid(UNIFORM_VEC2_t)) {
+        glm::vec2 f = *(glm::vec2 *) val;
+        CAST(UNIFORM_VEC2_t &, uniforms[name]).val = f;
+        found = true;
+    } else 
+    if (t == typeid(UNIFORM_VEC3_t)) {
         glm::vec3 f = *(glm::vec3 *) val;
         CAST(UNIFORM_VEC3_t &, uniforms[name]).val = f;
-        // reinterpret_cast<UNIFORM_VEC3_t&>(uniforms[name]).val = f;
-        // any_cast<UNIFORM_VEC3_t&>(uniforms[name]).val = f;
         found = true;
-    } else if (t == typeid(UNIFORM_VEC4_t)) {
+    } else 
+    if (t == typeid(UNIFORM_VEC4_t)) {
         glm::vec4 f = *(glm::vec4 *) val;
         CAST(UNIFORM_VEC4_t &, uniforms[name]).val = f;
-        // reinterpret_cast<UNIFORM_VEC4_t&>(uniforms[name]).val = f;
-        // any_cast<UNIFORM_VEC4_t&>(uniforms[name]).val = f;
         found = true;
-    } else {
+    } else 
+    if (t == typeid(UNIFORM_MAT2_t)) {
+        glm::mat2 f = *(glm::mat2 *) val;
+        CAST(UNIFORM_MAT2_t &, uniforms[name]).val = f;
+        found = true;
+    } else 
+    if (t == typeid(UNIFORM_MAT3_t)) {
+        glm::mat3 f = *(glm::mat3 *) val;
+        CAST(UNIFORM_MAT3_t &, uniforms[name]).val = f;
+        found = true;
+    } else 
+    if (t == typeid(UNIFORM_MAT4_t)) {
+        glm::mat4 f = *(glm::mat4 *) val;
+        CAST(UNIFORM_MAT4_t &, uniforms[name]).val = f;
+        found = true;
+    } else 
+    {
         cout << "Uniform \"" << name << "\"  not found!" << endl;
     }
 
@@ -110,18 +202,33 @@ bool UniformQueue::setUniformValue(const string &name, void *val) {
 void UniformQueue::sendAllUniforms() {
     for (auto &[name, uniform]: uniforms) {
         const type_info &t = uniforms[name].type();
+
+        if (t == typeid(UNIFORM_BOOL_t)) {
+            setBool(name, programObject, CAST(UNIFORM_BOOL_t &, uniform).val);
+        } else 
+        if (t == typeid(UNIFORM_INT_t)) {
+            setInt(name, programObject, CAST(UNIFORM_INT_t &, uniform).val);
+        } else 
         if (t == typeid(UNIFORM_FLOAT_t)) {
             setFloat(name, programObject, CAST(UNIFORM_FLOAT_t &, uniform).val);
-            // setFloat(name, programObject, reinterpret_cast<UNIFORM_FLOAT_t&>(uniform).val);
-            // setFloat(name, programObject, any_cast<UNIFORM_FLOAT_t&>(uniform).val);
-        } else if (t == typeid(UNIFORM_VEC3_t)) {
+        } else 
+        if (t == typeid(UNIFORM_VEC2_t)) {
+            setVec2(name, programObject, CAST(UNIFORM_VEC2_t &, uniform).val);
+        } else 
+        if (t == typeid(UNIFORM_VEC3_t)) {
             setVec3(name, programObject, CAST(UNIFORM_VEC3_t &, uniform).val);
-            // setVec3(name, programObject, reinterpret_cast<UNIFORM_VEC3_t&>(uniform).val);
-            // setVec3(name, programObject, any_cast<UNIFORM_VEC3_t&>(uniform).val);
-        } else if (t == typeid(UNIFORM_VEC4_t)) {
+        } else 
+        if (t == typeid(UNIFORM_VEC4_t)) {
             setVec4(name, programObject, CAST(UNIFORM_VEC4_t &, uniform).val);
-            // setVec4(name, programObject, reinterpret_cast<UNIFORM_VEC4_t&>(uniform).val);
-            // setVec4(name, programObject, any_cast<UNIFORM_VEC4_t&>(uniform).val);
+        } else 
+        if (t == typeid(UNIFORM_MAT2_t)) {
+            setMat2(name, programObject, CAST(UNIFORM_MAT2_t &, uniform).val);
+        } else 
+        if (t == typeid(UNIFORM_MAT3_t)) {
+            setMat3(name, programObject, CAST(UNIFORM_MAT3_t &, uniform).val);
+        } else 
+        if (t == typeid(UNIFORM_MAT4_t)) {
+            setMat4(name, programObject, CAST(UNIFORM_MAT4_t &, uniform).val);
         }
         // debug(name);
     }

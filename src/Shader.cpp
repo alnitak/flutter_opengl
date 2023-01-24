@@ -7,6 +7,7 @@
 
 #define LOG_TAG_SHADER "NATIVE SHADER"
 
+// Query eglGetError and eventully print it with the [note]
 void eglPrintError(const std::string &note) {
     EGLint error = eglGetError();
     std::string ret;
@@ -79,17 +80,14 @@ Shader::Shader(OpenglPluginContext *textureStruct)
 Shader::~Shader() {
     if (programObject != 0)
         glDeleteProgram(programObject);
-#ifdef _IS_WIN_
-    // pixelBuffer.clear();
-        // if (pixelBuffer != nullptr) 
-        //     free(pixelBuffer);
-#endif
 }
 
+// Not yet used. It will be used to draw the scene only when new data to draw it will be sent
 void Shader::setIsContinuous(bool isContinuous) {
     _isContinuous = isContinuous;
 }
 
+// Adds the basic uniforms used in ShaderToy shaders
 void Shader::addShaderToyUniforms() {
     glm::vec4 iMouse = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
     glm::vec3 iResolution = glm::vec3((GLfloat) width, (GLfloat) height, 0.0f);
@@ -104,6 +102,7 @@ void Shader::setShadersSize(int w, int h) {
     height = h;
 }
 
+// Set the source of the shaders
 void Shader::setShadersText(std::string vertexSource, std::string fragmentSource) {
     this->vertexSource = vertexSource;
     this->fragmentSource = fragmentSource;
@@ -183,6 +182,8 @@ std::string Shader::initShader() {
     return compileError;
 }
 
+// Prepare the common vertex shader and uniforms to be used with
+// the ShaderToy fragment shader
 std::string Shader::initShaderToy() {
     // Shows how to use the mouse input (only left button supported):
     //
@@ -310,9 +311,16 @@ void Shader::use() const {
     glUseProgram(programObject);
 }
 
+// called from the main rendering loop.
+// The workflow:
+// 1 - Make the context current (linux & win)
+// 2 - set all uniforms
+// 3 - draw into frame buffer object (linux & win). On android draw to texture and swap buffer
+// 4 - tell to Flutter texture registrat that a new frame is available
 void Shader::drawFrame() {
     if (programObject == 0) return;
     std::lock_guard<std::mutex> lock_guard(mutex_);
+
 #ifdef _IS_LINUX_
     gdk_gl_context_make_current(self->context);
 #elif _IS_WIN_
@@ -324,15 +332,10 @@ void Shader::drawFrame() {
     GLfloat time = (GLfloat) clock() / (GLfloat) CLOCKS_PER_SEC - startTime;
     use();
 
-    glm::vec3 iResolution = glm::vec3((GLfloat) width, (GLfloat) height, 0.0f);
-    uniformsList.setUniformValue("iResolution", (void *) (&iResolution));
     uniformsList.setUniformValue("iTime", (void *) (&time));
     uniformsList.sendAllUniforms();
 
 #ifdef _IS_ANDROID_
-    //    // Load the vertex data
-    //    glVertexAttribPointer ( 0, 3, GL_FLOAT, GL_FALSE, 0, shaderVertices );
-    //    glEnableVertexAttribArray ( 0 );
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     if (!eglSwapBuffers(self->display, self->surface)) {

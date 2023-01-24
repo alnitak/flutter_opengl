@@ -100,9 +100,15 @@ public:
                 : type(type), val(data) {};
     };
 
+    typedef UniformStruct<bool> UNIFORM_BOOL_t;
+    typedef UniformStruct<int> UNIFORM_INT_t;
     typedef UniformStruct<float> UNIFORM_FLOAT_t;
+    typedef UniformStruct<glm::vec2> UNIFORM_VEC2_t;
     typedef UniformStruct<glm::vec3> UNIFORM_VEC3_t;
     typedef UniformStruct<glm::vec4> UNIFORM_VEC4_t;
+    typedef UniformStruct<glm::mat2> UNIFORM_MAT2_t;
+    typedef UniformStruct<glm::mat3> UNIFORM_MAT3_t;
+    typedef UniformStruct<glm::mat4> UNIFORM_MAT4_t;
 
     map<string, any> uniforms;
 
