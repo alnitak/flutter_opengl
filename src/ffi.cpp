@@ -46,15 +46,13 @@ extern "C" FFI_PLUGIN_EXPORT void getTextureSize(int32_t *width, int32_t *height
 
 ///////////////////////////////////
 // Start OpenGL thread
-std::thread loopThread;
 extern "C" FFI_PLUGIN_EXPORT void
 startThread() {
     if (renderer == nullptr) {
         LOGD(LOG_TAG_FFI, "startThread: Texture not yet created!");
         return;
     }
-    // renderer->start();
-    loopThread = std::thread([&]() {
+    std::thread loopThread = std::thread([&]() {
         renderer->loop();
     });
     loopThread.detach();
@@ -92,6 +90,8 @@ setShader(bool isContinuous,
     return ret;
 }
 
+///////////////////////////////////
+// Set new ShaderToy shader
 extern "C" FFI_PLUGIN_EXPORT const char *
 setShaderToy(const char *fragmentShader) {
     if (renderer == nullptr) {
@@ -105,7 +105,7 @@ setShaderToy(const char *fragmentShader) {
 }
 
 ///////////////////////////////////
-// Get shader
+// Get shader sources
 extern "C" FFI_PLUGIN_EXPORT const char *
 getVertexShader() {
     if (renderer == nullptr) {

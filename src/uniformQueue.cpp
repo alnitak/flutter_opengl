@@ -123,9 +123,24 @@ void UniformQueue::addUniform(string name, UniformType type, void *val) {
 
     // cout << "ADD " << name << endl;
     switch (type) {
+        case UNIFORM_BOOL: {
+            bool f = *(bool *) val;
+            uniforms.emplace(name, UniformStruct<bool>(UNIFORM_BOOL, f));
+            break;
+        }
+        case UNIFORM_INT: {
+            int f = *(int *) val;
+            uniforms.emplace(name, UniformStruct<int>(UNIFORM_INT, f));
+            break;
+        }
         case UNIFORM_FLOAT: {
             float f = *(float *) val;
             uniforms.emplace(name, UniformStruct<float>(UNIFORM_FLOAT, f));
+            break;
+        }
+        case UNIFORM_VEC2: {
+            glm::vec2 f = *(glm::vec2 *) val;
+            uniforms.emplace(name, UNIFORM_VEC2_t(UNIFORM_VEC2, f));
             break;
         }
         case UNIFORM_VEC3: {
@@ -136,6 +151,21 @@ void UniformQueue::addUniform(string name, UniformType type, void *val) {
         case UNIFORM_VEC4: {
             glm::vec4 f = *(glm::vec4 *) val;
             uniforms.emplace(name, UNIFORM_VEC4_t(UNIFORM_VEC4, f));
+            break;
+        }
+        case UNIFORM_MAT2: {
+            glm::mat2 f = *(glm::mat2 *) val;
+            uniforms.emplace(name, UNIFORM_MAT2_t(UNIFORM_MAT2, f));
+            break;
+        }
+        case UNIFORM_MAT3: {
+            glm::mat3 f = *(glm::mat3 *) val;
+            uniforms.emplace(name, UNIFORM_MAT3_t(UNIFORM_MAT3, f));
+            break;
+        }
+        case UNIFORM_MAT4: {
+            glm::mat4 f = *(glm::mat4 *) val;
+            uniforms.emplace(name, UNIFORM_MAT4_t(UNIFORM_MAT4, f));
             break;
         }
     }

@@ -225,7 +225,7 @@ std::string Shader::initShaderToy() {
                        #endif
                        #if defined _IS_LINUX_ || defined _IS_WIN_
                        // The FBO is vertical flipped. It has top-left origin, but OpenGL has bottom-left
-                       // So flip in vertical axis when using framebuffer
+                       // So do a flip in vertical axis when using framebuffer
                        "    mainImage(gl_FragColor, vec2(gl_FragCoord.x, iResolution.y-gl_FragCoord.y));\n"
                        #endif
                        "}\n";
