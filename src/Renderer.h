@@ -60,6 +60,8 @@ public:
 
     double getFrameRate() { return frameRate; };
 
+    void setNewTextureMsg() { msg = MSG_NEW_TEXTURE; };
+
 private:
     OpenglPluginContext *self;
     std::mutex mutex;
@@ -81,6 +83,7 @@ private:
         MSG_INIT_OPENGL, // only in Android, this must be called in the loop thread(?)
         MSG_STOP_RENDERER,
         MSG_NEW_SHADER,
+        MSG_NEW_TEXTURE,
     };
     enum RenderThreadMessage msg;
 

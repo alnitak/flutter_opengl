@@ -1,13 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_opengl/opengl_controller.dart';
 import 'package:flutter_opengl_example/shadertoy.dart';
+
+import 'Utils.dart';
 
 bool textureCreated = false;
 bool shaderActive = false;
 int currentShaderIndex = -1;
 
+/// Tab page to test the plugin
+/// - create the texture id and use it in the Texture() widget
+/// - start/stop renderer
+/// - choose shader samples
 class Controls extends StatefulWidget {
   final Function(Size) onTextureSizeChanged;
   final Function(int) onTextureIdChanged;
@@ -44,6 +51,8 @@ class _ControlsState extends State<Controls> {
     widget.onTextureSizeChanged(textureSizes[2]);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -78,6 +87,22 @@ class _ControlsState extends State<Controls> {
                 await OpenGLController().openglPlugin.draw();
               },
               child: const Text('draw'),
+            ),
+
+            /// iChannel0
+            ElevatedButton(
+              onPressed: () async {
+                Utils.setAssetTexture('iChannel0', 'assets/texture.png');
+              },
+              child: const Text('iChannel0'),
+            ),
+
+            /// iChannel1
+            ElevatedButton(
+              onPressed: () async {
+                Utils.setAssetTexture('iChannel1', 'assets/dash.png');
+              },
+              child: const Text('iChannel1'),
             ),
           ],
         ),

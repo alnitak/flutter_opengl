@@ -8,10 +8,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="support Android, Linux, Windows">
+      <change afterPath="$PROJECT_DIR$/example/assets/dash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/lib/Utils.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/lib/shader_widget.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/lib/test_widget.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/assets/texture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/controls.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/controls.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/edit_shader.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/edit_shader.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/shadertoy.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/shadertoy.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_opengl_ffi.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_opengl_ffi.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/opengl_texture.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/opengl_texture.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/linux/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/linux/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Renderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Shader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Shader.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ffi.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ffi.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ffi.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/ffi.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uniformQueue.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/uniformQueue.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uniformQueue.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/uniformQueue.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/flutter_opengl_method_channel_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/flutter_opengl_method_channel_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +47,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />

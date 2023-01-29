@@ -29,6 +29,7 @@ add_library(
       ../src/Renderer.cpp
       ../src/Shader.cpp
       ../src/uniformQueue.cpp
+      ../src/Sampler2D.cpp
 )
 
 # Apply a standard set of build settings that are configured in the

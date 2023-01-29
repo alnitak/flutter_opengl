@@ -28,7 +28,9 @@ extern "C" FFI_PLUGIN_EXPORT void setMousePosition(
         double posX,
         double posY,
         double posZ,
-        double posW);
+        double posW,
+        double textureWidgetWidth, 
+        double textureWidgetHeight);
 extern "C" FFI_PLUGIN_EXPORT double getFPS();
 extern "C" FFI_PLUGIN_EXPORT bool addUniform(
         const char *name,
@@ -36,6 +38,11 @@ extern "C" FFI_PLUGIN_EXPORT bool addUniform(
         void *val);
 extern "C" FFI_PLUGIN_EXPORT bool setUniform(
         const char *name,
+        void *val);
+extern "C" FFI_PLUGIN_EXPORT bool addSampler2DUniform(
+        const char *name, 
+        int width, 
+        int height, 
         void *val);
 
 #endif // FFI_H

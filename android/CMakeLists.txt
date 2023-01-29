@@ -39,6 +39,7 @@ add_library(
         ../src/Renderer.cpp
         ../src/Shader.cpp
         ../src/uniformQueue.cpp
+        ../src/Sampler2D.cpp
 )
 #set (CMAKE_SHARED_LINKER_FLAGS "-Wl,--gc-sections,--strip-debug -fvisibility=hidden -fuse-ld=lld")
 

@@ -7,6 +7,11 @@ import 'package:image/image.dart' as img;
 import 'Utils.dart';
 import 'shadertoy.dart';
 
+/// Example widget that takes a child to be grabbed and used as
+/// a texture to feed the given shader.
+///
+/// The renderer is activated by touching it, another touch
+/// to interact with the shader and another touch to terminate the renderer
 class ShaderWidget extends StatefulWidget {
   final Widget child;
   final int shaderToyIndex;

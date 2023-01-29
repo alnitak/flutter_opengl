@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_opengl/opengl_controller.dart';
 
+/// Page to edit and compile the shader
+///
+/// In this example there is button to add a vec3 "TEST" uniform
+/// and other 2 button to increase/decrease its x value.
+/// To test this:
+/// - add into the fragment shader the new uniform "uniform vec3 TEST;"
+/// - use "TEST.x" somewhere in the code
+/// - press the "compile shader" button
+/// - press the "add TEST" button
+/// - try the behavior by pressing the increment/decrement TEST buttons
 class EditShader extends StatelessWidget {
   const EditShader({
     Key? key,

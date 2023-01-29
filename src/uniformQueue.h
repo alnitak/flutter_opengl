@@ -2,6 +2,7 @@
 #define UNIFORM_QUEUE_H
 
 #include "common.h"
+#include "Sampler2D.h"
 
 #include <iostream>
 #include <vector>
@@ -48,7 +49,8 @@ typedef enum {
     UNIFORM_VEC4,
     UNIFORM_MAT2,
     UNIFORM_MAT3,
-    UNIFORM_MAT4
+    UNIFORM_MAT4,
+    UNIFORM_SAMPLER2D
 } UniformType;
 
 void setBool(const string &name, GLuint po, bool value);
@@ -75,6 +77,8 @@ void setMat3(const string &name, GLuint po, const glm::mat3 &mat);
 
 void setMat4(const string &name, GLuint po, const glm::mat4 &mat);
 
+void setSampler2D(const string &name, GLuint po, Sampler2D &data);
+
 class UniformQueue {
 public:
     UniformQueue();
@@ -90,6 +94,8 @@ public:
     bool setUniformValue(const string &, void *val);
 
     void sendAllUniforms();
+
+    void setAllSampler2D();
 
     template<typename T>
     struct UniformStruct {
@@ -109,6 +115,7 @@ public:
     typedef UniformStruct<glm::mat2> UNIFORM_MAT2_t;
     typedef UniformStruct<glm::mat3> UNIFORM_MAT3_t;
     typedef UniformStruct<glm::mat4> UNIFORM_MAT4_t;
+    typedef UniformStruct<Sampler2D> UNIFORM_SAMPLER2D_t;
 
     map<string, any> uniforms;
 

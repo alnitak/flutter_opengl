@@ -1,4 +1,5 @@
 import 'dart:ffi' as ffi;
+import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ enum UniformType {
   uniformVec4,
   uniformMat2,
   uniformMat3,
-  uniformMat4
+  uniformMat4,
+  uniformSampler2D,
 }
 
 /// Bindings to Flutter_OpenGL
@@ -197,22 +199,32 @@ class FlutterOpenGLFfi {
   // sign(mouze.w)  = button is clicked
   // https://www.shadertoy.com/view/llySRh
   // https://www.shadertoy.com/view/Mss3zH
-  void setMousePosition(Offset pos, PointerEventType eventType) {
+  void setMousePosition(
+    Offset startingPos,
+    Offset pos,
+    PointerEventType eventType,
+    Size twSize,
+  ) {
+
     return _setMousePosition(
         pos.dx,
         pos.dy,
-        eventType == PointerEventType.onPointerDown
-            ? pos.dx
-            : (eventType == PointerEventType.onPointerMove ? pos.dx : -pos.dx),
-        eventType == PointerEventType.onPointerDown ? pos.dy : -pos.dy);
+        eventType == PointerEventType.onPointerDown ||
+        eventType == PointerEventType.onPointerMove
+            ? startingPos.dx
+            : -startingPos.dx,
+        -startingPos.dy,
+      twSize.width,
+      twSize.height,
+    );
   }
 
   late final _setMousePositionPtr = _lookup<
       ffi.NativeFunction<
           ffi.Void Function(ffi.Double, ffi.Double, ffi.Double,
-              ffi.Double)>>('setMousePosition');
+              ffi.Double, ffi.Double, ffi.Double)>>('setMousePosition');
   late final _setMousePosition = _setMousePositionPtr
-      .asFunction<void Function(double, double, double, double)>();
+      .asFunction<void Function(double, double, double, double, double, double)>();
 
   /// ***********************************************
   /// **** GET FPS
@@ -424,8 +436,45 @@ class FlutterOpenGLFfi {
       int Function(ffi.Pointer<ffi.Char>, int, ffi.Pointer<ffi.Void>)>();
 
   /// ***********************************************
+  /// **** ADD SAMPLER2D UNIFORM
+  ///
+  /// * add SAMPLER2D RGBA32
+  bool addSampler2DUniform(
+    String name,
+    int width,
+    int height,
+    Uint8List val,
+  ) {
+    assert(
+        val.length == width * height * 4,
+        "\nAssert error: RGBA32 raw image length mismatch."
+        "\nYou have passed a Uint8list with ${val.length}"
+        "\nIt should be $width x $height * 4 = ${width * height * 4}");
+    ffi.Pointer<ffi.Int8> valT = calloc(ffi.sizeOf<ffi.Int8>() * val.length);
+    for (int i = 0; i < val.length; ++i) {
+      valT[i] = val[i];
+    }
+
+    int ret = _addSampler2DUniform(
+      name.toNativeUtf8().cast<ffi.Char>(),
+      width,
+      height,
+      valT.cast<ffi.Void>(),
+    );
+    calloc.free(valT);
+    return ret == 0 ? false : true;
+  }
+
+  late final _addSampler2DUniformPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Int32, ffi.Int32,
+              ffi.Pointer<ffi.Void>)>>('addSampler2DUniform');
+  late final _addSampler2DUniform = _addSampler2DUniformPtr.asFunction<
+      int Function(ffi.Pointer<ffi.Char>, int, int, ffi.Pointer<ffi.Void>)>();
+
+  /// ***********************************************
   /// **** SET UNIFORMs
-  /// * add BOOL
+  /// * set BOOL
   bool setBoolUniform(String name, bool val) {
     ffi.Pointer<ffi.Bool> valT = calloc(ffi.sizeOf<ffi.Bool>());
     valT.value = val;
@@ -438,7 +487,7 @@ class FlutterOpenGLFfi {
     return ret == 0 ? false : true;
   }
 
-  /// * add INT
+  /// * set INT
   bool setIntUniform(String name, int val) {
     ffi.Pointer<ffi.Int32> valT = calloc(ffi.sizeOf<ffi.Int32>());
     valT.value = val;
@@ -451,7 +500,7 @@ class FlutterOpenGLFfi {
     return ret == 0 ? false : true;
   }
 
-  /// * add FLOAT
+  /// * set FLOAT
   bool setFloatUniform(String name, double val) {
     ffi.Pointer<ffi.Float> valT = calloc(ffi.sizeOf<ffi.Float>());
     valT.value = val;
@@ -464,7 +513,7 @@ class FlutterOpenGLFfi {
     return ret == 0 ? false : true;
   }
 
-  /// * add VEC2
+  /// * set VEC2
   bool setVec2Uniform(String name, List<double> val) {
     ffi.Pointer<ffi.Float> valT = calloc(ffi.sizeOf<ffi.Float>() * 2);
     valT[0] = val[0];
@@ -478,7 +527,7 @@ class FlutterOpenGLFfi {
     return ret == 0 ? false : true;
   }
 
-  /// * add VEC3
+  /// * set VEC3
   bool setVec3Uniform(String name, List<double> val) {
     ffi.Pointer<ffi.Float> valT = calloc(ffi.sizeOf<ffi.Float>() * 3);
     valT[0] = val[0];
@@ -493,7 +542,7 @@ class FlutterOpenGLFfi {
     return ret == 0 ? false : true;
   }
 
-  /// * add VEC4
+  /// * set VEC4
   bool setVec4Uniform(String name, List<double> val) {
     ffi.Pointer<ffi.Float> valT = calloc(ffi.sizeOf<ffi.Float>() * 4);
     valT[0] = val[0];
@@ -509,7 +558,7 @@ class FlutterOpenGLFfi {
     return ret == 0 ? false : true;
   }
 
-  /// * add MAT2
+  /// * set MAT2
   bool setMat2Uniform(String name, List<double> val) {
     ffi.Pointer<ffi.Float> valT = calloc(ffi.sizeOf<ffi.Float>() * 4);
     valT[0] = val[0];
@@ -525,7 +574,7 @@ class FlutterOpenGLFfi {
     return ret == 0 ? false : true;
   }
 
-  /// * add MAT3
+  /// * set MAT3
   bool setMat3Uniform(String name, List<double> val) {
     ffi.Pointer<ffi.Float> valT = calloc(ffi.sizeOf<ffi.Float>() * 9);
     valT[0] = val[0];
@@ -546,7 +595,7 @@ class FlutterOpenGLFfi {
     return ret == 0 ? false : true;
   }
 
-  /// * add MAT4
+  /// * set MAT4
   bool setMat4Uniform(String name, List<double> val) {
     ffi.Pointer<ffi.Float> valT = calloc(ffi.sizeOf<ffi.Float>() * 12);
     valT[0] = val[0];
@@ -569,6 +618,9 @@ class FlutterOpenGLFfi {
     calloc.free(valT);
     return ret == 0 ? false : true;
   }
+
+  /// * set Sampler2D
+  // bool setSampler2DUniform(String name, )
 
   late final _setUniformPtr = _lookup<
       ffi.NativeFunction<

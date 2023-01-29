@@ -88,6 +88,8 @@ void Shader::setIsContinuous(bool isContinuous) {
 }
 
 // Adds the basic uniforms used in ShaderToy shaders
+// #include "Sampler2D.h"
+// Sampler2D sampler = Sampler2D();
 void Shader::addShaderToyUniforms() {
     glm::vec4 iMouse = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
     glm::vec3 iResolution = glm::vec3((GLfloat) width, (GLfloat) height, 0.0f);
@@ -95,6 +97,24 @@ void Shader::addShaderToyUniforms() {
     uniformsList.addUniform("iMouse", UNIFORM_VEC4, (void *) (&iMouse));
     uniformsList.addUniform("iResolution", UNIFORM_VEC3, (void *) (&iResolution));
     uniformsList.addUniform("iTime", UNIFORM_FLOAT, (void *) (&time));
+
+
+    // /// TMP CHANNEL0
+    // unsigned char *rawData = (unsigned char *)malloc(width * height * 4 * sizeof(unsigned char));
+    // unsigned char *ptr = rawData;
+    //     for (int x=0;x<width * height; ++x){
+    //         ptr[0] = 255;//random()}%255;
+    //         ptr++;
+    //         ptr[0] = 0;// + (random()%100);
+    //         ptr++;
+    //         ptr[0] = 0;//random()}%255;
+    //         ptr++;
+    //         ptr[0] = 255;
+    //         ptr++;
+    //     }
+    // sampler.add_RGBA32(width, height, rawData);
+    // uniformsList.addUniform("iChannel0", UNIFORM_SAMPLER2D, (void *) (&sampler));
+    // free(rawData);
 }
 
 void Shader::setShadersSize(int w, int h) {
@@ -165,7 +185,11 @@ std::string Shader::initShader() {
 
     glFramebufferTexture(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, self->texture_name, 0);
 
+    uniformsList.setAllSampler2D();
+    
+
 #endif
+
 #ifdef _IS_LINUX_
     gdk_gl_context_clear_current();
 #elif _IS_WIN_
@@ -215,6 +239,7 @@ std::string Shader::initShaderToy() {
 
     std::string common = "precision highp float;         \n"
                          "uniform sampler2D iChannel0;   \n"
+                         "uniform sampler2D iChannel1;   \n"
                          "uniform vec4      iMouse;      \n"  // mouse position (in pixels)
                          "uniform vec3      iResolution; \n"  // viewport resolution (in pixels)
                          "uniform float     iTime;       \n"; // shader playback time (in seconds)
@@ -334,6 +359,7 @@ void Shader::drawFrame() {
 
     uniformsList.setUniformValue("iTime", (void *) (&time));
     uniformsList.sendAllUniforms();
+
 
 #ifdef _IS_ANDROID_
     glDrawArrays(GL_TRIANGLES, 0, 6);

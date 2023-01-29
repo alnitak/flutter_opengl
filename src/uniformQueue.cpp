@@ -1,4 +1,5 @@
 #include "uniformQueue.h"
+#include "Shader.h"
 
 #include <iterator>
 #include <iomanip>      // for setw
@@ -17,7 +18,20 @@ UniformQueue::UniformQueue() {
 }
 
 UniformQueue::~UniformQueue() {
-    // uniforms.clear();
+    // delete all Sampler2D textures
+    for (auto &[name, uniform]: uniforms) {
+        const type_info &t = uniforms[name].type();
+
+        if (t == typeid(UNIFORM_SAMPLER2D_t)) {
+            Sampler2D &sampler = CAST(UNIFORM_SAMPLER2D_t &, uniform).val;
+            // if the data is empty, the texture is already been generated
+            if (sampler.data.size() != 0) 
+            {
+                glDeleteTextures(1, &sampler.texture_index);
+            }
+            // debug(name);
+        }
+    }
 }
 
 void UniformQueue::debug(const string &name) {
@@ -109,6 +123,17 @@ void UniformQueue::debug(const string &name) {
              left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[3][2] << " " <<
              left << setw(10) << CAST(UNIFORM_MAT4_t &, uniform).val[3][3] <<
              endl;
+    } else 
+    if (t == typeid(UNIFORM_SAMPLER2D_t)) {
+        cout << left << setw(15) << name <<
+             left << setw(7) << "Sampler2D: " << 
+             left << setw(4) << CAST(UNIFORM_SAMPLER2D_t &, uniform).val.width << " x " <<
+             CAST(UNIFORM_SAMPLER2D_t &, uniform).val.height << 
+             "  texture index: " <<
+             left << setw(6) << CAST(UNIFORM_SAMPLER2D_t &, uniform).val.texture_index << 
+             "  N texture: " <<
+             CAST(UNIFORM_SAMPLER2D_t &, uniform).val.nTexture << 
+             endl;
     }
 }
 
@@ -116,12 +141,12 @@ void UniformQueue::debug(const string &name) {
 // Add a uniform to the shader
 void UniformQueue::addUniform(string name, UniformType type, void *val) {
     // check if the uniform already exists
-    if (uniforms.find(name) != uniforms.end()) {
+    if (/*type != UNIFORM_SAMPLER2D && */uniforms.find(name) != uniforms.end()) {
         cout << "Uniform \"" << name << "\"  already exists!" << endl;
         return;
     }
 
-    // cout << "ADD " << name << endl;
+    cout << "ADD " << name << endl;
     switch (type) {
         case UNIFORM_BOOL: {
             bool f = *(bool *) val;
@@ -166,6 +191,11 @@ void UniformQueue::addUniform(string name, UniformType type, void *val) {
         case UNIFORM_MAT4: {
             glm::mat4 f = *(glm::mat4 *) val;
             uniforms.emplace(name, UNIFORM_MAT4_t(UNIFORM_MAT4, f));
+            break;
+        }
+        case UNIFORM_SAMPLER2D: {
+            const Sampler2D f = *(Sampler2D*)(val);
+            uniforms.emplace(name, UNIFORM_SAMPLER2D_t(UNIFORM_SAMPLER2D, f));
             break;
         }
     }
@@ -221,6 +251,11 @@ bool UniformQueue::setUniformValue(const string &name, void *val) {
         glm::mat4 f = *(glm::mat4 *) val;
         CAST(UNIFORM_MAT4_t &, uniforms[name]).val = f;
         found = true;
+    } else  
+    if (t == typeid(UNIFORM_SAMPLER2D_t)) {
+        Sampler2D f = *(Sampler2D *) val;
+        CAST(UNIFORM_SAMPLER2D_t &, uniforms[name]).val = f;
+        found = true;
     } else 
     {
         cout << "Uniform \"" << name << "\"  not found!" << endl;
@@ -259,8 +294,34 @@ void UniformQueue::sendAllUniforms() {
         } else 
         if (t == typeid(UNIFORM_MAT4_t)) {
             setMat4(name, programObject, CAST(UNIFORM_MAT4_t &, uniform).val);
+        } else 
+        if (t == typeid(UNIFORM_SAMPLER2D_t)) {
+            setSampler2D(name, programObject, CAST(UNIFORM_SAMPLER2D_t &, uniform).val);
+            // debug(name);
         }
-        // debug(name);
+    }
+}
+
+// Called once when a new texture is set. Could be from Shader::initShader()
+// or from Renderer loop with MSG_NEW_TEXTURE message
+void UniformQueue::setAllSampler2D()
+{
+    int n = 0;
+    for (auto &[name, uniform]: uniforms) {
+        const type_info &t = uniforms[name].type();
+
+        if (t == typeid(UNIFORM_SAMPLER2D_t)) {
+            Sampler2D &sampler = CAST(UNIFORM_SAMPLER2D_t &, uniform).val;
+            // if the data is empty, the texture is already been generated
+            if (sampler.data.size() != 0) 
+            {
+                sampler.genTexture(n);
+                setSampler2D(name, programObject, sampler);
+                debug(name);
+            }
+            n++;
+            // debug(name);
+        }
     }
 }
 
@@ -319,4 +380,16 @@ void setMat3(const string &name, GLuint po, const glm::mat3 &mat) {
 // ------------------------------------------------------------------------
 void setMat4(const string &name, GLuint po, const glm::mat4 &mat) {
     glUniformMatrix4fv(glGetUniformLocation(po, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
+// ------------------------------------------------------------------------
+void setSampler2D(const string &name, GLuint po, Sampler2D &data) {
+
+    glUniform1i(
+        glGetUniformLocation(po, name.c_str()),
+        data.nTexture
+    );
+
+    // glActiveTexture(GL_TEXTURE0 + data.nTexture);
+    glBindTexture(GL_TEXTURE_2D, data.texture_index);
 }

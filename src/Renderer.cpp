@@ -355,11 +355,24 @@ void Renderer::loop() {
                 msg = MSG_NONE;
                 break;
 
+            case MSG_NEW_TEXTURE:
+        #ifdef _IS_LINUX_
+                gdk_gl_context_make_current(self->context);
+        #elif _IS_WIN_
+                wglMakeCurrent(self->hdc, self->hrc);
+        #endif
+                shader->getUniforms().setAllSampler2D();
+        #ifdef _IS_LINUX_
+                 gdk_gl_context_clear_current();
+        #endif
+                msg = MSG_NONE;
+            break;
+
             case MSG_STOP_RENDERER:
                 loopRunning = false;
-#if defined _IS_ANDROID_ || defined _IS_WIN_
-                destroyGL();
-#endif
+        #if defined _IS_ANDROID_ || defined _IS_WIN_
+                    destroyGL();
+        #endif
                 break;
 
             default:

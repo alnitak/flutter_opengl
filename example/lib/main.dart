@@ -6,6 +6,8 @@ import 'package:flutter_opengl_example/controls.dart';
 import 'package:flutter_opengl_example/edit_shader.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'test_widget.dart';
+
 void main() {
   OpenGLController().initializeGL();
   runApp(const MyApp());
@@ -46,7 +48,7 @@ class _MyAppState extends State<MyApp> {
         brightness: Brightness.dark,
       ),
       home: DefaultTabController(
-        length: 2,
+        length: 4,
         child: Scaffold(
           body: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -116,12 +118,15 @@ class _MyAppState extends State<MyApp> {
                     tabs: [
                       Tab(text: 'controls'),
                       Tab(text: 'edit shader'),
+                      Tab(text: 'test 1'),
+                      Tab(text: 'test 2'),
                     ],
                   ),
                 ),
 
                 const SizedBox(height: 12),
 
+                /// TABS
                 Expanded(
                   child: TabBarView(
                     children: [
@@ -133,10 +138,13 @@ class _MyAppState extends State<MyApp> {
                             textureSize.value = size,
                       ),
                       ValueListenableBuilder<String>(
-                          valueListenable: shaderUrl,
-                          builder: (_, shaderUrl, __) {
-                            return EditShader();
-                          }),
+                        valueListenable: shaderUrl,
+                        builder: (_, shaderUrl, __) {
+                          return const EditShader();
+                        },
+                      ),
+                      const TestWidget(shaderToyIndex: 1),
+                      const TestWidget(shaderToyIndex: 4),
                     ],
                   ),
                 ),

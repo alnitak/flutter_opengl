@@ -6,89 +6,472 @@
 /// "iMouse", "iTime" and "iResolution" uniforms are currently supported
 
 List<Map<String, String>> shadertoy = [
-  {
-    // https://www.shadertoy.com/view/ldfyzl
-    'url': 'https://www.shadertoy.com/view/ldfyzl',
+// {
+//     'url': '',
+//     'fragment':
+// '''
+// void mainImage( out vec4 fragColor, in vec2 fragCoord )
+// {
+//     vec2 iR = iResolution.xy;
+//     vec2 uv = fragCoord/iR;
+//
+//     float n = .5;
+//     if (uv.x >= n-0.01 && uv.x <= n+0.01)
+//         fragColor = vec4(1., 1., 0., 1.0);
+//
+//     else
+//     if (uv.y >= n-0.01 && uv.y <= n+0.01)
+//         fragColor = vec4(1., 1., 0., 1.0);
+//
+//     else
+//     if (uv.x > n) {
+//         fragColor = texture(iChannel0, uv);
+//     } else {
+//         fragColor = texture(iChannel1, uv);
+//     }
+// }
+// '''
+//   },
+{   // https://www.shadertoy.com/view/ltffzl
+    'url': 'https://www.shadertoy.com/view/ltffzl',
     'fragment':
-    '''
-/*
+'''
+// Heartfelt - by Martijn Steinrucken aka BigWings - 2017
+// Email:countfrolic@gmail.com Twitter:@The_ArtOfCode
+// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 
-A quick experiment with rain drop ripples.
+// I revisited the rain effect I did for another shader. This one is better in multiple ways:
+// 1. The glass gets foggy.
+// 2. Drops cut trails in the fog on the glass.
+// 3. The amount of rain is adjustable (with Mouse.y)
 
-This effect was written for and used in the launch scene of the
-64kB intro "H - Immersion", by Ctrl-Alt-Test.
+// To have full control over the rain, uncomment the HAS_HEART define 
 
- > http://www.ctrl-alt-test.fr/productions/h-immersion/
- > https://www.youtube.com/watch?v=27PN1SsXbjM
+// A video of the effect can be found here:
+// https://www.youtube.com/watch?v=uiF5Tlw22PI&feature=youtu.be
 
--- 
-Zavie / Ctrl-Alt-Test
+// Music - Alone In The Dark - Vadim Kiselev
+// https://soundcloud.com/ahmed-gado-1/sad-piano-alone-in-the-dark
+// Rain sounds:
+// https://soundcloud.com/elirtmusic/sleeping-sound-rain-and-thunder-1-hours
 
-*/
+#define S(a, b, t) smoothstep(a, b, t)
+//#define CHEAP_NORMALS
+#define HAS_HEART
+#define USE_POST_PROCESSING
 
-// Maximum number of cells a ripple can cross.
-#define MAX_RADIUS 2
-
-// Set to 1 to hash twice. Slower, but less patterns.
-#define DOUBLE_HASH 0
-
-// Hash functions shamefully stolen from:
-// https://www.shadertoy.com/view/4djSRW
-#define HASHSCALE1 .1031
-#define HASHSCALE3 vec3(.1031, .1030, .0973)
-
-float hash12(vec2 p)
-{
-	vec3 p3  = fract(vec3(p.xyx) * HASHSCALE1);
-    p3 += dot(p3, p3.yzx + 19.19);
-    return fract((p3.x + p3.y) * p3.z);
+vec3 N13(float p) {
+    //  from DAVE HOSKINS
+   vec3 p3 = fract(vec3(p) * vec3(.1031,.11369,.13787));
+   p3 += dot(p3, p3.yzx + 19.19);
+   return fract(vec3((p3.x + p3.y)*p3.z, (p3.x+p3.z)*p3.y, (p3.y+p3.z)*p3.x));
 }
 
-vec2 hash22(vec2 p)
-{
-	vec3 p3 = fract(vec3(p.xyx) * HASHSCALE3);
-    p3 += dot(p3, p3.yzx+19.19);
-    return fract((p3.xx+p3.yz)*p3.zy);
+vec4 N14(float t) {
+	return fract(sin(t*vec4(123., 1024., 1456., 264.))*vec4(6547., 345., 8799., 1564.));
+}
+float N(float t) {
+    return fract(sin(t*12345.564)*7658.76);
+}
 
+float Saw(float b, float t) {
+	return S(0., b, t)*S(1., b, t);
+}
+
+
+vec2 DropLayer2(vec2 uv, float t) {
+    vec2 UV = uv;
+    
+    uv.y += t*0.75;
+    vec2 a = vec2(6., 1.);
+    vec2 grid = a*2.;
+    vec2 id = floor(uv*grid);
+    
+    float colShift = N(id.x); 
+    uv.y += colShift;
+    
+    id = floor(uv*grid);
+    vec3 n = N13(id.x*35.2+id.y*2376.1);
+    vec2 st = fract(uv*grid)-vec2(.5, 0);
+    
+    float x = n.x-.5;
+    
+    float y = UV.y*20.;
+    float wiggle = sin(y+sin(y));
+    x += wiggle*(.5-abs(x))*(n.z-.5);
+    x *= .7;
+    float ti = fract(t+n.z);
+    y = (Saw(.85, ti)-.5)*.9+.5;
+    vec2 p = vec2(x, y);
+    
+    float d = length((st-p)*a.yx);
+    
+    float mainDrop = S(.4, .0, d);
+    
+    float r = sqrt(S(1., y, st.y));
+    float cd = abs(st.x-x);
+    float trail = S(.23*r, .15*r*r, cd);
+    float trailFront = S(-.02, .02, st.y-y);
+    trail *= trailFront*r*r;
+    
+    y = UV.y;
+    float trail2 = S(.2*r, .0, cd);
+    float droplets = max(0., (sin(y*(1.-y)*120.)-st.y))*trail2*trailFront*n.z;
+    y = fract(y*10.)+(st.y-.5);
+    float dd = length(st-vec2(x, y));
+    droplets = S(.3, 0., dd);
+    float m = mainDrop+droplets*r*trailFront;
+    
+    //m += st.x>a.y*.45 || st.y>a.x*.165 ? 1.2 : 0.;
+    return vec2(m, trail);
+}
+
+float StaticDrops(vec2 uv, float t) {
+	uv *= 40.;
+    
+    vec2 id = floor(uv);
+    uv = fract(uv)-.5;
+    vec3 n = N13(id.x*107.45+id.y*3543.654);
+    vec2 p = (n.xy-.5)*.7;
+    float d = length(uv-p);
+    
+    float fade = Saw(.025, fract(t+n.z));
+    float c = S(.3, 0., d)*fract(n.z*10.)*fade;
+    return c;
+}
+
+vec2 Drops(vec2 uv, float t, float l0, float l1, float l2) {
+    float s = StaticDrops(uv, t)*l0; 
+    vec2 m1 = DropLayer2(uv, t)*l1;
+    vec2 m2 = DropLayer2(uv*1.85, t)*l2;
+    
+    float c = s+m1.x+m2.x;
+    c = S(.3, 1., c);
+    
+    return vec2(c, max(m1.y*l0, m2.y*l1));
 }
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-    float resolution = 10. * exp2(-3.*iMouse.x/iResolution.x);
-	vec2 uv = fragCoord.xy / iResolution.y * resolution;
-    vec2 p0 = floor(uv);
+	vec2 uv = (fragCoord.xy-.5*iResolution.xy) / iResolution.y;
+    vec2 UV = fragCoord.xy/iResolution.xy;
+    vec3 M = iMouse.xyz/iResolution.xyz;
+    float T = iTime+M.x*2.;
+    
+    #ifdef HAS_HEART
+    T = mod(iTime, 102.);
+    T = mix(T, M.x*102., M.z>0.?1.:0.);
+    #endif
+    
+    
+    float t = T*.2;
+    
+    float rainAmount = iMouse.z>0. ? M.y : sin(T*.05)*.3+.7;
+    
+    float maxBlur = mix(3., 6., rainAmount);
+    float minBlur = 2.;
+    
+    float story = 0.;
+    float heart = 0.;
+    
+    #ifdef HAS_HEART
+    story = S(0., 70., T);
+    
+    t = min(1., T/70.);						// remap drop time so it goes slower when it freezes
+    t = 1.-t;
+    t = (1.-t*t)*70.;
+    
+    float zoom= mix(.3, 1.2, story);		// slowly zoom out
+    uv *=zoom;
+    minBlur = 4.+S(.5, 1., story)*3.;		// more opaque glass towards the end
+    maxBlur = 6.+S(.5, 1., story)*1.5;
+    
+    vec2 hv = uv-vec2(.0, -.1);				// build heart
+    hv.x *= .5;
+    float s = S(110., 70., T);				// heart gets smaller and fades towards the end
+    hv.y-=sqrt(abs(hv.x))*.5*s;
+    heart = length(hv);
+    heart = S(.4*s, .2*s, heart)*s;
+    rainAmount = heart;						// the rain is where the heart is
+    
+    maxBlur-=heart;							// inside the heart slighly less foggy
+    uv *= 1.5;								// zoom out a bit more
+    t *= .25;
+    #else
+    float zoom = -cos(T*.2);
+    uv *= .7+zoom*.3;
+    #endif
+    UV = (UV-.5)*(.9+zoom*.1)+.5;
+    
+    float staticDrops = S(-.5, 1., rainAmount)*2.;
+    float layer1 = S(.25, .75, rainAmount);
+    float layer2 = S(.0, .5, rainAmount);
+    
+    
+    vec2 c = Drops(uv, t, staticDrops, layer1, layer2);
+   #ifdef CHEAP_NORMALS
+    	vec2 n = vec2(dFdx(c.x), dFdy(c.x));// cheap normals (3x cheaper, but 2 times shittier ;))
+    #else
+    	vec2 e = vec2(.001, 0.);
+    	float cx = Drops(uv+e, t, staticDrops, layer1, layer2).x;
+    	float cy = Drops(uv+e.yx, t, staticDrops, layer1, layer2).x;
+    	vec2 n = vec2(cx-c.x, cy-c.x);		// expensive normals
+    #endif
+    
+    
+    #ifdef HAS_HEART
+    n *= 1.-S(60., 85., T);
+    c.y *= 1.-S(80., 100., T)*.8;
+    #endif
+    
+    float focus = mix(maxBlur-c.y, minBlur, S(.1, .2, c.x));
+    vec3 col = textureLod(iChannel0, UV+n, focus).rgb;
+    
+    
+    #ifdef USE_POST_PROCESSING
+    t = (T+3.)*.5;										// make time sync with first lightnoing
+    float colFade = sin(t*.2)*.5+.5+story;
+    col *= mix(vec3(1.), vec3(.8, .9, 1.3), colFade);	// subtle color shift
+    float fade = S(0., 10., T);							// fade in at the start
+    float lightning = sin(t*sin(t*10.));				// lighting flicker
+    lightning *= pow(max(0., sin(t+sin(t))), 10.);		// lightning flash
+    col *= 1.+lightning*fade*mix(1., .1, story*story);	// composite lightning
+    col *= 1.-dot(UV-=.5, UV);							// vignette
+    											
+    #ifdef HAS_HEART
+    	col = mix(pow(col, vec3(1.2)), col, heart);
+    	fade *= S(102., 97., T);
+    #endif
+    
+    col *= fade;										// composite start and end fade
+    #endif
+    
+    //col = vec3(heart);
+    fragColor = vec4(col, 1.);
+}
+'''
+  },
+  {
+  // https://www.shadertoy.com/view/ls3cDB
+  'url': 'https://www.shadertoy.com/view/ls3cDB',
+  'fragment':
+  '''
+#define pi 3.14159265359
+#define radius .1
 
-    vec2 circles = vec2(0.);
-    for (int j = -MAX_RADIUS; j <= MAX_RADIUS; ++j)
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    float aspect = iResolution.x / iResolution.y;
+
+    vec2 uv = fragCoord * vec2(aspect, 1.) / iResolution.xy;
+    vec2 mouse = iMouse.xy  * vec2(aspect, 1.) / iResolution.xy;
+    vec2 mouseDir = normalize(abs(iMouse.zw) - iMouse.xy);
+    vec2 origin = clamp(mouse - mouseDir * mouse.x / mouseDir.x, 0., 1.);
+    
+    float mouseDist = clamp(length(mouse - origin) 
+        + (aspect - (abs(iMouse.z) / iResolution.x) * aspect) / mouseDir.x, 0., aspect / mouseDir.x);
+    
+    if (mouseDir.x < 0.)
     {
-        for (int i = -MAX_RADIUS; i <= MAX_RADIUS; ++i)
-        {
-			vec2 pi = p0 + vec2(i, j);
-            #if DOUBLE_HASH
-            vec2 hsh = hash22(pi);
-            #else
-            vec2 hsh = pi;
-            #endif
-            vec2 p = pi + hash22(hsh);
-
-            float t = fract(0.3*iTime + hash12(hsh));
-            vec2 v = p - uv;
-            float d = length(v) - (float(MAX_RADIUS) + 1.)*t;
-
-            float h = 1e-3;
-            float d1 = d - h;
-            float d2 = d + h;
-            float p1 = sin(31.*d1) * smoothstep(-0.6, -0.3, d1) * smoothstep(0., -0.3, d1);
-            float p2 = sin(31.*d2) * smoothstep(-0.6, -0.3, d2) * smoothstep(0., -0.3, d2);
-            circles += 0.5 * normalize(v) * ((p2 - p1) / (2. * h) * (1. - t) * (1. - t));
-        }
+        mouseDist = distance(mouse, origin);
     }
-    circles /= float((MAX_RADIUS*2+1)*(MAX_RADIUS*2+1));
+  
+    float proj = dot(uv - origin, mouseDir);
+    float dist = proj - mouseDist;
+    
+    vec2 linePoint = uv - dist * mouseDir;
+    
+    if (dist > radius) 
+    {
+        fragColor = texture(iChannel1, uv * vec2(1. / aspect, 1.));
+        fragColor.rgb *= pow(clamp(dist - radius, 0., 1.) * 1.5, .2);
+    }
+    else if (dist >= 0.)
+    {
+        // map to cylinder point
+        float theta = asin(dist / radius);
+        vec2 p2 = linePoint + mouseDir * (pi - theta) * radius;
+        vec2 p1 = linePoint + mouseDir * theta * radius;
+        uv = (p2.x <= aspect && p2.y <= 1. && p2.x > 0. && p2.y > 0.) ? p2 : p1;
+        fragColor = texture(iChannel0, uv * vec2(1. / aspect, 1.));
+        fragColor.rgb *= pow(clamp((radius - dist) / radius, 0., 1.), .2);
+    }
+    else 
+    {
+        vec2 p = linePoint + mouseDir * (abs(dist) + pi * radius);
+        uv = (p.x <= aspect && p.y <= 1. && p.x > 0. && p.y > 0.) ? p : uv;
+        fragColor = texture(iChannel0, uv * vec2(1. / aspect, 1.));
+    }
+}
+'''
+  },
+  {
+    // https://www.shadertoy.com/view/MtBSzR
+    'url': 'https://www.shadertoy.com/view/MtBSzR',
+    'fragment':
+    '''
+// Created by Eduardo Castineyra - casty/2015
+// Creative Commons Attribution 4.0 International License
 
-    float intensity = mix(0.01, 0.15, smoothstep(0.1, 0.6, abs(fract(0.05*iTime + 0.5)*2.-1.)));
-    vec3 n = vec3(circles, sqrt(1. - dot(circles, circles)));
-    vec3 color = texture(iChannel0, uv/resolution - intensity*n.xy).rgb + 5.*pow(clamp(dot(n, normalize(vec3(1., 0.7, 0.5))), 0., 1.), 6.);
-	fragColor = vec4(color, 1.0);
+#define PI 3.141592
+const float radius = 0.1;
+#define DIST 2
+vec3 cyl = vec3(0.0);
+
+/// 1D function x: cylFun(t); y: normal at that point.
+vec2 curlFun(float t, float maxt){
+	vec2 ret = vec2(t, 1.0);    
+    if (t < cyl[DIST] - radius)
+        return ret;					/// Before the curl
+	if (t > cyl[DIST] + radius)
+        return vec2(-1.0);			/// After the curl
+    
+    /// Inside the curl
+    float a = asin((t - cyl[DIST]) / radius);
+    float ca = -a + PI;
+    ret.x = cyl[DIST] + ca * radius;
+    ret.y = cos(ca);
+    
+    if (ret.x < maxt)  
+        return ret;					/// We see the back face
+
+    if (t < cyl[DIST])
+        return vec2(t, 1.0);		/// Front face before the curve starts
+    ret.y = cos(a);
+    ret.x = cyl[DIST] + a * radius;
+    return ret.x < maxt ? ret : vec2(-1.0);  /// Front face curve
+	}
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    vec2 uv = fragCoord.xy / iResolution.xx;
+    vec2 ur = vec2(1.0, iResolution.y/iResolution.x);
+    vec2 mouse = (iMouse.x < 0.001? vec2((sin(iTime)*.5+1.0) * 300.0) : iMouse.xy)/iResolution.xx;
+    float d = length(mouse * (1.0 + 4.0*radius)) - 2.0*radius;
+    cyl = vec3(normalize(mouse), d);
+    
+    d = dot(uv, cyl.xy);
+    vec2 end = abs((ur - uv) / cyl.xy);
+    float maxt = d + min(end.x, end.y);
+    vec2 cf = curlFun(d, maxt);
+    vec2 tuv = uv + cyl.xy * (cf.x - d);
+    
+	float shadow = 1.0 - smoothstep (0.0, radius * 2.0, -(d - cyl[DIST]));
+   	shadow *= (smoothstep(-radius, radius, (maxt - (cf.x + 1.5 * PI * radius + radius))));
+    vec4 curr = texture(iChannel0, tuv / ur, -100.0);
+    curr = cf.y > 0.0 ? curr * cf.y  * (1.0 - shadow): (curr * 0.25 + 0.75) * (-cf.y);
+    shadow = smoothstep (0.0, radius * 2.0, (d - cyl[DIST]));
+    vec4 next = texture(iChannel1, uv / ur, -100.0) * shadow;
+    fragColor = cf.x > 0.0 ? curr : next;
+}
+'''
+  },
+  {
+    // https://www.shadertoy.com/view/dlfXRn
+    'url': 'https://www.shadertoy.com/view/dlfXRn',
+    'fragment':
+    '''
+float warp = 0.75; // simulate curvature of CRT monitor
+float zoom_factor;
+float abberationoffset = 0.1;
+
+void mainImage(out vec4 O, vec2 funni)
+{
+    warp = sin(iTime);
+    //comment out the line above if you dont want the screen to zoom in and out
+    zoom_factor =  1. + ((warp / 15.) * -1.);
+    vec2 p = funni.xy / iResolution.xy;
+    vec4 toUse = vec4(texture(iChannel0,p));
+    // squared distance from center
+    vec2 uv = p;
+    vec2 redoffsetfunniredamgus = uv;
+    vec2 blueoffsetlikedeeznuts = uv;
+    vec2 dc = abs(0.5-uv);
+    dc *= dc;
+    
+    // warp the fragment coordinates
+    uv.x -= 0.5; uv.x *= 1.0+(dc.y*(0.3*warp)); uv.x += 0.5;
+    uv.y -= 0.5; uv.y *= 1.0+(dc.x*(0.2*warp)); uv.y += 0.5;
+
+    // warp the red/blue offset coordinates
+    redoffsetfunniredamgus.x -= 0.5; redoffsetfunniredamgus.x *= 1.0+(dc.y*((0.3 + abberationoffset)*warp)); redoffsetfunniredamgus.x += 0.5;
+    redoffsetfunniredamgus.y -= 0.5; redoffsetfunniredamgus.y *= 1.0+(dc.x*((0.2 + abberationoffset)*warp)); redoffsetfunniredamgus.y += 0.5;
+    blueoffsetlikedeeznuts.x -= 0.5; blueoffsetlikedeeznuts.x *= 1.0+(dc.y*((0.3 - abberationoffset)*warp)); blueoffsetlikedeeznuts.x += 0.5;
+    blueoffsetlikedeeznuts.y -= 0.5; blueoffsetlikedeeznuts.y *= 1.0+(dc.x*((0.2 - abberationoffset)*warp)); blueoffsetlikedeeznuts.y += 0.5;
+
+    // zoom in the uv because uh yeah
+    uv = uv + (uv - vec2(0.5, 0.5)) * (zoom_factor - 1.0);
+    redoffsetfunniredamgus = redoffsetfunniredamgus + (redoffsetfunniredamgus - vec2(0.5, 0.5)) * (zoom_factor - 1.0);
+    blueoffsetlikedeeznuts = blueoffsetlikedeeznuts + (blueoffsetlikedeeznuts - vec2(0.5, 0.5)) * (zoom_factor - 1.0);
+
+    // sample inside boundaries, otherwise set to black
+    if (uv.y > 1.0 || uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0)
+        O = vec4(0.0,0.0,0.0,1.0);
+    else
+    {
+        // sample the texture
+        vec4 col1 = vec4(texture(iChannel0,uv));
+        vec4 col2 = vec4(texture(iChannel0,redoffsetfunniredamgus));
+		//vec4 col2 = texture2D(bitmap, redoffsetfunniredamgus);
+        vec4 col3 = vec4(texture(iChannel0,blueoffsetlikedeeznuts));
+		//vec4 col3 = texture2D(bitmap, blueoffsetlikedeeznuts);
+    	O = vec4(col2.r, col1.g, col3.b, col1.a);
+    }
+}
+'''
+  },
+  {
+    // https://www.shadertoy.com/view/XdXGR7
+    'url': 'https://www.shadertoy.com/view/XdXGR7',
+    'fragment':
+    '''
+const float PI = 3.14159265359;
+#define time (-iTime*5.0)
+
+const vec3 eps = vec3(0.01, 0.0, 0.0);
+
+float genWave1(float len)
+{
+	float wave = sin(8.0 * PI * len + time);
+	wave = (wave + 1.0) * 0.5; // <0 ; 1>
+	wave -= 0.3;
+	wave *= wave * wave;
+	return wave;
+}
+
+float genWave2(float len)
+{
+	float wave = sin(7.0 * PI * len + time);
+	float wavePow = 1.0 - pow(abs(wave*1.1), 0.8);
+	wave = wavePow * wave; 
+	return wave;
+}
+
+float scene(float len)
+{
+	// you can select type of waves
+	return genWave1(len);
+}
+
+vec2 normal(float len) 
+{
+	float tg = (scene(len + eps.x) - scene(len)) / eps.x;
+	return normalize(vec2(-tg, 1.0));
+}
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+	vec2 uv = fragCoord.xy / iResolution.xy;
+	vec2 so = iMouse.xy / iResolution.xy;
+	vec2 pos2 = vec2(uv - so); 	  //wave origin
+	vec2 pos2n = normalize(pos2);
+
+	float len = length(pos2);
+	float wave = scene(len); 
+
+	vec2 uv2 = -pos2n * wave/(1.0 + 5.0 * len);
+
+	fragColor = vec4(texture(iChannel0, uv + uv2));
 }
 '''
   },
