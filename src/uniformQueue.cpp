@@ -24,12 +24,7 @@ UniformQueue::~UniformQueue() {
 
         if (t == typeid(UNIFORM_SAMPLER2D_t)) {
             Sampler2D &sampler = CAST(UNIFORM_SAMPLER2D_t &, uniform).val;
-            // if the data is empty, the texture is already been generated
-            if (sampler.data.size() != 0) 
-            {
-                glDeleteTextures(1, &sampler.texture_index);
-            }
-            // debug(name);
+            glDeleteTextures(1, &sampler.texture_index);
         }
     }
 }
@@ -390,6 +385,9 @@ void setSampler2D(const string &name, GLuint po, Sampler2D &data) {
         data.nTexture
     );
 
-    // glActiveTexture(GL_TEXTURE0 + data.nTexture);
+#ifdef _IS_ANDROID_
+    // seems this is only needed in Android
+    glActiveTexture(GL_TEXTURE0 + data.nTexture);
+#endif
     glBindTexture(GL_TEXTURE_2D, data.texture_index);
 }
