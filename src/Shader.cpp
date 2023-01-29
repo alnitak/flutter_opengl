@@ -67,6 +67,14 @@ void eglPrintError(const std::string &note) {
     }
 }
 
+void replaceAll(std::string& src, const std::string& search,
+                          const std::string& replace) {
+    size_t pos = 0;
+    while ((pos = src.find(search, pos)) != std::string::npos) {
+         src.replace(pos, search.length(), replace);
+         pos += replace.length();
+    }
+}
 
 Shader::Shader(OpenglPluginContext *textureStruct)
         : self(textureStruct),
@@ -218,9 +226,15 @@ std::string Shader::initShaderToy() {
     // https://www.shadertoy.com/view/llySRh
     // https://www.shadertoy.com/view/Mss3zH
 
-    // IMPORT FROM SHADERTOY:
+    // IMPORT FROM SHADERTOY on Android:
+    // Since for now only ES 2 is supported and the below ES 3 functions 
+    // are not supported, replace them
     // texture ==> texture2D
     // round == floor
+#ifdef _IS_ANDROID_
+    replaceAll(fragmentSource, "texture(", "texture2D(");
+    replaceAll(fragmentSource, "round(", "floor(");
+#endif
 
     vertexSource =
 #ifdef _IS_ANDROID_

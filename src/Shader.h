@@ -38,7 +38,8 @@
 
 
 extern "C" void eglPrintError(const std::string &note);
-
+extern "C" void replaceAll(std::string& src, const std::string& search,
+                          const std::string& replace);
 
 class Shader {
 
