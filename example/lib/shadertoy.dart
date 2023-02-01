@@ -32,6 +32,865 @@ List<Map<String, String>> shadertoy = [
 // }
 // '''
 //   },
+  { // https://www.shadertoy.com/view/XsjXW1
+    'url': 'https://www.shadertoy.com/view/XsjXW1',
+    'fragment':
+    '''
+    mat3 m = mat3( 0.00,  0.80,  0.60,
+              -0.80,  0.36, -0.48,
+              -0.60, -0.48,  0.64 );
+
+// the backbone of any noise, or really any chaotic/natural/random looking
+// shader. hash basically maps an input value n to a random location in [0..1]
+// this function does have a period of TWO_PI but because the scaling factor
+// is so large there's significant differences between e.g. hash(0) and hash(TWO_PI)
+// the float data-type is not precise enough to be able to show the pattern even
+// in minute scales
+// and we're sampling with n ranging in the hundreds and thousands - it's basically
+// a reproducable random
+float hash( float n )
+{
+    return fract(sin(n)*43758.5453123);
+}
+
+
+// some random noise function that i can't really parse
+// most noise functions are basically chaotic but
+// still continuous mappings whose behavior is complex enough
+// that humans can't see the pattern
+float noise( in vec3 x )
+{
+    vec3 p = floor(x);
+    vec3 f = fract(x);
+
+    f = f*f*(3.0-2.0*f);
+
+    float n = p.x + p.y*57.0 + 113.0*p.z;
+
+    float res = mix(mix(mix( hash(n+  0.0), hash(n+  1.0),f.x),
+                        mix( hash(n+ 57.0), hash(n+ 58.0),f.x),f.y),
+                    mix(mix( hash(n+113.0), hash(n+114.0),f.x),
+                        mix( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
+    return res;
+}
+
+
+
+
+// return an interpolated height and position for the given input
+
+// height algorithm:
+// partition 2d space into a set of 1x1 squares
+// each square has 4 corners; each corner's coordinate is associated
+// with a random height (and with a variable a-d), such that the same corner on two different squares has
+// the same value. Interpolate between the corners
+// depending on where in the 1x1 square you are. Linear interpolation
+// creates discontinuities at the edges, instead use a cubic hermite spline with slope 0 at the tangents - this ensures smoothness
+// of 2 degrees.
+/*
+      x+           
+ +------------>   
+ |                
+ |  a            b
+y|   +----------+ 
++|   |          | 
+ |   |          | 
+ v   |          | 
+     |          | 
+     |          | 
+     +----------+ 
+    c            d
+*/
+vec3 noised( in vec2 x )
+{
+    vec2 p = floor(x);
+    vec2 f = fract(x);
+
+    vec2 u = f*f*(3.0-2.0*f);
+
+    float n = p.x + p.y*54.0;
+
+    // heights of the four corners
+    float a = hash(n+  0.0);
+    float b = hash(n+  1.0);
+    float c = hash(n+ 54.0);
+    float d = hash(n+ 55.0);
+    
+    return vec3(a+(b-a)*u.x+(c-a)*u.y+(a-b-c+d)*u.x*u.y,
+                // scalar function: f*f*(f*(f-2.0)+1.0) = f^2*(f-1)^2 = hump shape from [0..1] (*30 = goes up to 1.875 in the middle)
+                // any function can serve as the scalar as long as it 1) goes to 0 at the edges, and 2) is continuous (and preferably is smooth as well)
+                // the scalar affects how smooth the terrain is; a higher value will make the mountains more sharp
+                
+                // the actual yz vec2 is another returned value that to add more flavor to the noise. 
+                // You can use it as the basis of another noise, or (in the case of the caller here), 
+                // modify the .x with the .yz.
+                // the vec2 function should reference a,b,c,d such that the function evaluates to the
+                // same value on either side of the edge of the 1x1 square
+                
+                /* 
+				 * if the formula is F(x), the following invariants should hold:
+				 * (1) F(<x+, y>).y = F(<x-, y>).y, x is an integer
+				 * (2) F(<x, y+>).x = F(<x, y->).x, y is an integer
+				 * in (1), the scalar makes the x component go to 0, so only the y components must
+				 * be equal. Similarly in (2), the y component is multiplied by 0, so only the x
+				 * components should be equal.
+				 * With the invariants, transitioning between two cells of the 1x1 grid will be continuous
+				 */
+                30.0*f*f*(f*(f-2.0)+1.0)*(vec2(b-a,c-a)+(a-b-c+d)*u.yx));
+
+}
+
+float noise( in vec2 x )
+{
+    vec2 p = floor(x);
+    vec2 f = fract(x);
+
+    f = f*f*(3.0-2.0*f);
+
+    float n = p.x + p.y*57.0;
+
+    float res = mix(mix( hash(n+  0.0), hash(n+  1.0),f.x),
+                    mix( hash(n+ 57.0), hash(n+ 58.0),f.x),f.y);
+
+    return res;
+}
+
+float fbm( vec3 p )
+{
+    float f = 0.0;
+
+    f += 0.5000*noise( p ); p = m*p*2.02;
+    f += 0.2500*noise( p ); p = m*p*2.03;
+    f += 0.1250*noise( p ); p = m*p*2.01;
+    f += 0.0625*noise( p );
+
+    return f/0.9375;
+}
+
+mat2 m2 = mat2(1.6,-1.2,1.2,1.6);
+
+// fbm is a more complex noise, again harmonic
+// that takes several layers of noise at differing
+// scales and adds them up -- basically a more interesting
+// noise
+float fbm( vec2 p )
+{
+    float f = 0.0;
+
+    f += 0.5000*noise( p ); p = m2*p*2.02;
+    f += 0.2500*noise( p ); p = m2*p*2.03;
+    f += 0.1250*noise( p ); p = m2*p*2.01;
+    f += 0.0625*noise( p );
+
+    return f/0.9375;
+}
+
+// the height of the terrain at the given xy location
+float terrain( in vec2 x )
+{
+    // scale world coordinates down a lot
+    vec2  p = x*0.003;
+    float a = 0.0;
+    float b = 1.0;
+    vec2  d = vec2(0.0);
+    // sample a base noise at different locations 5 times
+    // and accumulate the sample into the final height
+    // this is the technique of taking a simple noise
+    // and making more interesting noise out of it by
+    // doing harmonic sampling? is that what it's called
+    for(int i=0;i<5; i++)
+    {
+        // random n
+        vec3 n = noised(p);
+        // d represents some "distance" away from some origin
+        d += n.yz;
+        // b is the octave attenuation (1, 0.5, 0.25, etc)
+        // add this octave, which is scaled by the attenuation
+        // factor and also by the distance factor
+        a += b*n.x/(1.0+dot(d,d));
+        b *= 0.5;
+        // not sure what how this matrix acts on p
+        // i believe it's more or less a twist + expand
+        p=m2*p;
+    }
+
+    return 140.0*a;
+}
+
+// same as terrain but go for 9 more iterations
+// this produces a much more fine-grained terrain function
+// that has goes deeper into the smaller scales of the terrain
+// so if terrain( x ) returned some value like 100,
+// terrain2( x ) returns a slightly more detailed value like 100.125
+// or something - it's a purturbed version of normal terrain
+// but the purtubations also exhibit the fractal landscape behavior
+// that is characterstic of the land
+float terrain2( in vec2 x )
+{
+    vec2  p = x*0.003;
+    float a = 0.0;
+    float b = 1.0;
+    vec2  d = vec2(0.0);
+    for(int i=0;i<14; i++)
+    {
+        vec3 n = noised(p);
+        d += n.yz;
+        a += b*n.x/(1.0+dot(d,d));
+        b *= 0.5;
+        p=m2*p;
+    }
+
+    return 140.0*a;
+}
+
+
+// takes in a world location and returns how vertically
+// far away you are from the terrain there
+// when used within raymarching this means that as the ray 
+// is marching, since the map is continuous, you'll eventually
+// get within some small epsilon value of the actual terrain,
+// at which point you can count it as a hit
+float map( in vec3 p )
+{
+    // the height of the terrain at the location's xz plane
+    float h = terrain(p.xz);
+
+    // some sort of postprocessing of the height here
+    // to give it more jagged edges
+
+    // not sure how it really works yet
+    float ss = 0.03;
+    float hh = h*ss;
+    // scale the height down a lot, decompose it into its fractional
+    // and whole parts
+    float fh = fract(hh);
+    float ih = floor(hh);
+    // transform fh by pushing it up towards its sqrt
+    // by some amount depending on the height of the terrain you're at
+    // fh corresponds to a height of ~33 in the terrain
+    // the effect of this is that regularly at 33 pixel intervals,
+    // the middle area of the interval gets pushed up towards the top
+    // this creates more of a plateau effect which is more realistic
+    // of actual terrain
+    fh = mix( sqrt(fh), fh, smoothstep(50.0,140.0,h) );
+    
+    // reconstruct h with the new fractional part
+    h = (ih+fh)/ss;
+
+    return p.y - h;
+}
+
+// same as map but using terrain2
+float map2( in vec3 p )
+{
+    float h = terrain2(p.xz);
+
+
+    float ss = 0.03;
+    float hh = h*ss;
+    float fh = fract(hh);
+    float ih = floor(hh);
+    fh = mix( sqrt(fh), fh, smoothstep(50.0,140.0,h) );
+    h = (ih+fh)/ss;
+
+    return p.y - h;
+}
+
+// return whether the ray starting at rO and pointing at rD
+// hit the map or not. If it did, the distance from the origin to the hit
+// will be stored in resT
+// assumes rD is normalized
+bool jinteresct(in vec3 rO, in vec3 rD, out float resT )
+{
+    float h = 0.0;
+    float t = 0.0;
+    // march the ray forward 120 times
+    for( int j=0; j<120; j++ )
+    {
+        //if( t>2000.0 ) break;
+
+        vec3 p = rO + t*rD;
+        // break out of the iteration if you've passed some vertical
+        // plane which guarantees you won't hit the map
+        // (assumes the map is below 300); it's for performance i think?
+if( p.y>300.0 ) break;
+        h = map( p );
+
+        // if you're within .1 units, count that as a hit on the terrain
+        if( h<0.1 )
+        {
+            resT = t;
+            return true;
+        }
+        // t controls where your ray has been marched to
+        // what iq is saying here is that if the height is
+        // still large (that is, the ray is still quite vertically
+        // away from hitting the terrain), you can jump the
+        // ray much farther forward
+        // the invariant here is that the terrain's slope is less than 2
+        // the invariant is broken sometimes which is where the strange
+        // aliased banding that moves with the camera comes from
+        // this is really cool -- you're dynamically sampling the terrain
+        // based on how far away you are from it
+        t += max(0.1,0.5*h);
+    }
+
+    // if you've reached here, you've gone 120 iterations and still
+    // not hit the terrain, OR you've hit y = 300
+    // if you're within 5 units of the floor, just say you hit
+    // not sure why he does this
+    if( h<5.0 )
+    {
+        resT = t;
+        return true;
+    }
+    return false;
+}
+
+// this is called starting at the original ray's intersection point + 20*light1, in the direction of light1
+// it calculates a long-range shadow with a soft-edge
+float sinteresct(in vec3 rO, in vec3 rD )
+{
+    float res = 1.0;
+    float t = 0.0;
+    for( int j=0; j<50; j++ )
+    {
+        //if( t>1000.0 ) break;
+        // cast a ray towards the light
+        vec3 p = rO + t*rD;
+
+        // track how far from the ground you are
+        float h = map( p );
+
+        // if you've hit the ground, you're completely in the shadow
+        if( h<0.1 )
+        {
+            return 0.0;
+        }
+        // 16 * h/t?
+        // 16 is an arbitrary scalar
+        // h/t is the difference in height divided by the distance the ray has travelled
+        res = min( res, 16.0*h/t );
+        // adding h is another performance gain - move the ray based on how far you away you are now
+        // because the terrain is mostly smooth
+        // you can basically analyze this as t will at some point get placed very near the actual minimum distance
+        // away between the ray and the terrain
+        // at that point, res will be set to h/t -- so farther-away terrains will cast shadows with a larger gradient
+        // basically emulates the diffusive quality of light, also realy cool
+        t += h;
+
+    }
+
+    return clamp( res, 0.0, 1.0 );
+}
+
+// approximate the gradient of the terrain at pos by
+// moving in a small epsilon in each of the three directions
+// the epsilon is scaled by t, the distance of the point from
+// the camera. This means that points farther away
+// have a smoother normal calculation
+// the choice of epsilon has a massive effect on the percieved
+// detail of the terrain
+// the difference is clearly noticable if you have a small epsilon
+// on faraway points - there is a lot of aliasing since the effective
+// distance between two adjacent pixels that are both far away
+// is quite large. This achieves the same effect as mip-mapping in terms
+// of detail. You do in fact want to scale by `t` otherwise pixels far away
+// don't look connected
+vec3 calcNormal( in vec3 pos, float t )
+{
+    float e = 0.001 * t;
+    vec3  eps = vec3(e,0.0,0.0);
+    vec3 nor;
+    nor.x = map2(pos+eps.xyy) - map2(pos-eps.xyy);
+    nor.y = map2(pos+eps.yxy) - map2(pos-eps.yxy);
+    nor.z = map2(pos+eps.yyx) - map2(pos-eps.yyx);
+    return normalize(nor);
+}
+
+vec3 camPath( float time )
+{
+    vec2 p = 600.0*vec2( cos(1.4+0.37*time),
+                         cos(3.2+0.31*time) );
+
+    return vec3( p.x, 0.0, p.y );
+}
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // maps screen from (-1, -1) on bottom-left to (1, 1) on top-right
+    vec2 xy = -1.0 + 2.0*fragCoord.xy / iResolution.xy;
+
+    // correct aspect ratio; y goes from -1 to 1, x goes from -1.75 to 1.75 (the aspect ratio is hard-coded to be 1.75)
+    vec2 s = xy*vec2(1.75,1.0);
+
+    float time = iTime*0.15;
+
+    // diretional light coming down from the top
+    vec3 light1 = normalize( vec3(  0.4, 0.22,  0.6 ) );
+
+    // a second light, probably directional
+    vec3 light2 = vec3( -0.707, 0.000, -0.707 );
+
+    // camera position is set using two cosines at different speeds
+    vec3 campos = camPath( time );
+    // target's always looking forward -- this is cool
+    vec3 camtar = camPath( time + 3.0 );
+    campos.y = terrain( campos.xz ) + 15.0;
+    // the eye is always just looking down
+    camtar.y = campos.y*0.5;
+
+    // roll the camera
+    float roll = 0.1*cos(0.1*time);
+    // cp is an upwards pointing vector in world space that wiggles slightly
+    // it controls the up vector of the camera
+    vec3 cp = vec3(sin(roll), cos(roll),0.0);
+
+    // the direction the camera's pointing at
+    vec3 cw = normalize(camtar-campos);
+    // points to the "right" in the camera
+    vec3 cu = normalize(cross(cw,cp));
+    // points "up" in the camera, basically cp projected onto the camera's
+    // viewing plane
+    vec3 cv = normalize(cross(cu,cw));
+    // direction of the ray to cast for this pixel
+    // it's made of 3 components in camera space -
+    // an amount to go horizontally,
+    // an amount to go vertically,
+    // and an amount to go outwards
+    // that cw vector is needed otherwise the rays are always
+    // perpendicular to the camera's viewing angle
+    // the cw factor more or less controls the fov
+    // (a large factor zooms the whole frustum in, a small factor
+    // expands the fov out)
+    // this is shoddily recreating a frustum, i don't
+    // believe this is the right way to do this
+    vec3 rd = normalize( s.x*cu + s.y*cv + 1.6*cw );
+
+    float sundot = clamp(dot(rd,light1),0.0,1.0);
+    vec3 col;
+    float t;
+    // if your ray doesn't hit the ground, this pixel is hitting
+    // the sky instead -- render the sky
+    if( !jinteresct(campos,rd,t) )
+    {
+        // sky is very light blue scaled by the ray's y position,
+        // which is how high up the ray is; higher up means higher up
+        // in the sky means a darker blue;
+        // the y never goes past some small threshold
+        // so the sky always looks *mostly* blue, but you can still see
+        // the gradient
+        col = 0.9*vec3(0.97,.99,1.0)*(1.0-0.3*rd.y);
+
+        // this line adds a small amount of red-orangish color
+        // mostly in a ring shape around where the "sun" would be
+        col += 0.2*vec3(0.8,0.7,0.5)*pow( sundot, 4.0 );
+    }
+    else
+    {
+        // here's where you hit
+        vec3 pos = campos + t*rd;
+
+        // the terrain normal at this location
+        vec3 nor = calcNormal( pos, t );
+
+        //basic diffuse light calculation
+        float dif1 = clamp( dot( light1, nor ), 0.0, 1.0 );
+        // i think this basically produces some ambient light as well?
+        float dif2 = clamp( 0.2 + 0.8*dot( light2, nor ), 0.0, 1.0 );
+        
+        // shadow factor -- 1 = no long-range shadow, 0 = completely in shadow
+        float sh = 1.0;
+        // if light1 hits me
+        if( dif1>0.001 )
+            sh = sinteresct(pos+light1*20.0,light1);
+
+        // dif1v is the color contribution of the diffuse of the first light source
+        vec3 dif1v = vec3(dif1);
+        // sh = iMouse.x / iResolution.x;
+        // soft-shadow has a red coloring to it
+        dif1v *= vec3( sh, sh*sh*0.5+0.5*sh, sh*sh );
+
+        // apply a simple random noise factor on the base ground color
+        // just to give it a bit more flavor
+        float r = noise( 7.0*pos.xz );
+
+        // here we begin coloring the terrain. The base color mixes between
+        // a dark brown base color and a slightly more colorful brown at the top
+        // terrain2 is used here as just another random noise function whose input scales
+        // are on the same magnitude as the position; it's used to give the vertical bands
+        // in the terrain
+        float heightMix = clamp(terrain2( vec2(pos.x,pos.y*48.0))/200.0,0.0,1.0);
+        col = (r*0.25+0.75)*0.9*mix( vec3(0.10,0.05,0.03), vec3(0.13,0.10,0.08), heightMix );
+        // mix the color with a more reddish hue if the normal points more up (how flat it is)
+        col = mix( col, 0.17*vec3(0.5,.23,0.04)*(0.50+0.50*r),smoothstep(0.70,0.9,nor.y) );
+        // and if they're *really* flat, give it some green for grass
+        col = mix( col, 0.10*vec3(0.2,.30,0.00)*(0.25+0.75*r),smoothstep(0.95,1.0,nor.y) );
+        col *= 0.75;
+         // snow
+        #if 1
+        // height factor -- higher places have more snow (h=1), lower places have no snow (h=0)
+        float h = smoothstep(55.0,80.0,pos.y + 25.0*fbm(0.01*pos.xz) );
+        // normal+cliff factor -- land that is flatter gets more snow, cliff-like land doesn't get much snow
+        // normal+cliff factor is also scaled by height, aka higher up the slope factor is stronger
+        float e = smoothstep(1.0-0.5*h,1.0-0.1*h,nor.y);
+        // wind directional factor -- if you have a high x slope, put less snow.
+        // so hilly terrain that is going up in one direction will have snow,
+        // going down on the other side will have no snow
+        float o = 0.3 + 0.7*smoothstep(0.0,0.1,nor.x+h*h);
+        float s = h*e*o;
+        s = smoothstep( 0.1, 0.9, s );
+        // mix color with dark grey color for snow
+        col = mix( col, 0.4*vec3(0.6,0.65,0.7), s );
+        #endif
+
+
+        // final light calculation
+        
+        // start with a slope factor -- cliffs will be shaded slightly darker
+        // this is most apparent when the cliff meets the ground; emulates ambient occlusion
+        // a little bit
+        vec3 brdf  = 2.0*vec3(0.17,0.19,0.20)*clamp(nor.y,0.0,1.0);
+        // most of the lighting comes from dif1
+             brdf += 6.0*vec3(1.00,0.95,0.80)*dif1v;
+        // a bit from dif2, which is just a small ambient secondary light to complement the first
+             brdf += 2.0*vec3(0.20,0.20,0.20)*dif2;
+
+       	// add all of the light
+        col *= brdf;
+
+        // fog factor - 0 at close distances, goes to 1. Has a slightly s shaped curve
+        float fo = 1.0-exp(-pow(0.0015*t,1.5));
+        // fog color -- base 0.7; if you're looking towards the sun, make the fog the color of the sun
+        // when there's a lot of fog in the distance, the fog carries the color of the sun and blends
+        // it in with the actual surface color. This emulates that behavior
+        vec3 fco = vec3(0.7) + 0.6*vec3(0.8,0.7,0.5)*pow( sundot, 4.0 );
+        col = mix( col, fco, fo );
+    }
+
+    // postprocess filter; basically a sqrt color curve that helps the dark parts look brighter
+    // a bit like a compressor audio effect; makes things a bit warmer in general
+    col = sqrt(col);
+
+    // (0, 0) to (1, 1)
+    vec2 uv = xy*0.5+0.5;
+    //create a slight inset shadow on the top corners
+    col *= 0.7 + 0.3*pow(16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y),0.1);
+
+    // and we're done!
+    fragColor=vec4(col,1.0);
+}
+    '''
+  },
+  { // https://www.shadertoy.com/view/XttSRs
+    'url': 'https://www.shadertoy.com/view/XttSRs',
+    'fragment':
+    '''
+// Constants
+#define PI 3.1415
+#define MOD2 vec2(3.07965, 7.4235)
+
+// Raymarching
+float minPrimStepSize = 0.4 ;
+const int primNumSamples = 150 ;
+
+// Colours
+const vec3 obsidianCol = vec3(30./255., 31./255., 30./255.) ;
+const vec3 sunCol = vec3(1.0,1.0,1.0) ;
+const vec3 skyCol = vec3(206./255., 146./255., 14./255.) ;
+const float ambientCol = 0.3 ;
+
+// Sun
+const float lightElev = 20. * 3.14/180. ;
+const float lightAzi = 100. * 3.14/180. ;
+const vec3 lightDir = vec3(cos(lightAzi)*cos(lightElev),sin(lightElev),sin(lightAzi)*cos(lightElev));
+
+// Terrain
+const int octavesTerrain =  12 ;
+const float sharpness = 0.35 ;
+const float offset = 0.85 ;
+
+// Lava
+
+vec2 rot2D(vec2 p, float angle) {
+    angle = radians(angle);
+    float s = sin(angle);
+    float c = cos(angle);
+    
+    return p * mat2(c,s,-s,c);  
+}
+
+float rand(vec2 c){
+    return fract(sin(dot(c.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+float hash12(vec2 p) {
+	p  = fract(p / MOD2);
+    p += dot(p.xy, p.yx+19.19);
+    return fract(p.x * p.y);
+}
+
+const vec2 add = vec2(1.0, 0.0);
+
+float noise( in vec2 x ) {
+    vec2 p = floor(x);
+    vec2 f = fract(x);
+    f = f*f*(3.0-2.0*f);
+    float res = mix(mix( hash12(p),          hash12(p + add.xy),f.x),
+                    mix( hash12(p + add.yx), hash12(p + add.xx),f.x),f.y);
+    return res;
+}
+
+float noiseEmber(vec2 p) {
+    return hash12(p);
+}
+
+float smoothNoiseEmber(vec2 p) {
+    vec2 p0 = floor(p + vec2(0.0, 0.0));
+    vec2 p1 = floor(p + vec2(1.0, 0.0));
+    vec2 p2 = floor(p + vec2(0.0, 1.0));
+    vec2 p3 = floor(p + vec2(1.0, 1.0));
+    vec2 pf = fract(p);
+    return mix( mix(noise(p0), noise(p1), pf.x),mix(noise(p2), noiseEmber(p3), pf.x), pf.y);
+}
+
+const int octavesEmber = 5 ;
+
+float fbmEmber(in vec2 p) {
+    float f=0.0;
+    for(int i=0; i < octavesEmber; ++i)
+        f+=smoothNoiseEmber(2.0*p*exp2(float(i)))/exp2(float(i+1));
+    return f;
+}
+
+float sampleField(vec3 position) {
+  float noiseVal = 0.0 ;
+  float amplitude = 1.0 ;
+  float scaling = 75. ;
+  float freq = 0.009 ;
+  float lac = 2.0 ;
+  for (int i = 0 ; i < octavesTerrain ; ++i) {
+    noiseVal += amplitude * noise(freq*position.xz) ;
+    amplitude /= lac ;
+    freq *= lac ;
+  }
+    
+  // Islandise terrain //
+  noiseVal -= offset ;
+  noiseVal = clamp(noiseVal,0.,1.5) ;
+  noiseVal = pow(sharpness, noiseVal) ;
+  noiseVal = 1.0 - (noiseVal) ;
+  return noiseVal * scaling ;
+}
+
+#define time iTime*0.1
+
+float hash21(in vec2 n){ return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453); }
+mat2 makem2(in float theta){float c = cos(theta);float s = sin(theta);return mat2(c,-s,s,c);}
+float noiseLava( in vec2 x ){return texture(iChannel0, x*0.02).x;}
+
+float sampleFreq = 0.2 ;
+vec2 gradn(vec2 p) {
+	float ep = .09;
+	float gradx = noiseLava(sampleFreq*vec2(p.x+ep,p.y))-noiseLava(sampleFreq*vec2(p.x-ep,p.y));
+	float grady = noiseLava(sampleFreq*vec2(p.x,p.y+ep))-noiseLava(sampleFreq*vec2(p.x,p.y-ep));
+	return vec2(gradx,grady);
+}
+
+
+// ...... Taken from https://www.shadertoy.com/view/MdBSRW
+#define TEMPERATURE 2200.0
+
+vec3 blackbody(float t)
+{
+    t *= TEMPERATURE;
+    
+    float u = ( 0.860117757 + 1.54118254e-4 * t + 1.28641212e-7 * t*t ) 
+            / ( 1.0 + 8.42420235e-4 * t + 7.08145163e-7 * t*t );
+    
+    float v = ( 0.317398726 + 4.22806245e-5 * t + 4.20481691e-8 * t*t ) 
+            / ( 1.0 - 2.89741816e-5 * t + 1.61456053e-7 * t*t );
+
+    float x = 3.0*u / (2.0*u - 8.0*v + 4.0);
+    float y = 2.0*v / (2.0*u - 8.0*v + 4.0);
+    float z = 1.0 - x - y;
+    
+    float Y = 1.0;
+    float X = Y / y * x;
+    float Z = Y / y * z;
+
+    mat3 XYZtoRGB = mat3(3.2404542, -1.5371385, -0.4985314,
+                        -0.9692660,  1.8760108,  0.0415560,
+                         0.0556434, -0.2040259,  1.0572252);
+
+    return max(vec3(0.0), (vec3(X,Y,Z) * XYZtoRGB) * pow(t * 0.0004, 4.0));
+}
+
+
+// ..... Taken from https://www.shadertoy.com/view/lslXRS
+float flowFBM(in vec2 p)
+{
+	float z=2.;
+	float rz = 0.;
+	vec2 bp = p;
+	for (float i= 1.;i < 9.;i++ ){
+		//primary flow speed
+		p += time*.006;
+		//secondary flow speed (speed of the perceived flow)
+		bp += time*0.00009;
+		//displacement field (try changing time multiplier)
+		vec2 gr = gradn(i*p*1.4+time*0.1);
+		//rotation of the displacement field
+		gr*=makem2(time*2.-(0.05*p.x+0.03*p.y)*40.);
+		//displace the system
+		p += gr*.5;
+		//add noise octave
+		rz+= (sin(noise(p)*7.)*0.5+0.5)/z;
+		//blend factor (blending displaced system with base system)
+		//you could call this advection factor (.5 being low, .95 being high)
+		p = mix(bp,p,.77);
+		//intensity scaling
+		z *= 1.4;
+		//octave scaling
+		p *= 3.1;
+		bp *= 1.5;
+	}
+	return rz;	
+}
+
+
+vec3 getFieldNormal(in vec3 cameraPos, in vec3 direction, float dist) {
+  float p = min(.3, .0005+.00005 * dist*dist);
+  vec3 position = cameraPos + direction * dist ;
+  vec3 nor = vec3(0.0,sampleField(position), 0.0);
+  vec3 v2 = nor-vec3(p,sampleField(position+vec3(p,0.0,0.0)), 0.0);
+  vec3 v3 = nor-vec3(0.0,sampleField(position+vec3(0.0,0.0,-p)), -p);
+  nor = cross(v2, v3);
+  return normalize(nor);   
+}
+
+vec3 calcSkyCol(in vec3 direction)
+{
+	float sunAmount = max( dot(direction, lightDir), 0.0 );
+	float v = pow(1.0-max(direction.y,0.0),5.)*.5;
+	vec3  sky = vec3(v*sunCol.x*0.4+skyCol.x, v*sunCol.y*0.4+skyCol.y, v*sunCol.z*0.4+skyCol.z);
+	sky = sky + sunCol * pow(sunAmount, 6.5)*.32;
+	sky = sky+ sunCol * min(pow(sunAmount, 1600.), .3)*.65;
+	return sky;
+}
+
+float fineRayMarchBinarySearch(vec3 startPos, vec3 direction, in vec2 rayDists, out float height) {
+    float halfwayT;
+	for (int n = 0; n < 4; n++)
+	{
+		halfwayT = (rayDists.x + rayDists.y) * .5;
+		vec3 p = startPos + halfwayT*direction;
+		if ((height = sampleField(p)) - p.y > 0.5) {
+			rayDists.x = halfwayT;
+		} else {
+			rayDists.y = halfwayT;
+		}
+	}
+	return rayDists.x;
+}
+
+bool coarseRayMarch(vec3 startPos, vec3 direction, out float rayDist, out float height) {
+    vec3 position = startPos ;
+    bool intersected = false ;
+    rayDist = 0.0 ;
+    float oldRayDist = rayDist ;
+    
+    for (int i = 0 ; i < primNumSamples ; ++i) {
+        if (position.y > 66.) {
+            break ;
+        }
+		if ((height = sampleField(position)) - position.y > 0.5) {            
+            intersected = true ;
+            break ;
+        } else {
+            oldRayDist = rayDist ;
+            float delta = max(minPrimStepSize,height*0.001) + (rayDist*0.025);
+		    rayDist += delta;
+            position = (rayDist)*direction + startPos ;
+        }
+    }
+    
+    if (intersected) {
+       rayDist = fineRayMarchBinarySearch(startPos,direction,vec2(rayDist,oldRayDist),height) ;   
+    }
+    
+    return intersected ;
+}
+
+// Calculate sun light...
+vec3 calcColour(in vec3 pos, in vec3 normal, in vec3 eyeDir, float dis, float height)
+{
+  	float h = dot(lightDir,normal);
+	float c = max(h, 0.0)+ambientCol;
+    vec2 samplePosition = (eyeDir * dis + pos).xz  ;
+    vec3 lavCol = blackbody(flowFBM(samplePosition*0.005)) ;
+    float specular = 0.0 ;
+    vec3 col ;
+    if (height > 0.0) {
+        specular = 0.6 ;
+        col = obsidianCol ;
+        col = col * (sunCol + lavCol * 6.0/(height)) * c ;
+        if (h  > 0.0) {
+          vec3 R = reflect(lightDir, normal);
+	  	  float specAmount = pow( max(dot(R, normalize(eyeDir)), 0.0), 3.0)*specular;
+		  col = mix(col, sunCol , specAmount);
+        }
+    } else {
+        col = lavCol ;
+    }
+    
+    return col ;
+}
+
+vec3 calcFog( in vec3  rgb, in float dis, in vec3 dir) {
+	float fogAmount = exp(-dis* 0.002);
+	return mix(calcSkyCol(dir), rgb, fogAmount);
+}
+    
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord)
+{    
+    vec2 uv = (fragCoord.xy - iResolution.xy * .5) / iResolution.y;
+    vec2  m = 2.*((iMouse.xy / iResolution.xy) - 0.5);
+    
+    if (iMouse.xy == vec2(0)) {
+       m.y = 0.0 ;   
+    }
+    
+    vec3 dir = vec3(uv, 1.);
+    dir.yz = rot2D(dir.yz,  90. * m.y);
+    dir.xz = rot2D(dir.xz, 180. * m.x + 180.);
+    dir = normalize(dir) ;
+
+    float offset = iTime ;
+    vec3 cameraPos = vec3(0.0,0.0,3.0*offset) ;
+    float heightOffset = sampleField(cameraPos) ;
+    cameraPos.y = 20.0 + heightOffset ;
+    float rayInterDist = -1.0 ;
+    float height = 0.0 ;
+	bool hasIntersected = coarseRayMarch(cameraPos,dir,rayInterDist,height) ;
+    vec3 col = vec3(0.0) ;
+    if (hasIntersected) {
+      vec3 normal = getFieldNormal(cameraPos,dir,rayInterDist) ;
+      col = calcColour(cameraPos + dir*rayInterDist, normal, dir, rayInterDist, height) ;
+    } else {
+      col = calcSkyCol(dir) ;     
+    }
+    col =  calcFog(col,rayInterDist,dir) ;
+    
+    // Taken from 
+    vec3 embers=vec3(1.0,0.35,0.04)*smoothstep(0.77+sin(time*5.0)*0.01+sin(time)*0.01,1.0,fbmEmber(uv*10.0+vec2(cos(uv.y*0.8+time*1.0)*10.0,time*40.0)));
+    embers+=vec3(1.0,0.35,0.04)*smoothstep(0.77+sin(time*82.0)*0.01+sin(time*1.2)*0.01,1.0,fbmEmber(vec2(100.0)+uv*8.0+vec2(time*1.0+cos(uv.y*0.3+time*1.0)*10.0,time*30.0)));
+
+	fragColor = vec4(col + 8.*embers,1) ;
+}
+'''
+  },
 {   // https://www.shadertoy.com/view/ltffzl
     'url': 'https://www.shadertoy.com/view/ltffzl',
     'fragment':
@@ -302,67 +1161,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         uv = (p.x <= aspect && p.y <= 1. && p.x > 0. && p.y > 0.) ? p : uv;
         fragColor = texture(iChannel0, uv * vec2(1. / aspect, 1.));
     }
-}
-'''
-  },
-  {
-    // https://www.shadertoy.com/view/MtBSzR
-    'url': 'https://www.shadertoy.com/view/MtBSzR',
-    'fragment':
-    '''
-// Created by Eduardo Castineyra - casty/2015
-// Creative Commons Attribution 4.0 International License
-
-#define PI 3.141592
-const float radius = 0.1;
-#define DIST 2
-vec3 cyl = vec3(0.0);
-
-/// 1D function x: cylFun(t); y: normal at that point.
-vec2 curlFun(float t, float maxt){
-	vec2 ret = vec2(t, 1.0);    
-    if (t < cyl[DIST] - radius)
-        return ret;					/// Before the curl
-	if (t > cyl[DIST] + radius)
-        return vec2(-1.0);			/// After the curl
-    
-    /// Inside the curl
-    float a = asin((t - cyl[DIST]) / radius);
-    float ca = -a + PI;
-    ret.x = cyl[DIST] + ca * radius;
-    ret.y = cos(ca);
-    
-    if (ret.x < maxt)  
-        return ret;					/// We see the back face
-
-    if (t < cyl[DIST])
-        return vec2(t, 1.0);		/// Front face before the curve starts
-    ret.y = cos(a);
-    ret.x = cyl[DIST] + a * radius;
-    return ret.x < maxt ? ret : vec2(-1.0);  /// Front face curve
-	}
-
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
-{
-    vec2 uv = fragCoord.xy / iResolution.xx;
-    vec2 ur = vec2(1.0, iResolution.y/iResolution.x);
-    vec2 mouse = (iMouse.x < 0.001? vec2((sin(iTime)*.5+1.0) * 300.0) : iMouse.xy)/iResolution.xx;
-    float d = length(mouse * (1.0 + 4.0*radius)) - 2.0*radius;
-    cyl = vec3(normalize(mouse), d);
-    
-    d = dot(uv, cyl.xy);
-    vec2 end = abs((ur - uv) / cyl.xy);
-    float maxt = d + min(end.x, end.y);
-    vec2 cf = curlFun(d, maxt);
-    vec2 tuv = uv + cyl.xy * (cf.x - d);
-    
-	float shadow = 1.0 - smoothstep (0.0, radius * 2.0, -(d - cyl[DIST]));
-   	shadow *= (smoothstep(-radius, radius, (maxt - (cf.x + 1.5 * PI * radius + radius))));
-    vec4 curr = texture(iChannel0, tuv / ur, -100.0);
-    curr = cf.y > 0.0 ? curr * cf.y  * (1.0 - shadow): (curr * 0.25 + 0.75) * (-cf.y);
-    shadow = smoothstep (0.0, radius * 2.0, (d - cyl[DIST]));
-    vec4 next = texture(iChannel1, uv / ur, -100.0) * shadow;
-    fragColor = cf.x > 0.0 ? curr : next;
 }
 '''
   },
@@ -2227,138 +3025,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
 ''',
   },
   {
-    // https://www.shadertoy.com/view/MdX3zr
-    'url': 'https://www.shadertoy.com/view/XslGRr',
-    'fragment': '''
-// Created by anatole duprat - XT95/2013
-// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
-
-float noise(vec3 p) //Thx to Las^Mercury
-{
-	vec3 i = floor(p);
-	vec4 a = dot(i, vec3(1., 57., 21.)) + vec4(0., 57., 21., 78.);
-	vec3 f = cos((p-i)*acos(-1.))*(-.5)+.5;
-	a = mix(sin(cos(a)*a),sin(cos(1.+a)*(1.+a)), f.x);
-	a.xy = mix(a.xz, a.yw, f.y);
-	return mix(a.x, a.y, f.z);
-}
-
-float sphere(vec3 p, vec4 spr)
-{
-	return length(spr.xyz-p) - spr.w;
-}
-
-float flame(vec3 p)
-{
-	float d = sphere(p*vec3(1.,.5,1.), vec4(.0,-1.,.0,1.));
-	return d + (noise(p+vec3(.0,iTime*2.,.0)) + noise(p*3.)*.5)*.25*(p.y) ;
-}
-
-float scene(vec3 p)
-{
-	return min(100.-length(p) , abs(flame(p)) );
-}
-
-vec4 raymarch(vec3 org, vec3 dir)
-{
-	float d = 0.0, glow = 0.0, eps = 0.02;
-	vec3  p = org;
-	bool glowed = false;
-	
-	for(int i=0; i<64; i++)
-	{
-		d = scene(p) + eps;
-		p += d * dir;
-		if( d>eps )
-		{
-			if(flame(p) < .0)
-				glowed=true;
-			if(glowed)
-       			glow = float(i)/64.;
-		}
-	}
-	return vec4(p,glow);
-}
-
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
-{
-	vec2 v = -1.0 + 2.0 * fragCoord.xy / iResolution.xy;
-	v.x *= iResolution.x/iResolution.y;
-	
-	vec3 org = vec3(0., -2., 4.);
-	vec3 dir = normalize(vec3(v.x*1.6, -v.y, -1.5));
-	
-	vec4 p = raymarch(org, dir);
-	float glow = p.w;
-	
-	vec4 col = mix(vec4(1.,.5,.1,1.), vec4(0.1,.5,1.,1.), p.y*.02+.4);
-	
-	fragColor = mix(vec4(0.), col, pow(glow*2.,4.));
-	//fragColor = mix(vec4(1.), mix(vec4(1.,.5,.1,1.),vec4(0.1,.5,1.,1.),p.y*.02+.4), pow(glow*2.,4.));
-
-}
-''',
-  },
-  {
-    // https://www.shadertoy.com/view/7ddGRn
-    'url': 'https://www.shadertoy.com/view/7ddGRn',
-    'fragment': '''
-#define NUM_EXPLOSIONS 7.
-#define NUM_PARTICLES 100.
-#define inv_nparticels (1./NUM_PARTICLES)
-#define PI 3.1415926
-
-float Hash11(float t){
-    return fract(sin(t*613.2)*614.8);
-}
-vec2 Hash12(float t){
-  return vec2(fract(sin(t*213.3)*314.8)-0.5,fract(sin(t*591.1)*647.2)-0.5);
-}
-
-vec2 Hash12_Polar(float t){
-    float o = fract(sin(t*213.3)*314.8)*PI*2.0;
-    float r = fract(sin(t*591.1)*647.2);
-    return vec2(sin(o)*r,cos(o)*r);
-}
-
-float Explosion(vec2 uv, float t)
-{
-    float fract_t=fract(t);
-    float floor_t=floor(t);
-    float power=0.3+Hash11(floor_t);
-    float sparks=0.;
-    for(float i=0.;i<NUM_PARTICLES;i++)
-    {
-        vec2 dir=Hash12_Polar(i*floor_t)*1.;
-        float inv_d=1./(length(uv-dir*sqrt(fract_t)));
-        float brightness=mix(0.3,0.09,smoothstep(0.,0.1,fract_t))*(1.0-(0.5+0.5*Hash11(i))*fract_t);
-        float sparkling= .5+.5*sin(t*10.2+floor_t*i);
-        sparks+=power*brightness*sparkling*inv_nparticels*inv_d;
-    }
-    return sparks;
-}
-
-void mainImage(out vec4 fragColor, in vec2 fragCoord)
-{
-    vec2 uv = (fragCoord-.5*iResolution.xy)/iResolution.y;
-
-    vec3 col=vec3(0);    
-
-    for(float i=0.;i<NUM_EXPLOSIONS;i++){
-        float t=iTime*(0.3+0.4*Hash11(i))+i/NUM_EXPLOSIONS;
-        float fract_t=fract(t);
-        float floor_t=floor(t);
-    
-        vec3 color=0.7+0.3*sin(vec3(.34,.54,.43)*floor_t*i);
-        vec2 center = Hash12(i+10.+5.*floor_t);
-        col+=Explosion(uv-center,t)*color;
-    }
-    col-=0.1;
-    fragColor = vec4(col,1.0);
-} 
-  ''',
-  },
-  {
     // https://www.shadertoy.com/view/csB3zy
     'url': 'https://www.shadertoy.com/view/csB3zy',
     'fragment': '''
@@ -2732,261 +3398,202 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
   ''',
   },
   {
-    // https://www.shadertoy.com/view/MdXSWn
-    'url': 'https://www.shadertoy.com/view/MdXSWn',
+    // https://www.shadertoy.com/view/fssXzN
+    'url': 'https://www.shadertoy.com/view/fssXzN',
     'fragment': '''
-  // Created by evilryu
-// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+//by neozhaoliang
+//https://www.shadertoy.com/user/neozhaoliang
 
+#define AA                 1//2
+#define FOV_DIST           3.0
+#define BULB_ITERATIONS    7//8
+#define SPONGE_ITERATIONS  9
+#define MAX_TRACE_STEPS    200//200
+#define MIN_TRACE_DIST     0.01
+#define MAX_TRACE_DIST     10.0
+#define PRECISION          1e-4
+#define PI                 3.14159265358979323
+#define T                  (iTime * 0.1)
 
-// whether turn on the animation
-//#define phase_shift_on 
-
-float stime, ctime;
- void ry(inout vec3 p, float a){  
- 	float c,s;vec3 q=p;  
-  	c = cos(a); s = sin(a);  
-  	p.x = c * q.x + s * q.z;  
-  	p.z = -s * q.x + c * q.z; 
- }  
-
-float pixel_size = 0.0;
-
-/* 
-
-z = r*(sin(theta)cos(phi) + i cos(theta) + j sin(theta)sin(phi)
-
-zn+1 = zn^8 +c
-
-z^8 = r^8 * (sin(8*theta)*cos(8*phi) + i cos(8*theta) + j sin(8*theta)*sin(8*theta)
-
-zn+1' = 8 * zn^7 * zn' + 1
-
-*/
-
-vec3 mb(vec3 p) {
-	p.xyz = p.xzy;
-	vec3 z = p;
-	vec3 dz=vec3(0.0);
-	float power = 8.0;
-	float r, theta, phi;
-	float dr = 1.0;
-	
-	float t0 = 1.0;
-	for(int i = 0; i < 7; ++i) {
-		r = length(z);
-		if(r > 2.0) continue;
-		theta = atan(z.y / z.x);
-        #ifdef phase_shift_on
-		phi = asin(z.z / r) + iTime*0.1;
-        #else
-        phi = asin(z.z / r);
-        #endif
-		
-		dr = pow(r, power - 1.0) * dr * power + 1.0;
-	
-		r = pow(r, power);
-		theta = theta * power;
-		phi = phi * power;
-		
-		z = r * vec3(cos(theta)*cos(phi), sin(theta)*cos(phi), sin(phi)) + p;
-		
-		t0 = min(t0, r);
-	}
-	return vec3(0.5 * log(r) * r / dr, t0, 0.0);
+// view to world transformation
+mat3 viewMatrix(vec3 camera, vec3 lookat, vec3 up)
+{
+    vec3 f = normalize(lookat - camera);
+    vec3 r = normalize(cross(f, up));
+    vec3 u = normalize(cross(r, f));
+    return mat3(r, u, -f);
 }
 
- vec3 f(vec3 p){ 
-	 ry(p, iTime*0.2);
-     return mb(p); 
- } 
-
-
- float softshadow(vec3 ro, vec3 rd, float k ){ 
-     float akuma=1.0,h=0.0; 
-	 float t = 0.01;
-     for(int i=0; i < 50; ++i){ 
-         h=f(ro+rd*t).x; 
-         if(h<0.001)return 0.02; 
-         akuma=min(akuma, k*h/t); 
- 		 t+=clamp(h,0.01,2.0); 
-     } 
-     return akuma; 
- } 
-
-vec3 nor( in vec3 pos )
+// 2D rotatation
+void R(inout vec2 p, float a)
 {
-    vec3 eps = vec3(0.001,0.0,0.0);
-	return normalize( vec3(
-           f(pos+eps.xyy).x - f(pos-eps.xyy).x,
-           f(pos+eps.yxy).x - f(pos-eps.yxy).x,
-           f(pos+eps.yyx).x - f(pos-eps.yyx).x ) );
+    p = cos(a) * p + sin(a) * vec2(p.y, -p.x);
 }
 
-vec3 intersect( in vec3 ro, in vec3 rd )
+float mandelbulb(vec3 p)
 {
-    float t = 1.0;
-    float res_t = 0.0;
-    float res_d = 1000.0;
-    vec3 c, res_c;
-    float max_error = 1000.0;
-	float d = 1.0;
-    float pd = 100.0;
-    float os = 0.0;
-    float step = 0.0;
-    float error = 1000.0;
-    
-    for( int i=0; i<48; i++ )
+    p /= 1.192;
+    p.xyz = p.xzy;
+    vec3 z = p;
+    vec3 dz = vec3(0.0);
+    float dr = 1.0;
+    float power = 8.0;
+    float r, theta, phi;
+    for (int i = 0; i < BULB_ITERATIONS; i++)
     {
-        if( error < pixel_size*0.5 || t > 20.0 )
-        {
-        }
-        else{  // avoid broken shader on windows
-        
-            c = f(ro + rd*t);
-            d = c.x;
-
-            if(d > os)
-            {
-                os = 0.4 * d*d/pd;
-                step = d + os;
-                pd = d;
-            }
-            else
-            {
-                step =-os; os = 0.0; pd = 100.0; d = 1.0;
-            }
-
-            error = d / t;
-
-            if(error < max_error) 
-            {
-                max_error = error;
-                res_t = t;
-                res_c = c;
-            }
-        
-            t += step;
-        }
-
+        r = length(z);
+        if (r > 2.0)
+            break;
+        float theta = atan(z.y / z.x);
+        float phi = asin(z.z / r);
+        dr = pow(r, power - 1.0) * power * dr + 1.0;
+        r = pow(r, power);
+        theta = theta * power;
+        phi = phi * power;
+        z = r * vec3(cos(theta) * cos(phi), cos(phi) * sin(theta), sin(phi)) + p;
     }
-	if( t>20.0/* || max_error > pixel_size*/ ) res_t=-1.0;
-    return vec3(res_t, res_c.y, res_c.z);
+    return 0.5 * log(r) * r / dr;
 }
 
- void mainImage( out vec4 fragColor, in vec2 fragCoord ) 
- { 
-    vec2 q=fragCoord.xy/iResolution.xy; 
- 	vec2 uv = -1.0 + 2.0*q; 
- 	uv.x*=iResolution.x/iResolution.y; 
-     
-    pixel_size = 1.0/(iResolution.x * 3.0);
-	// camera
- 	stime=0.7+0.3*sin(iTime*0.4); 
- 	ctime=0.7+0.3*cos(iTime*0.4); 
-
- 	vec3 ta=vec3(0.0,0.0,0.0); 
-	vec3 ro = vec3(0.0, 3.*stime*ctime, 3.*(1.-stime*ctime));
-
- 	vec3 cf = normalize(ta-ro); 
-    vec3 cs = normalize(cross(cf,vec3(0.0,1.0,0.0))); 
-    vec3 cu = normalize(cross(cs,cf)); 
- 	vec3 rd = normalize(uv.x*cs + uv.y*cu + 3.0*cf);  // transform from view to world
-
-    vec3 sundir = normalize(vec3(0.1, 0.8, 0.6)); 
-    vec3 sun = vec3(1.64, 1.27, 0.99); 
-    vec3 skycolor = vec3(0.6, 1.5, 1.0); 
-
-	vec3 bg = exp(uv.y-2.0)*vec3(0.4, 1.6, 1.0);
-
-    float halo=clamp(dot(normalize(vec3(-ro.x, -ro.y, -ro.z)), rd), 0.0, 1.0); 
-    vec3 col=bg+vec3(1.0,0.8,0.4)*pow(halo,17.0); 
-
-
-    float t=0.0;
-    vec3 p=ro; 
-	 
-	vec3 res = intersect(ro, rd);
-	 if(res.x > 0.0){
-		   p = ro + res.x * rd;
-           vec3 n=nor(p); 
-           float shadow = softshadow(p, sundir, 10.0 );
-
-           float dif = max(0.0, dot(n, sundir)); 
-           float sky = 0.6 + 0.4 * max(0.0, dot(n, vec3(0.0, 1.0, 0.0))); 
- 		   float bac = max(0.3 + 0.7 * dot(vec3(-sundir.x, -1.0, -sundir.z), n), 0.0); 
-           float spe = max(0.0, pow(clamp(dot(sundir, reflect(rd, n)), 0.0, 1.0), 10.0)); 
-
-           vec3 lin = 4.5 * sun * dif * shadow; 
-           lin += 0.8 * bac * sun; 
-           lin += 0.6 * sky * skycolor*shadow; 
-           lin += 3.0 * spe * shadow; 
-
-		   res.y = pow(clamp(res.y, 0.0, 1.0), 0.55);
-		   vec3 tc0 = 0.5 + 0.5 * sin(3.0 + 4.2 * res.y + vec3(0.0, 0.5, 1.0));
-           col = lin *vec3(0.9, 0.8, 0.6) *  0.2 * tc0;
- 		   col=mix(col,bg, 1.0-exp(-0.001*res.x*res.x)); 
-    } 
-
-    // post
-    col=pow(clamp(col,0.0,1.0),vec3(0.45)); 
-    col=col*0.6+0.4*col*col*(3.0-2.0*col);  // contrast
-    col=mix(col, vec3(dot(col, vec3(0.33))), -0.5);  // satuation
-    col*=0.5+0.5*pow(16.0*q.x*q.y*(1.0-q.x)*(1.0-q.y),0.7);  // vigneting
- 	fragColor = vec4(col.xyz, smoothstep(0.55, .76, 1.-res.x/5.)); 
- }
-  ''',
-  },
-  {
-    // https://www.shadertoy.com/view/MdXcD2
-    'url': 'https://www.shadertoy.com/view/MdXcD2',
-    'fragment': '''
-float triangle(float x) {
-	x -= 1.0;
-    x /= 4.0;
-    x -= floor(x);
-    x *= 4.0;
-    x -= 2.0;
-	x = abs(x);
-    x -= 1.0;
-    return x;
+float sdSponge(vec3 z)
+{
+    for(int i = 0; i < SPONGE_ITERATIONS; i++)
+    {
+        z = abs(z);
+        z.xy = (z.x < z.y) ? z.yx : z.xy;
+        z.xz = (z.x < z.z) ? z.zx : z.xz;
+        z.zy = (z.y < z.z) ? z.yz : z.zy;	 
+        z = z * 3.0 - 2.0;
+        z.z += (z.z < -1.0) ? 2.0 : 0.0;
+    }
+    z = abs(z) - vec3(1.0);
+    float dis = min(max(z.x, max(z.y, z.z)), 0.0) + length(max(z, 0.0)); 
+    return dis * 0.6 * pow(3.0, -float(SPONGE_ITERATIONS)); 
 }
 
-float square(float x) {
-    x /= 4.0;
-    x -= floor(x);
-	return 1.0 - 2.0 * step(0.5, x);
+float DE(vec3 p)
+{
+    float d1 = mandelbulb(p);
+    float d2 = sdSponge(p);
+    return max(d1, d2);
+    
 }
 
-vec3 palette(float i) {
-	float x = 0.5 + 0.5*triangle(i / 30.0);
-    return vec3(2.0 * x, 2.0 * x - 0.5, 2.0 * x - 1.0);
+vec3 calcNormal(vec3 p)
+{
+    const vec2 e = vec2(0.001, 0.0);
+    return normalize(vec3(
+			  DE(p + e.xyy) - DE(p - e.xyy),
+			  DE(p + e.yxy) - DE(p - e.yxy),
+			  DE(p + e.yyx) - DE(p - e.yyx)));
+}
+
+float trace(vec3 ro, vec3 rd)
+{
+    float t = MIN_TRACE_DIST;
+    float h;
+    for (int i = 0; i < MAX_TRACE_STEPS; i++)
+    {
+        h = DE(ro + rd * t);
+        if (h < PRECISION * t || t > MAX_TRACE_DIST)
+            return t;
+        t += h;
+    }
+    return -1.0;
+}
+
+float softShadow(vec3 ro, vec3 rd, float tmin, float tmax, float k)
+{
+    float res = 1.0;
+    float t = tmin;
+    for (int i = 0; i < 10; i++)
+    {
+        float h = DE(ro + rd * t);
+        res = min(res, k * h / t);
+        t += clamp(h, 0.01, 0.1);
+        if (h < 0.001 || t > tmax)
+            break;
+    }
+    return clamp(res, 0.0, 1.0);
+}
+
+float calcAO(vec3 p, vec3 n)
+{
+    float occ = 0.0;
+    float sca = 1.0;
+    for (int i = 0; i < 5; i++)
+    {
+        float h = 0.01 + 0.15 * float(i) / 4.0;
+        float d = DE(p + h * n);
+        occ += (h - d) * sca;
+        sca *= 0.9;
+    }
+    return clamp(1.0 - 3.0 * occ, 0.0, 1.0);
+}
+
+vec3 render(vec3 ro, vec3 rd, vec3 lig)
+{
+    vec3 background = vec3(0.08, 0.16, 0.32);
+    vec3 col = background;
+    float t = trace(ro, rd);
+    if (t >= 0.0)
+	{
+        col = vec3(0.9);
+        vec3 pos = ro + rd * t;
+        vec3 nor = calcNormal(pos);
+        vec3 ref = reflect(rd, nor);
+
+        float occ = calcAO(pos, nor);
+        float amb = 0.3;
+        float dif = clamp(dot(nor, lig), 0.0, 1.0);
+        float fre = pow(clamp(1.0 + dot(nor, rd), 0.0, 1.0), 2.0);
+        float spe = pow(clamp(dot(ref, lig), 0.0, 1.0), 16.0);
+        dif *= softShadow(pos, lig, 0.02, 5.0, 16.0);
+
+        vec3 lin = vec3(0.3);
+        lin += 1.8 * dif * vec3(1.0, 0.8, 0.55);
+        lin += 2.0 * spe * vec3(1.0, 0.9, 0.7) * dif;
+        lin += 0.3 * amb * vec3(0.4, 0.6, 1.0) * occ;
+        lin += 0.25 * fre * vec3(1.0) * occ;
+
+        col *= lin;
+
+        float atten = 1.0 / (1.0 + t * t * 0.1);
+	    col *= atten * occ;
+	    col = mix(col, background, smoothstep(0.0, 0.95, t / MAX_TRACE_DIST));
+    }
+    return sqrt(col);
 }
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-	vec2 pos = (2.0 * fragCoord.xy - iResolution.xy) / max(iResolution.x, iResolution.y);
-    vec2 z0 = vec2(-0.905, 0.25);
-    //vec2 z0 = vec2(-1.748, 0.001);
-    float zoom = 1.0 * exp(7.0 * smoothstep(0.0, 1.0, 0.5 + 0.5 * triangle(iTime / 20.0 + 1.0)));
-	vec2 z = 2.0 / zoom * pos + z0;
 
-    float t = iTime / 2.0;
-    float r = length(pos);
-    float blend = clamp(2.0 * triangle(t) - square(t + 1.0) * r * 0.5, 0.0, 1.0);
-    
-    vec2 c = mix(z,z0,smoothstep(0.0, 1.0, blend));
-    
-    for(int i = 0; i < 128; i++) {
-        z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y);
-        z += c;
-        if(dot(z,z) > 4.0) {    
-		    fragColor = vec4(palette(float(i)),1.0);
-            return;
-        }
-    }
-
-    fragColor = vec4(0.0);
+    vec3 tot = vec3(0.0);
+    for (int ii = 0; ii < AA; ii ++)
+	{
+	    for (int jj = 0; jj < AA; jj++)
+		{
+		    // map uv to (-1, 1) and adjust aspect ratio
+		    vec2 offset = vec2(float(ii), float(jj)) / float(AA);
+		    vec2 uv = (fragCoord.xy + offset) / iResolution.xy;
+		    uv = 2.0 * uv - 1.0;
+		    uv.x *= iResolution.x / iResolution.y;
+		    vec3 camera = vec3(4.0) / (min(3.5, 1.0 + pow(2.0, T)));
+		    vec3 lookat = vec3(0.0);
+		    vec3 up = vec3(0.0, 1.0, 0.0);
+		    // set camera
+		    vec3 ro = camera;
+            R(ro.xz, T);
+		    mat3 M = viewMatrix(ro, lookat, up);
+		    // put screen at distance FOV_DISt in front of the camera
+		    vec3 rd = M * normalize(vec3(uv, -FOV_DIST));
+            vec3 lig = normalize(vec3(1.0, 2.0, 1.0));
+		    vec3 col = render(ro, rd, lig);
+		    tot += col;
+		}
+	}
+    tot /= float(AA * AA);
+    fragColor = vec4(tot, 1.0);
 }
   ''',
   },

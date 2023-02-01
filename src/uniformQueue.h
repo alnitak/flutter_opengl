@@ -38,8 +38,6 @@
 #endif
 
 
-using namespace std;
-
 typedef enum {
     UNIFORM_BOOL,
     UNIFORM_INT,
@@ -53,31 +51,31 @@ typedef enum {
     UNIFORM_SAMPLER2D
 } UniformType;
 
-void setBool(const string &name, GLuint po, bool value);
+void setBool(const std::string &name, GLuint po, bool value);
 
-void setInt(const string &name, GLuint po, int value);
+void setInt(const std::string &name, GLuint po, int value);
 
-void setFloat(const string &name, GLuint po, float value);
+void setFloat(const std::string &name, GLuint po, float value);
 
-void setVec2(const string &name, GLuint po, const glm::vec2 &value);
+void setVec2(const std::string &name, GLuint po, const glm::vec2 &value);
 
-void setVec2(const string &name, GLuint po, float x, float y);
+void setVec2(const std::string &name, GLuint po, float x, float y);
 
-void setVec3(const string &name, GLuint po, const glm::vec3 &value);
+void setVec3(const std::string &name, GLuint po, const glm::vec3 &value);
 
-void setVec3(const string &name, GLuint po, float x, float y, float z);
+void setVec3(const std::string &name, GLuint po, float x, float y, float z);
 
-void setVec4(const string &name, GLuint po, const glm::vec4 &value);
+void setVec4(const std::string &name, GLuint po, const glm::vec4 &value);
 
-void setVec4(const string &name, GLuint po, float x, float y, float z, float w);
+void setVec4(const std::string &name, GLuint po, float x, float y, float z, float w);
 
-void setMat2(const string &name, GLuint po, const glm::mat2 &mat);
+void setMat2(const std::string &name, GLuint po, const glm::mat2 &mat);
 
-void setMat3(const string &name, GLuint po, const glm::mat3 &mat);
+void setMat3(const std::string &name, GLuint po, const glm::mat3 &mat);
 
-void setMat4(const string &name, GLuint po, const glm::mat4 &mat);
+void setMat4(const std::string &name, GLuint po, const glm::mat4 &mat);
 
-void setSampler2D(const string &name, GLuint po, Sampler2D &data);
+void setSampler2D(const std::string &name, GLuint po, Sampler2D &data);
 
 class UniformQueue {
 public:
@@ -85,13 +83,13 @@ public:
 
     ~UniformQueue();
 
-    void debug(const string &name);
+    void debug(const std::string &name);
 
     void setProgram(GLuint po) { this->programObject = po; }
 
-    void addUniform(string name, UniformType type, void *val);
+    void addUniform(std::string name, UniformType type, void *val);
 
-    bool setUniformValue(const string &, void *val);
+    bool setUniformValue(const std::string &, void *val);
 
     void sendAllUniforms();
 
@@ -117,7 +115,7 @@ public:
     typedef UniformStruct<glm::mat4> UNIFORM_MAT4_t;
     typedef UniformStruct<Sampler2D> UNIFORM_SAMPLER2D_t;
 
-    map<string, any> uniforms;
+    std::map<std::string, std::any> uniforms;
 
 private:
     static GLuint programObject;

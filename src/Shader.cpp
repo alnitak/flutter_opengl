@@ -351,7 +351,7 @@ void Shader::use() const {
 }
 
 // called from the main rendering loop.
-// The workflow:
+// The flow:
 // 1 - Make the context current (linux & win)
 // 2 - set all uniforms
 // 3 - draw into frame buffer object (linux & win). On android draw to texture and swap buffer
@@ -394,7 +394,10 @@ void Shader::drawFrame() {
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
 
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void*)(self->myTexture->buffer.data()));
+    glBindFramebuffer(GLenum(GL_FRAMEBUFFER), FBO);
+    /// uff... takes me ages to understand that Widnwos doesn't like glGetTexImage??*@##[]][!!
+    // glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void*)(self->myTexture->buffer.data()));
+    glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, (void*)(self->myTexture->buffer.data()));
 
     self->myTexture->Update();
 #endif

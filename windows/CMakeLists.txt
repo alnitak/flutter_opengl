@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.14)
 # Project-level configuration.
 set(PROJECT_NAME "flutter_opengl")
 project(${PROJECT_NAME} LANGUAGES CXX)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -29,6 +29,7 @@ list(APPEND PLUGIN_SOURCES
   ../src/ffi.cpp
   ../src/Renderer.cpp
   ../src/Shader.cpp
+  ../src/Sampler2D.cpp
   ../src/uniformQueue.cpp
 )
 

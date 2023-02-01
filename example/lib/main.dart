@@ -143,8 +143,8 @@ class _MyAppState extends State<MyApp> {
                           return const EditShader();
                         },
                       ),
-                      const TestWidget(shaderToyIndex: 1),
-                      const TestWidget(shaderToyIndex: 4),
+                      const TestWidget(shaderToyCode: 'ls3cDB'),
+                      const TestWidget(shaderToyCode: 'XdXGR7'),
                     ],
                   ),
                 ),

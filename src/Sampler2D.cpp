@@ -1,6 +1,15 @@
 #include "Sampler2D.h"
 #include "Shader.h"
 
+#ifdef _IS_ANDROID_
+#include <GLES3/gl3.h>
+#include <GLES3/gl32.h>
+#elif _IS_LINUX_
+#include <GL/glew.h>
+#elif _IS_WIN_
+#include <GL/glew.h>
+#endif
+
 #include <cstring>
 
 Sampler2D::Sampler2D()
@@ -39,5 +48,5 @@ void Sampler2D::genTexture(int n)
     // glGenerateMipmap(GL_TEXTURE_2D);
     // glBindTexture(GL_TEXTURE_2D, texture_index);
 
-    data.clear();
+    // data.clear();
 }

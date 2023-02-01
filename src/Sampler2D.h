@@ -4,14 +4,7 @@
 #include "common.h"
 #include <vector>
 
-#ifdef _IS_ANDROID_
-#include <GLES3/gl3.h>
-#include <GLES3/gl32.h>
-#elif _IS_LINUX_
-#include <GL/glew.h>
-#elif _IS_WIN_
-#include <GL/glew.h>
-#endif
+
 
 class Sampler2D {
 public:
@@ -23,7 +16,7 @@ public:
 
     std::vector<unsigned char> data;
     int width, height;
-    GLuint texture_index;
+    unsigned int texture_index;
     // define the Nth texture. 
     // The 1st texture defined will be used as GL_TEXTURE0
     // The 2nd GL_TEXTURE1 and so on

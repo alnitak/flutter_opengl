@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_opengl/opengl_controller.dart';
 import 'package:flutter_opengl/opengl_texture.dart';
 import 'package:image/image.dart' as img;
@@ -89,7 +88,7 @@ class RendererWidget extends StatelessWidget {
             !(screenshot.data ?? false)) {
           return const SizedBox.shrink();
         }
-        print('FINAL WIDGET SIZE: ${Utils.captured.size}');
+        debugPrint('FINAL WIDGET SIZE: ${Utils.captured.size}');
         // flip capture data vertically
         img.Image flipped = img.Image.fromBytes(
           width: Utils.captured.size!.width.toInt(),
@@ -117,7 +116,11 @@ class RendererWidget extends StatelessWidget {
             // start renderer
             OpenGLController().openglFFI.startThread();
 
-            // add texture
+
+            // Seems that on Windows the textures must be sent after
+            // Texture() widget has been drawn?
+            Future.delayed(const Duration(milliseconds: 100), () {
+            // add the grabbed widget as texture on iChannel0 uniform
             OpenGLController().openglFFI.addSampler2DUniform(
                   'iChannel0',
                   Utils.captured.size!.width.toInt(),
@@ -125,10 +128,10 @@ class RendererWidget extends StatelessWidget {
                   flipped.getBytes(order: img.ChannelOrder.rgba),
                 );
 
-            Utils.setAssetTexture('iChannel1', 'assets/texture.png');
+              Utils.setAssetTexture('iChannel1', 'assets/texture.png');
+            });
 
-            return Container(
-              color: Colors.yellow.withOpacity(0.1),
+            return SizedBox(
               width: Utils.captured.size!.width,
               height: Utils.captured.size!.height,
               child: OpenGLTexture(

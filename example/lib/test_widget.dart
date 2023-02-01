@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 
 import 'shader_widget.dart';
+import 'shadertoy.dart';
 
 /// A widget that uses [ShaderWidget] by grabbing it
 /// and passing the image to the shader as a texture
 class TestWidget extends StatelessWidget {
-  final int shaderToyIndex;
+  /// the ShaderToy code (the last string in the URL)
+  final String shaderToyCode;
 
   const TestWidget({
     Key? key,
-    required this.shaderToyIndex,
+    required this.shaderToyCode,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    int shaderToyIndex = shadertoy.indexWhere((element) => 
+      element['url']!.contains(shaderToyCode));
     return Padding(
       padding: const EdgeInsets.all(30.0),
       child: ShaderWidget(
@@ -35,13 +39,7 @@ class TestWidget extends StatelessWidget {
                     child: Text(
                       'Lorem ipsum dolor sit amet, consectetur adipisici elit, '
                       'sed eiusmod tempor incidunt ut labore et dolore magna '
-                      'aliqua. Ut enim ad minim veniam, quis nostrud '
-                      'exercitation ullamco laboris nisi ut aliquid ex ea '
-                      'commodi consequat. Quis aute iure reprehenderit in '
-                      'voluptate velit esse cillum dolore eu fugiat '
-                      'nulla pariatur. Excepteur sint obcaecat cupiditat non '
-                      'proident, sunt in culpa qui officia deserunt '
-                      'mollit anim id est laborum.',
+                      'aliqua. Ut enim ad minim veniam, quis nostrud ',
                       style: TextStyle(color: Colors.black),
                     ),
                   ),

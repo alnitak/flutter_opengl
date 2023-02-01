@@ -33,7 +33,7 @@ class Utils {
       withPalette: false,
     );
 
-    // texture in OpenGL have the origin at top left, so flip vertically
+    // texture in OpenGL have the origin at top left, so flip it vertically
     rgba = img.flipVertical(rgba);
 
     final decodedBytes = rgba.getBytes(order: img.ChannelOrder.rgba);
