@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_opengl/opengl_controller.dart';
-import 'package:flutter_opengl/opengl_texture.dart';
+import 'package:flutter_opengl/flutter_opengl.dart';
 import 'package:image/image.dart' as img;
 
-import 'Utils.dart';
 import 'shadertoy.dart';
 
 /// Example widget that takes a child to be grabbed and used as
@@ -15,7 +13,7 @@ class ShaderWidget extends StatefulWidget {
   final Widget child;
   final int shaderToyIndex;
 
-  ShaderWidget({
+  const ShaderWidget({
     Key? key,
     required this.shaderToyIndex,
     required this.child,
@@ -80,20 +78,19 @@ class RendererWidget extends StatelessWidget {
     // 2 - create OpenGL texture with the widget size
     // 3 - start renderer
     // 4 - set shader
-    return FutureBuilder<bool>(
-      future: Utils.captureWidget(childKeyToCapture),
+    return FutureBuilder<CapturedWidget>(
+      future: OGLUtils.captureWidget(childKeyToCapture),
       builder: (context, screenshot) {
         if (!screenshot.hasData ||
             screenshot.hasError ||
-            !(screenshot.data ?? false)) {
+            ((screenshot.data?.size ?? Size.zero) == Size.zero)) {
           return const SizedBox.shrink();
         }
-        debugPrint('FINAL WIDGET SIZE: ${Utils.captured.size}');
-        // flip capture data vertically
+        // flip image data vertically
         img.Image flipped = img.Image.fromBytes(
-          width: Utils.captured.size!.width.toInt(),
-          height: Utils.captured.size!.height.toInt(),
-          bytes: Utils.captured.byteData!.buffer,
+          width: OGLUtils.captured.size.width.toInt(),
+          height: OGLUtils.captured.size.height.toInt(),
+          bytes: OGLUtils.captured.byteData.buffer,
           numChannels: 4,
         );
         flipped = img.flipVertical(flipped);
@@ -101,8 +98,8 @@ class RendererWidget extends StatelessWidget {
         return FutureBuilder<int>(
           // get texture id
           future: OpenGLController().openglPlugin.createSurface(
-                Utils.captured.size!.width.toInt(),
-                Utils.captured.size!.height.toInt(),
+                OGLUtils.captured.size.width.toInt(),
+                OGLUtils.captured.size.height.toInt(),
               ),
           builder: (context, textureId) {
             if (!textureId.hasData || textureId.hasError) {
@@ -110,30 +107,30 @@ class RendererWidget extends StatelessWidget {
             }
             // set the shader
             OpenGLController().openglFFI.setShaderToy(
-                  shadertoy[shaderToyIndex]['fragment']!,
+                  shaderToyTexture[shaderToyIndex]['fragment']!,
                 );
 
             // start renderer
             OpenGLController().openglFFI.startThread();
 
-
             // Seems that on Windows the textures must be sent after
             // Texture() widget has been drawn?
             Future.delayed(const Duration(milliseconds: 100), () {
-            // add the grabbed widget as texture on iChannel0 uniform
-            OpenGLController().openglFFI.addSampler2DUniform(
-                  'iChannel0',
-                  Utils.captured.size!.width.toInt(),
-                  Utils.captured.size!.height.toInt(),
-                  flipped.getBytes(order: img.ChannelOrder.rgba),
-                );
+              // add the grabbed widget as texture on iChannel0 uniform
+              OpenGLController().openglFFI.addSampler2DUniform(
+                    'iChannel0',
+                    OGLUtils.captured.size.width.toInt(),
+                    OGLUtils.captured.size.height.toInt(),
+                    flipped.getBytes(order: img.ChannelOrder.rgba),
+                  );
 
-              Utils.setAssetTexture('iChannel1', 'assets/texture.png');
+              // set the 2nd texture uniform
+              OGLUtils.setAssetTexture('iChannel1', 'assets/texture.png');
             });
 
             return SizedBox(
-              width: Utils.captured.size!.width,
-              height: Utils.captured.size!.height,
+              width: OGLUtils.captured.size.width,
+              height: OGLUtils.captured.size.height,
               child: OpenGLTexture(
                 id: textureId.data!,
               ),

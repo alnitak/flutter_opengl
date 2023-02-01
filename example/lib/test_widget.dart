@@ -16,7 +16,7 @@ class TestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int shaderToyIndex = shadertoy.indexWhere((element) => 
+    int shaderToyIndex = shaderToyTexture.indexWhere((element) =>
       element['url']!.contains(shaderToyCode));
     return Padding(
       padding: const EdgeInsets.all(30.0),

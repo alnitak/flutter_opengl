@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_opengl/opengl_controller.dart';
+import 'package:flutter_opengl/flutter_opengl.dart';
 
 /// Page to edit and compile the shader
 ///

@@ -28,8 +28,4 @@ abstract class FlutterOpenglPlatform extends PlatformInterface {
   Future<int> createSurface(int width, int height) async {
     throw UnimplementedError('createSurface() has not been implemented.');
   }
-
-  Future draw() async {
-    throw UnimplementedError('draw() has not been implemented.');
-  }
 }

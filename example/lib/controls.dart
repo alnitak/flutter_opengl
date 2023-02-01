@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_opengl/opengl_controller.dart';
+import 'package:flutter_opengl/flutter_opengl.dart';
 import 'package:flutter_opengl_example/shadertoy.dart';
-
-import 'Utils.dart';
 
 bool textureCreated = false;
 bool shaderActive = false;
 int currentShaderIndex = -1;
+int currentShaderTextureIndex = -1;
 
 /// Tab page to test the plugin
 /// - create the texture id and use it in the Texture() widget
@@ -51,8 +50,6 @@ class _ControlsState extends State<Controls> {
     widget.onTextureSizeChanged(textureSizes[2]);
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -82,17 +79,13 @@ class _ControlsState extends State<Controls> {
               },
               child: const Text('create texture'),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                await OpenGLController().openglPlugin.draw();
-              },
-              child: const Text('draw'),
-            ),
+
+            const SizedBox(width: 16),
 
             /// iChannel0
             ElevatedButton(
               onPressed: () async {
-                Utils.setAssetTexture('iChannel0', 'assets/texture.png');
+                OGLUtils.setAssetTexture('iChannel0', 'assets/texture.png');
               },
               child: const Text('iChannel0'),
             ),
@@ -100,7 +93,7 @@ class _ControlsState extends State<Controls> {
             /// iChannel1
             ElevatedButton(
               onPressed: () async {
-                Utils.setAssetTexture('iChannel1', 'assets/dash.png');
+                OGLUtils.setAssetTexture('iChannel1', 'assets/dash.png');
               },
               child: const Text('iChannel1'),
             ),
@@ -144,36 +137,24 @@ class _ControlsState extends State<Controls> {
           }),
         ),
 
-        /// SET SHADERS
+        /// SHADERS BUTTONS
+        const Text('Shader examples'),
         Wrap(
+          alignment: WrapAlignment.center,
           runSpacing: 4,
           spacing: 4,
           children: [
-            // provide vertex and fragment sources
-            // ElevatedButton(
-            //   onPressed: () {
-            //     OpenGLController().openglFFI.setShader(
-            //       textureSizes[indexTextureSize.value].width.toInt(),
-            //       textureSizes[indexTextureSize.value].height.toInt(),
-            //           true,
-            //           shaders[0],
-            //           shaders[1],
-            //         );
-            //   },
-            //   child: const Text('1'),
-            // ),
-            // const SizedBox(width: 12),
-
             // ShaderToy, provide only fragment source
-            ...List.generate(shadertoy.length, (i) {
+            ...List.generate(shaderToy.length, (i) {
               return ElevatedButton(
                 onPressed: () {
-                  widget.onUrlChanged(shadertoy[i]['url']!);
+                  widget.onUrlChanged(shaderToy[i]['url']!);
                   OpenGLController().openglFFI.setShaderToy(
-                        shadertoy[i]['fragment']!,
+                        shaderToy[i]['fragment']!,
                       );
                   Size size = OpenGLController().openglFFI.getTextureSize();
                   if (size.width != -1) {
+                    currentShaderTextureIndex = -1;
                     currentShaderIndex = i;
                     shaderActive = true;
                   } else {
@@ -191,7 +172,45 @@ class _ControlsState extends State<Controls> {
             }),
           ],
         ),
-        const SizedBox(height: 8),
+
+        /// SHADERS BUTTONS with textures
+        const SizedBox(height: 16),
+        Text('Shader examples with textures'),
+        Wrap(
+          alignment: WrapAlignment.center,
+          runSpacing: 4,
+          spacing: 4,
+          children: [
+            // ShaderToy, provide only fragment source
+            ...List.generate(shaderToyTexture.length, (i) {
+              return ElevatedButton(
+                onPressed: () {
+                  widget.onUrlChanged(shaderToyTexture[i]['url']!);
+                  OpenGLController().openglFFI.setShaderToy(
+                    shaderToyTexture[i]['fragment']!,
+                      );
+                  Size size = OpenGLController().openglFFI.getTextureSize();
+                  if (size.width != -1) {
+                    currentShaderIndex = -1;
+                    currentShaderTextureIndex = i;
+                    shaderActive = true;
+                  } else {
+                    currentShaderTextureIndex = -1;
+                  }
+                  setState(() {});
+                },
+                style: ButtonStyle(
+                  backgroundColor: shaderActive && i == currentShaderTextureIndex
+                      ? const MaterialStatePropertyAll(Colors.green)
+                      : null,
+                ),
+                child: Text('${i + 1}'),
+              );
+            }),
+          ],
+        ),
+
+        const SizedBox(height: 16),
 
         /// START STOP
         Row(

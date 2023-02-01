@@ -1,12 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_opengl/src/opengl_controller.dart';
 
 import 'flutter_opengl_ffi.dart';
-import 'opengl_controller.dart';
 
 /// A widget that contains the Texture widget.
 ///
-/// The size of this widget is not related to the texture
-/// size use when calling [OpenGLController().openglPlugin.createSurface()]
+/// The size of this widget is not related to the texture size.
+/// It grabs also the mouse events to pass to the shader.
+///
+/// First get the id calling [OpenGLController().flutterOpenglPlugin.createSurface]
+/// then feed this widget with id got:
+///
+/// '''dart
+/// FutureBuilder<int>(
+///   // get texture id
+///   future: OpenGLController().openglPlugin.createSurface(
+///         Utils.captured.size!.width.toInt(),
+///         Utils.captured.size!.height.toInt(),
+///       ),
+///   builder: (context, textureId) {
+///     if (!textureId.hasData || textureId.hasError) {
+///       return const SizedBox.shrink();
+///     }
+///
+///     // start renderer
+///     OpenGLController().openglFFI.startThread();
+///
+///     // set your shader and texture here
+///     OpenGLController().openglFFI.setShaderToy(
+///       fragmentShaderString,
+///     );
+///
+///     return SizedBox(
+///       width: width,
+///       height: height,
+///       child: OpenGLTexture(
+///         id: textureId,
+///       ),
+///     );
+///   })
+/// '''
 class OpenGLTexture extends StatelessWidget {
   /// the texture id got by
   /// [OpenGLController().flutterOpenglPlugin.createSurface]

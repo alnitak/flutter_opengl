@@ -108,12 +108,12 @@ packages:
     source: sdk
     version: "0.0.0"
   image:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.12"
+    version: "4.0.13"
   js:
     dependency: transitive
     description:

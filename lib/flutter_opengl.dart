@@ -1,13 +1,9 @@
-import 'flutter_opengl_platform_interface.dart';
+library star_menu;
 
-class FlutterOpengl {
-  /// This function needs to call native to prepare the texture
-  /// All the other methods use FFI
-  Future<int> createSurface(int width, int height) {
-    return FlutterOpenglPlatform.instance.createSurface(width, height);
-  }
-
-  Future draw() {
-    return FlutterOpenglPlatform.instance.draw();
-  }
-}
+export 'src/flutter_opengl.dart';
+export 'src/flutter_opengl_ffi.dart';
+export 'src/flutter_opengl_method_channel.dart';
+export 'src/flutter_opengl_platform_interface.dart';
+export 'src/ogl_utils.dart';
+export 'src/opengl_controller.dart';
+export 'src/opengl_texture.dart';

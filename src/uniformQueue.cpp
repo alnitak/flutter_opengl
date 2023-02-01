@@ -22,7 +22,7 @@ UniformQueue::UniformQueue() {
 UniformQueue::~UniformQueue() {
     // delete all Sampler2D textures
     for (auto &[name, uniform]: uniforms) {
-        const type_info &t = uniforms[name].type();
+        const std::type_info &t = uniforms[name].type();
 
         if (t == typeid(UNIFORM_SAMPLER2D_t)) {
             Sampler2D &sampler = std::any_cast<UNIFORM_SAMPLER2D_t &>(uniform).val;
@@ -33,7 +33,7 @@ UniformQueue::~UniformQueue() {
 
 void UniformQueue::debug(const std::string &name) {
     auto uniform = uniforms[name];
-    const type_info &t = uniforms[name].type();
+    const std::type_info &t = uniforms[name].type();
     std::cout;
     if (t == typeid(UNIFORM_BOOL_t)) {
         std::cout << std::left << std::setw(15) << name <<
@@ -202,7 +202,7 @@ void UniformQueue::addUniform(std::string name, UniformType type, void *val) {
 // Set new value to an existing uniform
 bool UniformQueue::setUniformValue(const std::string &name, void *val) {
     bool found = false;
-    const type_info &t = uniforms[name].type();
+    const std::type_info &t = uniforms[name].type();
 
     if (t == typeid(UNIFORM_BOOL_t)) {
         float f = *(float *) val;
@@ -263,7 +263,7 @@ bool UniformQueue::setUniformValue(const std::string &name, void *val) {
 
 void UniformQueue::sendAllUniforms() {
     for (auto &[name, uniform]: uniforms) {
-        const type_info &t = uniforms[name].type();
+        const std::type_info &t = uniforms[name].type();
 
         if (t == typeid(UNIFORM_BOOL_t)) {
             setBool(name, programObject, std::any_cast<UNIFORM_BOOL_t &>(uniform).val);
@@ -294,7 +294,7 @@ void UniformQueue::sendAllUniforms() {
         } else 
         if (t == typeid(UNIFORM_SAMPLER2D_t)) {
             setSampler2D(name, programObject, std::any_cast<UNIFORM_SAMPLER2D_t &>(uniform).val);
-            debug(name);
+            // debug(name);
         }
     }
 }
@@ -305,7 +305,7 @@ void UniformQueue::setAllSampler2D()
 {
     int n = 0;
     for (auto &[name, uniform]: uniforms) {
-        const type_info &t = uniforms[name].type();
+        const std::type_info &t = uniforms[name].type();
 
         if (t == typeid(UNIFORM_SAMPLER2D_t)) {
             Sampler2D &sampler = std::any_cast<UNIFORM_SAMPLER2D_t &>(uniform).val;

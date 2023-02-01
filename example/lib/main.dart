@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_opengl/opengl_controller.dart';
-import 'package:flutter_opengl/opengl_texture.dart';
+import 'package:flutter_opengl/flutter_opengl.dart';
 import 'package:flutter_opengl_example/controls.dart';
 import 'package:flutter_opengl_example/edit_shader.dart';
 import 'package:url_launcher/url_launcher.dart';

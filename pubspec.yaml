@@ -15,6 +15,9 @@ dependencies:
   #https://pub.dev/packages/ffi
   ffi: 2.0.1
 
+  #https://pub.dev/packages/image
+  image: ^4.0.13
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

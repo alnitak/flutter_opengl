@@ -23,7 +23,7 @@ enum UniformType {
   uniformSampler2D,
 }
 
-/// Bindings to Flutter_OpenGL
+/// FFI bindings to Flutter_OpenGL
 class FlutterOpenGLFfi {
   /// Holds the symbol lookup function.
   final ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName)
@@ -146,7 +146,7 @@ class FlutterOpenGLFfi {
 
   /// ***********************************************
   /// **** GET VERTEX SHADER
-  /// Get current vertext shader text
+  /// Get current vertex shader text
   String getVertexShader() {
     ffi.Pointer<ffi.Char> vs = _getVertexShader();
     return vs.cast<Utf8>().toDartString();
@@ -160,7 +160,7 @@ class FlutterOpenGLFfi {
 
   /// ***********************************************
   /// **** GET FRAGMENT SHADER
-  /// Get current fragmen shader text
+  /// Get current fragment shader text
   String getFragmentShader() {
     ffi.Pointer<ffi.Char> fs = _getFragmentShader();
     return fs.cast<Utf8>().toDartString();
@@ -618,9 +618,6 @@ class FlutterOpenGLFfi {
     calloc.free(valT);
     return ret == 0 ? false : true;
   }
-
-  /// * set Sampler2D
-  // bool setSampler2DUniform(String name, )
 
   late final _setUniformPtr = _lookup<
       ffi.NativeFunction<

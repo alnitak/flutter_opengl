@@ -5,9 +5,9 @@
 /// Also many of them are heavy for mobile devices (few FPS)
 /// "iMouse", "iTime" and "iResolution" uniforms are currently supported
 
-List<Map<String, String>> shadertoy = [
-// {
-//     'url': '',
+List<Map<String, String>> shaderToyTexture = [
+  // {
+//     'url': 'TEXTURE TEST',
 //     'fragment':
 // '''
 // void mainImage( out vec4 fragColor, in vec2 fragCoord )
@@ -32,6 +32,7 @@ List<Map<String, String>> shadertoy = [
 // }
 // '''
 //   },
+
   { // https://www.shadertoy.com/view/XsjXW1
     'url': 'https://www.shadertoy.com/view/XsjXW1',
     'fragment':
@@ -891,10 +892,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord)
 }
 '''
   },
-{   // https://www.shadertoy.com/view/ltffzl
+  {   // https://www.shadertoy.com/view/ltffzl
     'url': 'https://www.shadertoy.com/view/ltffzl',
     'fragment':
-'''
+    '''
 // Heartfelt - by Martijn Steinrucken aka BigWings - 2017
 // Email:countfrolic@gmail.com Twitter:@The_ArtOfCode
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
@@ -1111,10 +1112,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 '''
   },
   {
-  // https://www.shadertoy.com/view/ls3cDB
-  'url': 'https://www.shadertoy.com/view/ls3cDB',
-  'fragment':
-  '''
+    // https://www.shadertoy.com/view/ls3cDB
+    'url': 'https://www.shadertoy.com/view/ls3cDB',
+    'fragment':
+    '''
 #define pi 3.14159265359
 #define radius .1
 
@@ -1272,7 +1273,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 	fragColor = vec4(texture(iChannel0, uv + uv2));
 }
 '''
-  },
+  }
+];
+List<Map<String, String>> shaderToy = [
   {
     // https://www.shadertoy.com/view/XlfGRj
     'url': 'https://www.shadertoy.com/view/XlfGRj',

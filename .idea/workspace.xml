@@ -8,24 +8,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="added texture support and widget example (tested on linux only)">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/flutter_opengl.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/c_cpp_properties.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/c_cpp_properties.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/Utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/ogl_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/controls.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/controls.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/edit_shader.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/edit_shader.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/shader_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/shader_widget.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/shadertoy.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/shadertoy.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/test_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/test_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/example/linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/linux/flutter/generated_plugin_registrant.h" beforeDir="false" afterPath="$PROJECT_DIR$/example/linux/flutter/generated_plugin_registrant.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/example/linux/flutter/generated_plugins.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.h" beforeDir="false" afterPath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/example/windows/flutter/generated_plugins.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sampler2D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler2D.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sampler2D.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler2D.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Shader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Shader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_opengl.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_opengl.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_opengl_ffi.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/flutter_opengl_ffi.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_opengl_method_channel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/flutter_opengl_method_channel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_opengl_platform_interface.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/flutter_opengl_platform_interface.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/opengl_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/opengl_controller.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/opengl_texture.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/opengl_texture.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/uniformQueue.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/uniformQueue.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/uniformQueue.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/uniformQueue.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/windows/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/windows/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/flutter_opengl_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/flutter_opengl_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,24 +71,14 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/android" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/src" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
       <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
       <method v="2" />
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="flutter_opengl_android" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="flutter_opengl_android" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
     </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

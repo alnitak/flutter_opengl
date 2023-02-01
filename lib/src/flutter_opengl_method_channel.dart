@@ -23,15 +23,4 @@ class MethodChannelFlutterOpengl extends FlutterOpenglPlatform {
     }
     return textureId ?? -1;
   }
-
-  @override
-  Future draw() async {
-    try {
-      await methodChannel.invokeMethod('draw');
-      return;
-    } on PlatformException catch (e) {
-      debugPrint(e.toString());
-    }
-    return Future.value();
-  }
 }
