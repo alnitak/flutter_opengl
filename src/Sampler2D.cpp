@@ -37,6 +37,7 @@ void Sampler2D::genTexture(int n)
     glGenTextures(1, &texture_index);
     glBindTexture(GL_TEXTURE_2D, texture_index);
 
+
     // turn off filtering and wrap modes
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

@@ -31,17 +31,15 @@ class TestWidget extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
+              Column(
                 children: [
                   Image.asset('assets/dash.png', height: 100),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                    child: Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipisici elit, '
-                      'sed eiusmod tempor incidunt ut labore et dolore magna '
-                      'aliqua. Ut enim ad minim veniam, quis nostrud ',
-                      style: TextStyle(color: Colors.black),
-                    ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Lorem ipsum dolor sit amet, consectetur adipisici elit, '
+                    'sed eiusmod tempor incidunt ut labore et dolore magna '
+                    'aliqua. Ut enim ad minim veniam, quis nostrud ',
+                    style: TextStyle(color: Colors.black),
                   ),
                 ],
               ),

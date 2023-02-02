@@ -7,28 +7,16 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="added texture support and widget example (tested on linux only)">
-      <change afterPath="$PROJECT_DIR$/lib/src/flutter_opengl.dart" afterDir="false" />
+    <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="some refactoring">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/Utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/ogl_utils.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/controls.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/controls.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/edit_shader.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/edit_shader.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/shader_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/shader_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/shadertoy.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/shadertoy.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/test_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/test_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/flutter_opengl.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_opengl.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/flutter_opengl_ffi.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/flutter_opengl_ffi.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/flutter_opengl_method_channel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/flutter_opengl_method_channel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/flutter_opengl_platform_interface.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/flutter_opengl_platform_interface.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/opengl_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/opengl_controller.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/opengl_texture.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/opengl_texture.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/uniformQueue.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/uniformQueue.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/flutter_opengl_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/flutter_opengl_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/ogl_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/ogl_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/opengl_texture.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/opengl_texture.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Sampler2D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler2D.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Shader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Shader.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +29,9 @@
         <option value="Dart File" />
       </list>
     </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="texture" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />

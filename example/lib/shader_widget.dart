@@ -80,17 +80,17 @@ class RendererWidget extends StatelessWidget {
     // 4 - set shader
     return FutureBuilder<CapturedWidget>(
       future: OGLUtils.captureWidget(childKeyToCapture),
-      builder: (context, screenshot) {
-        if (!screenshot.hasData ||
-            screenshot.hasError ||
-            ((screenshot.data?.size ?? Size.zero) == Size.zero)) {
+      builder: (context, captured) {
+        if (!captured.hasData ||
+            captured.hasError ||
+            ((captured.data?.size ?? Size.zero) == Size.zero)) {
           return const SizedBox.shrink();
         }
         // flip image data vertically
         img.Image flipped = img.Image.fromBytes(
-          width: OGLUtils.captured.size.width.toInt(),
-          height: OGLUtils.captured.size.height.toInt(),
-          bytes: OGLUtils.captured.byteData.buffer,
+          width: captured.data!.size.width.toInt(),
+          height: captured.data!.size.height.toInt(),
+          bytes: captured.data!.byteData.buffer,
           numChannels: 4,
         );
         flipped = img.flipVertical(flipped);
@@ -98,8 +98,8 @@ class RendererWidget extends StatelessWidget {
         return FutureBuilder<int>(
           // get texture id
           future: OpenGLController().openglPlugin.createSurface(
-                OGLUtils.captured.size.width.toInt(),
-                OGLUtils.captured.size.height.toInt(),
+                captured.data!.size.width.toInt(),
+                captured.data!.size.height.toInt(),
               ),
           builder: (context, textureId) {
             if (!textureId.hasData || textureId.hasError) {
@@ -115,12 +115,12 @@ class RendererWidget extends StatelessWidget {
 
             // Seems that on Windows the textures must be sent after
             // Texture() widget has been drawn?
-            Future.delayed(const Duration(milliseconds: 100), () {
+            Future.delayed(const Duration(milliseconds: 0), () {
               // add the grabbed widget as texture on iChannel0 uniform
               OpenGLController().openglFFI.addSampler2DUniform(
                     'iChannel0',
-                    OGLUtils.captured.size.width.toInt(),
-                    OGLUtils.captured.size.height.toInt(),
+                    captured.data!.size.width.toInt(),
+                    captured.data!.size.height.toInt(),
                     flipped.getBytes(order: img.ChannelOrder.rgba),
                   );
 
@@ -129,8 +129,8 @@ class RendererWidget extends StatelessWidget {
             });
 
             return SizedBox(
-              width: OGLUtils.captured.size.width,
-              height: OGLUtils.captured.size.height,
+              width: captured.data!.size.width,
+              height: captured.data!.size.height,
               child: OpenGLTexture(
                 id: textureId.data!,
               ),

@@ -128,6 +128,7 @@ class _MyAppState extends State<MyApp> {
                 /// TABS
                 Expanded(
                   child: TabBarView(
+                    physics: NeverScrollableScrollPhysics(),
                     children: [
                       Controls(
                         onFPSChanged: (newFPS) => fpsText.value = newFPS,

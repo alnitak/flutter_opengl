@@ -18,57 +18,23 @@ class CapturedWidget {
 }
 
 class OGLUtils {
-  /// Used in the recursive _capture() function to know when must return
-  static final Completer<bool> _completer = Completer();
 
-  /// where the widget image is stored
-  static final CapturedWidget captured = CapturedWidget(ByteData(0), Size.zero);
-
+  /// Capture raw RGBA32 data image
   static Future<CapturedWidget> captureWidget(GlobalKey widgetKey) async {
-    await _capture(widgetKey, 15);
-    return captured;
-  }
+    final RenderRepaintBoundary boundary =
+        widgetKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+    final ui.Image image = await boundary.toImage(pixelRatio: 1.0);
+    final ByteData? byteData =
+        await image.toByteData(format: ui.ImageByteFormat.rawRgba);
 
-  /// Capture the widget with the given [widgetKey]
-  // TODO: find a better way to capture the widget when the issue will
-  // be fixed? https://github.com/flutter/flutter/issues/22308
-  static Future<bool> _capture(GlobalKey widgetKey, int retryCounter) async {
-    ui.Image? image;
-
-    try {
-      RenderRepaintBoundary? boundary =
-          widgetKey.currentContext?.findRenderObject() as RenderRepaintBoundary;
-
-      if (retryCounter < 1) _completer.complete(false);
-
-      image = await boundary.toImage();
-
-      captured.byteData =
-          await image.toByteData(format: ui.ImageByteFormat.rawRgba) ??
-              ByteData(0);
-      captured.size = Size(image.width.toDouble(), image.height.toDouble());
-
-      if (retryCounter < 8) {
-        _completer.complete(true);
-      } else {
-        Timer(const Duration(milliseconds: 20), () {
-          if (!_completer.isCompleted) {
-            _capture(widgetKey, retryCounter);
-          }
-        });
-        retryCounter--;
-      }
-    } catch (exception) {
-      retryCounter--;
-      if (retryCounter < 1) _completer.complete(false);
-      //Delay is required. See Issue https://github.com/flutter/flutter/issues/22308
-      Timer(const Duration(milliseconds: 20), () {
-        if (!_completer.isCompleted) {
-          _capture(widgetKey, retryCounter);
-        }
-      });
+    if (byteData == null) {
+      return CapturedWidget(ByteData(0), Size.zero);
     }
-    return _completer.future;
+
+    return CapturedWidget(
+      byteData,
+      Size(image.width.toDouble(), image.height.toDouble()),
+    );
   }
 
   /// Load an asset image, flip vertically and

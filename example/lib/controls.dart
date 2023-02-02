@@ -37,23 +37,21 @@ class _ControlsState extends State<Controls> {
   late ValueNotifier<int> indexTextureSize;
   final textureSizes = [
     const Size(150, 84),
-    const Size(300, 168),
     const Size(600, 337),
     const Size(1000, 563),
-    const Size(1500, 844),
   ];
 
   @override
   void initState() {
     super.initState();
-    indexTextureSize = ValueNotifier(2);
-    widget.onTextureSizeChanged(textureSizes[2]);
+    indexTextureSize = ValueNotifier(1);
+    widget.onTextureSizeChanged(textureSizes[1]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       children: [
         /// CREATE TEXTURE
         Row(
@@ -99,7 +97,7 @@ class _ControlsState extends State<Controls> {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
 
         /// SET TEXTURE SIZE
         Wrap(
@@ -138,114 +136,126 @@ class _ControlsState extends State<Controls> {
         ),
 
         /// SHADERS BUTTONS
-        const Text('Shader examples'),
-        Wrap(
-          alignment: WrapAlignment.center,
-          runSpacing: 4,
-          spacing: 4,
-          children: [
-            // ShaderToy, provide only fragment source
-            ...List.generate(shaderToy.length, (i) {
-              return ElevatedButton(
-                onPressed: () {
-                  widget.onUrlChanged(shaderToy[i]['url']!);
-                  OpenGLController().openglFFI.setShaderToy(
-                        shaderToy[i]['fragment']!,
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Shader examples'),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  runSpacing: 4,
+                  spacing: 4,
+                  children: [
+                    // ShaderToy, provide only fragment source
+                    ...List.generate(shaderToy.length, (i) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          widget.onUrlChanged(shaderToy[i]['url']!);
+                          OpenGLController().openglFFI.setShaderToy(
+                            shaderToy[i]['fragment']!,
+                          );
+                          Size size = OpenGLController().openglFFI.getTextureSize();
+                          if (size.width != -1) {
+                            currentShaderTextureIndex = -1;
+                            currentShaderIndex = i;
+                            shaderActive = true;
+                          } else {
+                            currentShaderIndex = -1;
+                          }
+                          setState(() {});
+                        },
+                        style: ButtonStyle(
+                          fixedSize: const MaterialStatePropertyAll(Size(10,10)),
+                          backgroundColor: shaderActive && i == currentShaderIndex
+                              ? const MaterialStatePropertyAll(Colors.green)
+                              : null,
+                        ),
+                        child: Text('${i + 1}'),
                       );
-                  Size size = OpenGLController().openglFFI.getTextureSize();
-                  if (size.width != -1) {
-                    currentShaderTextureIndex = -1;
-                    currentShaderIndex = i;
-                    shaderActive = true;
-                  } else {
-                    currentShaderIndex = -1;
-                  }
-                  setState(() {});
-                },
-                style: ButtonStyle(
-                  backgroundColor: shaderActive && i == currentShaderIndex
-                      ? const MaterialStatePropertyAll(Colors.green)
-                      : null,
+                    }),
+                  ],
                 ),
-                child: Text('${i + 1}'),
-              );
-            }),
-          ],
-        ),
 
-        /// SHADERS BUTTONS with textures
-        const SizedBox(height: 16),
-        Text('Shader examples with textures'),
-        Wrap(
-          alignment: WrapAlignment.center,
-          runSpacing: 4,
-          spacing: 4,
-          children: [
-            // ShaderToy, provide only fragment source
-            ...List.generate(shaderToyTexture.length, (i) {
-              return ElevatedButton(
-                onPressed: () {
-                  widget.onUrlChanged(shaderToyTexture[i]['url']!);
-                  OpenGLController().openglFFI.setShaderToy(
-                    shaderToyTexture[i]['fragment']!,
+                /// SHADERS BUTTONS with textures
+                const SizedBox(height: 10),
+                const Text('Shader examples with textures'),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  runSpacing: 4,
+                  spacing: 4,
+                  children: [
+                    // ShaderToy, provide only fragment source
+                    ...List.generate(shaderToyTexture.length, (i) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          widget.onUrlChanged(shaderToyTexture[i]['url']!);
+                          OpenGLController().openglFFI.setShaderToy(
+                            shaderToyTexture[i]['fragment']!,
+                          );
+                          Size size = OpenGLController().openglFFI.getTextureSize();
+                          if (size.width != -1) {
+                            currentShaderIndex = -1;
+                            currentShaderTextureIndex = i;
+                            shaderActive = true;
+                          } else {
+                            currentShaderTextureIndex = -1;
+                          }
+                          setState(() {});
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: shaderActive && i == currentShaderTextureIndex
+                              ? const MaterialStatePropertyAll(Colors.green)
+                              : null,
+                        ),
+                        child: Text('${i + 1}'),
                       );
-                  Size size = OpenGLController().openglFFI.getTextureSize();
-                  if (size.width != -1) {
-                    currentShaderIndex = -1;
-                    currentShaderTextureIndex = i;
-                    shaderActive = true;
-                  } else {
-                    currentShaderTextureIndex = -1;
-                  }
-                  setState(() {});
-                },
-                style: ButtonStyle(
-                  backgroundColor: shaderActive && i == currentShaderTextureIndex
-                      ? const MaterialStatePropertyAll(Colors.green)
-                      : null,
+                    }),
+                  ],
                 ),
-                child: Text('${i + 1}'),
-              );
-            }),
-          ],
+
+                const SizedBox(height: 10),
+
+                /// START STOP
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    /// START
+                    ElevatedButton(
+                      onPressed: () {
+                        OpenGLController().openglFFI.startThread();
+                        fpsTimer?.cancel();
+                        fpsTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+                          double fps = OpenGLController().openglFFI.getFps();
+                          widget.onFPSChanged('${fps.toStringAsFixed(1)} FPS');
+                        });
+                      },
+                      child: const Text('start'),
+                    ),
+                    const SizedBox(width: 8),
+
+                    /// STOP
+                    ElevatedButton(
+                      onPressed: () {
+                        fpsTimer?.cancel();
+                        OpenGLController().openglFFI.stopThread();
+                        setState(() {
+                          textureCreated = false;
+                          shaderActive = false;
+                          currentShaderIndex = -1;
+                        });
+                      },
+                      child: const Text('stop'),
+                    ),
+                  ],
+                ),
+
+              ],
+            ),
+          ),
         ),
 
-        const SizedBox(height: 16),
-
-        /// START STOP
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            /// START
-            ElevatedButton(
-              onPressed: () {
-                OpenGLController().openglFFI.startThread();
-                fpsTimer?.cancel();
-                fpsTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-                  double fps = OpenGLController().openglFFI.getFps();
-                  widget.onFPSChanged('${fps.toStringAsFixed(1)} FPS');
-                });
-              },
-              child: const Text('start'),
-            ),
-            const SizedBox(width: 8),
-
-            /// STOP
-            ElevatedButton(
-              onPressed: () {
-                fpsTimer?.cancel();
-                OpenGLController().openglFFI.stopThread();
-                setState(() {
-                  textureCreated = false;
-                  shaderActive = false;
-                  currentShaderIndex = -1;
-                });
-              },
-              child: const Text('stop'),
-            ),
-          ],
-        ),
       ],
     );
   }
