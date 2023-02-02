@@ -9,14 +9,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="some refactoring">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/controls.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/controls.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/shader_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/shader_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/test_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/test_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/ogl_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/ogl_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/opengl_texture.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/opengl_texture.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sampler2D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler2D.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Shader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Shader.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
