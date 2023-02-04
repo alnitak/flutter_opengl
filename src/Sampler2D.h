@@ -9,7 +9,7 @@
 class Sampler2D {
 public:
     Sampler2D();
-    ~Sampler2D();
+    ~Sampler2D() = default;
 
     void add_RGBA32(int w, int h, unsigned char *rawData);
     void genTexture(int n);

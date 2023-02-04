@@ -1,5 +1,6 @@
 #include "uniformQueue.h"
 #include "Shader.h"
+#include "ffi.h"
 
 #include <iterator>
 #include <iomanip>      // for setw
@@ -148,46 +149,55 @@ void UniformQueue::addUniform(std::string name, UniformType type, void *val) {
         case UNIFORM_BOOL: {
             bool f = *(bool *) val;
             uniforms.emplace(name, UNIFORM_BOOL_t(UNIFORM_BOOL, f));
+            setUniformValue(name, val);
             break;
         }
         case UNIFORM_INT: {
             int f = *(int *) val;
             uniforms.emplace(name, UNIFORM_INT_t(UNIFORM_INT, f));
+            setUniformValue(name, val);
             break;
         }
         case UNIFORM_FLOAT: {
             float f = *(float *) val;
             uniforms.emplace(name, UNIFORM_FLOAT_t(UNIFORM_FLOAT, f));
+            setUniformValue(name, val);
             break;
         }
         case UNIFORM_VEC2: {
             glm::vec2 f = *(glm::vec2 *) val;
             uniforms.emplace(name, UNIFORM_VEC2_t(UNIFORM_VEC2, f));
+            setUniformValue(name, val);
             break;
         }
         case UNIFORM_VEC3: {
             glm::vec3 f = *(glm::vec3 *) val;
             uniforms.emplace(name, UNIFORM_VEC3_t(UNIFORM_VEC3, f));
+            setUniformValue(name, val);
             break;
         }
         case UNIFORM_VEC4: {
             glm::vec4 f = *(glm::vec4 *) val;
             uniforms.emplace(name, UNIFORM_VEC4_t(UNIFORM_VEC4, f));
+            setUniformValue(name, val);
             break;
         }
         case UNIFORM_MAT2: {
             glm::mat2 f = *(glm::mat2 *) val;
             uniforms.emplace(name, UNIFORM_MAT2_t(UNIFORM_MAT2, f));
+            setUniformValue(name, val);
             break;
         }
         case UNIFORM_MAT3: {
             glm::mat3 f = *(glm::mat3 *) val;
             uniforms.emplace(name, UNIFORM_MAT3_t(UNIFORM_MAT3, f));
+            setUniformValue(name, val);
             break;
         }
         case UNIFORM_MAT4: {
             glm::mat4 f = *(glm::mat4 *) val;
             uniforms.emplace(name, UNIFORM_MAT4_t(UNIFORM_MAT4, f));
+            setUniformValue(name, val);
             break;
         }
         case UNIFORM_SAMPLER2D: {
@@ -196,7 +206,6 @@ void UniformQueue::addUniform(std::string name, UniformType type, void *val) {
             break;
         }
     }
-    setUniformValue(name, val);
 }
 
 // Set new value to an existing uniform
@@ -250,8 +259,11 @@ bool UniformQueue::setUniformValue(const std::string &name, void *val) {
         found = true;
     } else  
     if (t == typeid(UNIFORM_SAMPLER2D_t)) {
-        Sampler2D f = *(Sampler2D *) val;
-        std::any_cast<UNIFORM_SAMPLER2D_t &>(uniforms[name]).val = f;
+        std::cout << "UPDATE Sampler2D " << name << std::endl;
+        Sampler2D &f = std::any_cast<UNIFORM_SAMPLER2D_t &>(uniforms[name]).val;
+        f.add_RGBA32(f.width, f.height, (unsigned char *) val);
+        if (getRenderer() != nullptr && getRenderer()->isLooping())
+            getRenderer()->setNewTextureMsg();
         found = true;
     } else 
     {
@@ -309,13 +321,9 @@ void UniformQueue::setAllSampler2D()
 
         if (t == typeid(UNIFORM_SAMPLER2D_t)) {
             Sampler2D &sampler = std::any_cast<UNIFORM_SAMPLER2D_t &>(uniform).val;
-            // if the data is empty, the texture is already been generated
-            if (sampler.data.size() != 0) 
-            {
-                sampler.genTexture(n);
-                setSampler2D(name, programObject, sampler);
-                // debug(name);
-            }
+            sampler.genTexture(n);
+            setSampler2D(name, programObject, sampler);
+            // debug(name);
             n++;
         }
     }

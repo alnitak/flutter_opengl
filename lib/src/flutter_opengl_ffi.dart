@@ -619,6 +619,25 @@ class FlutterOpenGLFfi {
     return ret == 0 ? false : true;
   }
 
+  /// * set SAMPLER2D
+  ///
+  /// Replace a texture with another image with the same size.
+  /// Be sure the [val] length is the same as the previously
+  /// stored image with int the uniform named [name].
+  bool setSampler2DUniform(String name, Uint8List val) {
+    ffi.Pointer<ffi.Int8> valT = calloc(ffi.sizeOf<ffi.Int8>() * val.length);
+    for (int i = 0; i < val.length; ++i) {
+      valT[i] = val[i];
+    }
+
+    int ret = _setUniform(
+      name.toNativeUtf8().cast<ffi.Char>(),
+      valT.cast<ffi.Void>(),
+    );
+    calloc.free(valT);
+    return ret == 0 ? false : true;
+  }
+
   late final _setUniformPtr = _lookup<
       ffi.NativeFunction<
           ffi.Int Function(

@@ -18,7 +18,6 @@ class CapturedWidget {
 }
 
 class OGLUtils {
-
   /// Capture raw RGBA32 data image
   static Future<CapturedWidget> captureWidget(GlobalKey widgetKey) async {
     final RenderRepaintBoundary boundary =
@@ -39,7 +38,8 @@ class OGLUtils {
 
   /// Load an asset image, flip vertically and
   /// add it to the shader uniform with the name [uniformName]
-  static setAssetTexture(String uniformName, String assetName) async {
+  static setAssetTexture(String uniformName, String assetName,
+      {bool toCreate = false}) async {
     final Uint8List inputImg =
         (await rootBundle.load(assetName)).buffer.asUint8List();
     final decoder = img.PngDecoder();
@@ -56,7 +56,13 @@ class OGLUtils {
 
     final decodedBytes = rgba.getBytes(order: img.ChannelOrder.rgba);
 
-    OpenGLController().openglFFI.addSampler2DUniform(
-        uniformName, rgba.width, rgba.height, decodedBytes);
+    if (toCreate) {
+      OpenGLController()
+          .openglFFI
+          .setSampler2DUniform(uniformName, decodedBytes);
+    } else {
+      OpenGLController().openglFFI.addSampler2DUniform(
+          uniformName, rgba.width, rgba.height, decodedBytes);
+    }
   }
 }

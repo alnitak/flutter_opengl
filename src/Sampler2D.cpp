@@ -12,12 +12,8 @@
 
 #include <cstring>
 
-Sampler2D::Sampler2D()
-{
-
-}
-
-Sampler2D::~Sampler2D()
+Sampler2D::Sampler2D() 
+    : nTexture(-1)
 {
 }
 
@@ -32,13 +28,19 @@ void Sampler2D::add_RGBA32(int w, int h, unsigned char *rawData)
 
 void Sampler2D::genTexture(int n)
 {
-    nTexture = n;
-    glActiveTexture(GL_TEXTURE0 + n);
-    glGenTextures(1, &texture_index);
+    // if the data is empty, the texture hass already been generated
+    if (data.empty()) return;
+
+    // if nTexture != -1 the texture has already been created 
+    // and we are here only to update it
+    if (nTexture == -1) {
+        nTexture = n;
+        glGenTextures(1, &texture_index);
+    }
+    glActiveTexture(GL_TEXTURE0 + nTexture);
     glBindTexture(GL_TEXTURE_2D, texture_index);
 
-
-    // turn off filtering and wrap modes
+    // filtering and wrap modes
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -49,5 +51,5 @@ void Sampler2D::genTexture(int n)
     // glGenerateMipmap(GL_TEXTURE_2D);
     // glBindTexture(GL_TEXTURE_2D, texture_index);
 
-    // data.clear();
+    data.clear();
 }

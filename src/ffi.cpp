@@ -157,8 +157,6 @@ addShaderToyUniforms() {
 // sign(mouze.w)  = button is clicked
 // https://www.shadertoy.com/view/llySRh
 // https://www.shadertoy.com/view/Mss3zH
-
-// float[4] mouse;
 extern "C" FFI_PLUGIN_EXPORT void
 setMousePosition(
     double posX, double posY, double posZ, double posW,
