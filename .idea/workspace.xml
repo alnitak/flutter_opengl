@@ -7,8 +7,18 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="some refactoring">
+    <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="set new texture without generating a new one">
+      <change afterPath="$PROJECT_DIR$/example/lib/states.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/controls.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/controls.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/shader_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/shader_widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/shadertoy.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/shadertoy.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/test_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/test_widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/flutter_opengl_method_channel_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/flutter_opengl_method_channel_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/flutter_opengl_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/flutter_opengl_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +56,7 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../selenium4/libs/flutteropengl/android" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../yoda" />
     <property name="settings.editor.selected.configurable" value="preferences.customizations" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
@@ -87,7 +97,21 @@
       <option name="project" value="LOCAL" />
       <updated>1674991116604</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="added gif demo">
+      <created>1675353495991</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1675353495991</updated>
+    </task>
+    <task id="LOCAL-00004" summary="set new texture without generating a new one">
+      <created>1675505829096</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1675505829096</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -104,6 +128,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="support Android, Linux, Windows" />
     <MESSAGE value="added texture support and widget example (tested on linux only)" />
-    <option name="LAST_COMMIT_MESSAGE" value="added texture support and widget example (tested on linux only)" />
+    <MESSAGE value="added gif demo" />
+    <MESSAGE value="set new texture without generating a new one" />
+    <option name="LAST_COMMIT_MESSAGE" value="set new texture without generating a new one" />
   </component>
 </project>

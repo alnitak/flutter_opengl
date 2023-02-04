@@ -1,11 +1,11 @@
 /// Shaders taken from ShaderToy.com
 /// These are only fragment shaders
-/// Many of the shaders can be copy/pasted, but they must have
-/// only the "image" layer (no iChannel, no buffer etc).
+/// Many of the shaders can be copy/pasted.
 /// Also many of them are heavy for mobile devices (few FPS)
-/// "iMouse", "iTime" and "iResolution" uniforms are currently supported
+/// "iMouse", "iTime", "iResolution", "iChannel0" and "iChannel1" uniforms
+/// are currently supported
 
-List<Map<String, String>> shaderToyTexture = [
+List<Map<String, String>> shaderToy = [
   // {
 //     'url': 'TEXTURE TEST',
 //     'fragment':
@@ -1273,9 +1273,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 	fragColor = vec4(texture(iChannel0, uv + uv2));
 }
 '''
-  }
-];
-List<Map<String, String>> shaderToy = [
+  },
   {
     // https://www.shadertoy.com/view/XlfGRj
     'url': 'https://www.shadertoy.com/view/XlfGRj',

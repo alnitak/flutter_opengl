@@ -107,7 +107,7 @@ class RendererWidget extends StatelessWidget {
             }
             // set the shader
             OpenGLController().openglFFI.setShaderToy(
-                  shaderToyTexture[shaderToyIndex]['fragment']!,
+                  shaderToy[shaderToyIndex]['fragment']!,
                 );
 
             // start renderer

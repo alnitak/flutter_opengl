@@ -4,43 +4,25 @@ import 'package:flutter_opengl/flutter_opengl.dart';
 import 'package:flutter_opengl_example/controls.dart';
 import 'package:flutter_opengl_example/edit_shader.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'controls_texture.dart';
+import 'states.dart';
 import 'test_widget.dart';
 
 void main() {
   OpenGLController().initializeGL();
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textureSize = ref.watch(stateTextureSize);
+    final textureId = ref.watch(stateTextureId);
 
-class _MyAppState extends State<MyApp> {
-  late ValueNotifier<String> shaderUrl;
-  late ValueNotifier<String> fpsText;
-  late ValueNotifier<int> textureId;
-  late ValueNotifier<Size> textureSize;
-
-  @override
-  void initState() {
-    super.initState();
-
-    textureId = ValueNotifier(-1);
-    fpsText = ValueNotifier('');
-    shaderUrl = ValueNotifier('');
-
-    // textureSize = ValueNotifier(const Size(300, 168));
-    textureSize = ValueNotifier(const Size(600, 337));
-    // textureSize = ValueNotifier(const Size(1000, 563));
-    // textureSize = ValueNotifier(const Size(1500, 844));
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -55,67 +37,24 @@ class _MyAppState extends State<MyApp> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 /// FPS and ShaderToy URL text
-                ValueListenableBuilder<String>(
-                    valueListenable: shaderUrl,
-                    builder: (_, shaderUrl, __) {
-                      return ValueListenableBuilder<String>(
-                          valueListenable: fpsText,
-                          builder: (_, fps, __) {
-                            return Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                    '$fps\n${textureSize.value.width.toInt()} x '
-                                    '${textureSize.value.height.toInt()}',
-                                    textScaleFactor: 1.3),
-                                const SizedBox(width: 30),
-                                RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: shaderUrl,
-                                        style: const TextStyle(
-                                            decoration:
-                                                TextDecoration.underline,
-                                            fontWeight: FontWeight.bold),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            launchUrl(Uri.parse(shaderUrl));
-                                          },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            );
-                          });
-                    }),
+                const UpperText(),
                 const SizedBox(height: 8),
 
                 /// TEXTURE
                 AspectRatio(
                   aspectRatio:
-                      textureSize.value.width / textureSize.value.height,
-                  child: ValueListenableBuilder<int>(
-                    valueListenable: textureId,
-                    builder: (_, id, __) {
-                      if (id == -1) {
-                        return Container(
-                          color: Colors.red,
-                        );
-                      }
-                      return OpenGLTexture(
-                        id: id,
-                      );
-                    },
-                  ),
+                      textureSize.width / textureSize.height,
+                  child: textureId == -1
+                    ? const ColoredBox(color: Colors.red)
+                    : OpenGLTexture(id: textureId)
                 ),
 
                 const SizedBox(
                   height: 40,
                   child: TabBar(
+                    isScrollable: true,
                     tabs: [
-                      Tab(text: 'controls'),
+                      Tab(text: 'shaders'),
                       Tab(text: 'edit shader'),
                       Tab(text: 'test 1'),
                       Tab(text: 'test 2'),
@@ -128,21 +67,10 @@ class _MyAppState extends State<MyApp> {
                 /// TABS
                 Expanded(
                   child: TabBarView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      Controls(
-                        onFPSChanged: (newFPS) => fpsText.value = newFPS,
-                        onUrlChanged: (newUrl) => shaderUrl.value = newUrl,
-                        onTextureIdChanged: (id) => textureId.value = id,
-                        onTextureSizeChanged: (size) =>
-                            textureSize.value = size,
-                      ),
-                      ValueListenableBuilder<String>(
-                        valueListenable: shaderUrl,
-                        builder: (_, shaderUrl, __) {
-                          return const EditShader();
-                        },
-                      ),
+                      Controls(),
+                      const EditShader(),
                       const TestWidget(shaderToyCode: 'ls3cDB'),
                       const TestWidget(shaderToyCode: 'XdXGR7'),
                     ],
@@ -153,6 +81,48 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// FPS, texture size and shader URL
+///
+class UpperText extends ConsumerWidget {
+  const UpperText({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final fps = ref.watch(stateFPS);
+    final shaderUrl = ref.watch(stateUrl);
+    final textureSize = ref.watch(stateTextureSize);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+            '$fps\n${textureSize.width.toInt()} x '
+                '${textureSize.height.toInt()}',
+            textScaleFactor: 1.3),
+        const SizedBox(width: 30),
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: shaderUrl,
+                style: const TextStyle(
+                    decoration:
+                    TextDecoration.underline,
+                    fontWeight: FontWeight.bold),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    launchUrl(Uri.parse(shaderUrl));
+                  },
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
