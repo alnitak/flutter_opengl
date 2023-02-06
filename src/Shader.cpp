@@ -106,23 +106,14 @@ void Shader::addShaderToyUniforms() {
     uniformsList.addUniform("iResolution", UNIFORM_VEC3, (void *) (&iResolution));
     uniformsList.addUniform("iTime", UNIFORM_FLOAT, (void *) (&time));
 
-
-    // /// TMP CHANNEL0
-    // unsigned char *rawData = (unsigned char *)malloc(width * height * 4 * sizeof(unsigned char));
-    // unsigned char *ptr = rawData;
-    //     for (int x=0;x<width * height; ++x){
-    //         ptr[0] = 255;//random()}%255;
-    //         ptr++;
-    //         ptr[0] = 0;// + (random()%100);
-    //         ptr++;
-    //         ptr[0] = 0;//random()}%255;
-    //         ptr++;
-    //         ptr[0] = 255;
-    //         ptr++;
-    //     }
-    // sampler.add_RGBA32(width, height, rawData);
-    // uniformsList.addUniform("iChannel0", UNIFORM_SAMPLER2D, (void *) (&sampler));
-    // free(rawData);
+    // Add black 4x4 texture for each iChannel
+    std::vector<unsigned char> rawData(4 * 4 * 4, 0);
+    Sampler2D sampler1;
+    sampler1.add_RGBA32(4, 4, rawData.data());
+    uniformsList.addUniform("iChannel0", UNIFORM_SAMPLER2D, (void *) (&sampler1));
+    uniformsList.addUniform("iChannel1", UNIFORM_SAMPLER2D, (void *) (&sampler1));
+    uniformsList.addUniform("iChannel2", UNIFORM_SAMPLER2D, (void *) (&sampler1));
+    uniformsList.addUniform("iChannel3", UNIFORM_SAMPLER2D, (void *) (&sampler1));
 }
 
 void Shader::setShadersSize(int w, int h) {
@@ -252,8 +243,14 @@ std::string Shader::initShaderToy() {
             "}                                 \n";
 
     std::string common = "precision highp float;         \n"
+                        // "layout(binding=0) uniform sampler2D iChannel0; \n"
+                        // "layout(binding=1) uniform sampler2D iChannel1; \n"
+                        // "layout(binding=2) uniform sampler2D iChannel2; \n"
+                        // "layout(binding=3) uniform sampler2D iChannel3; \n"
                          "uniform sampler2D iChannel0;   \n"
                          "uniform sampler2D iChannel1;   \n"
+                         "uniform sampler2D iChannel2;   \n"
+                         "uniform sampler2D iChannel3;   \n"
                          "uniform vec4      iMouse;      \n"  // mouse position (in pixels)
                          "uniform vec3      iResolution; \n"  // viewport resolution (in pixels)
                          "uniform float     iTime;       \n"; // shader playback time (in seconds)
@@ -385,6 +382,10 @@ void Shader::drawFrame() {
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
+    
+    // glBindTexture(GL_TEXTURE_2D, NULL);
+    // glFlush();
+    // glFinish();
 
     fl_texture_registrar_mark_texture_frame_available(self->texture_registrar,
                                                       self->texture);
@@ -393,6 +394,7 @@ void Shader::drawFrame() {
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, NULL);
 
     glBindFramebuffer(GLenum(GL_FRAMEBUFFER), FBO);
     /// uff... takes me ages to understand that Widnwos doesn't like glGetTexImage??*@##[]][!!

@@ -51,32 +51,6 @@ typedef enum {
     UNIFORM_SAMPLER2D
 } UniformType;
 
-void setBool(const std::string &name, GLuint po, bool value);
-
-void setInt(const std::string &name, GLuint po, int value);
-
-void setFloat(const std::string &name, GLuint po, float value);
-
-void setVec2(const std::string &name, GLuint po, const glm::vec2 &value);
-
-void setVec2(const std::string &name, GLuint po, float x, float y);
-
-void setVec3(const std::string &name, GLuint po, const glm::vec3 &value);
-
-void setVec3(const std::string &name, GLuint po, float x, float y, float z);
-
-void setVec4(const std::string &name, GLuint po, const glm::vec4 &value);
-
-void setVec4(const std::string &name, GLuint po, float x, float y, float z, float w);
-
-void setMat2(const std::string &name, GLuint po, const glm::mat2 &mat);
-
-void setMat3(const std::string &name, GLuint po, const glm::mat3 &mat);
-
-void setMat4(const std::string &name, GLuint po, const glm::mat4 &mat);
-
-void setSampler2D(const std::string &name, GLuint po, Sampler2D &data);
-
 class UniformQueue {
 public:
     UniformQueue();
@@ -87,13 +61,43 @@ public:
 
     void setProgram(GLuint po) { this->programObject = po; }
 
-    void addUniform(std::string name, UniformType type, void *val);
+    bool addUniform(std::string name, UniformType type, void *val);
+
+    bool removeUniform(const std::string &name);
 
     bool setUniformValue(const std::string &, void *val);
 
     void sendAllUniforms();
 
     void setAllSampler2D();
+
+    bool replaceSampler2D(const std::string &name, int w, int h, unsigned char *rawData);
+    
+    void setBool(const std::string &name, GLuint po, bool value);
+
+    void setInt(const std::string &name, GLuint po, int value);
+
+    void setFloat(const std::string &name, GLuint po, float value);
+
+    void setVec2(const std::string &name, GLuint po, const glm::vec2 &value);
+
+    void setVec2(const std::string &name, GLuint po, float x, float y);
+
+    void setVec3(const std::string &name, GLuint po, const glm::vec3 &value);
+
+    void setVec3(const std::string &name, GLuint po, float x, float y, float z);
+
+    void setVec4(const std::string &name, GLuint po, const glm::vec4 &value);
+
+    void setVec4(const std::string &name, GLuint po, float x, float y, float z, float w);
+
+    void setMat2(const std::string &name, GLuint po, const glm::mat2 &mat);
+
+    void setMat3(const std::string &name, GLuint po, const glm::mat3 &mat);
+
+    void setMat4(const std::string &name, GLuint po, const glm::mat4 &mat);
+
+    void setSampler2D(const std::string &name, GLuint po, Sampler2D &data);
 
     template<typename T>
     struct UniformStruct {

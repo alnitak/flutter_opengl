@@ -52,15 +52,20 @@ public:
 
     std::string setShaderToy(const char *fragmentSource);
 
-    std::string getCompileError() { return compileError; };
+    inline std::string getCompileError() { return compileError; };
 
-    Shader *getShader() { return shader.get(); };
+    inline Shader *getShader() { return shader.get(); };
 
-    bool isLooping() { return loopRunning; };
+    inline bool isLooping() { return loopRunning; };
 
-    double getFrameRate() { return frameRate; };
+    inline double getFrameRate() { return frameRate; };
 
-    void setNewTextureMsg() { msg = MSG_NEW_TEXTURE; };
+    inline void setNewTextureMsg() { msg = MSG_NEW_TEXTURE; };
+
+    inline void deleteTextureMsg(unsigned int textureId) { 
+        textureIdToDelete = textureId; 
+        msg = MSG_DELETE_TEXTURE; 
+    };
 
 private:
     OpenglPluginContext *self;
@@ -76,6 +81,7 @@ private:
     bool isShaderToy;
     bool loopRunning;
     bool isDrawing;
+    unsigned int textureIdToDelete;
 
     enum RenderThreadMessage {
         MSG_NONE = 0,
@@ -84,6 +90,7 @@ private:
         MSG_STOP_RENDERER,
         MSG_NEW_SHADER,
         MSG_NEW_TEXTURE,
+        MSG_DELETE_TEXTURE,
     };
     enum RenderThreadMessage msg;
 

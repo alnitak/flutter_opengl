@@ -11,6 +11,7 @@ public:
     Sampler2D();
     ~Sampler2D() = default;
 
+    void replaceTexture(int w, int h, unsigned char *rawData);
     void add_RGBA32(int w, int h, unsigned char *rawData);
     void genTexture(int n);
 

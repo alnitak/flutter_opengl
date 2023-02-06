@@ -137,11 +137,11 @@ void UniformQueue::debug(const std::string &name) {
 
 
 // Add a uniform to the shader
-void UniformQueue::addUniform(std::string name, UniformType type, void *val) {
+bool UniformQueue::addUniform(std::string name, UniformType type, void *val) {
     // check if the uniform already exists
     if (/*type != UNIFORM_SAMPLER2D && */uniforms.find(name) != uniforms.end()) {
         std::cout << "Uniform \"" << name << "\"  already exists!" << std::endl;
-        return;
+        return false;
     }
 
     std::cout << "ADD " << name << std::endl;
@@ -206,6 +206,27 @@ void UniformQueue::addUniform(std::string name, UniformType type, void *val) {
             break;
         }
     }
+    return true;
+}
+
+// Remove the uniform with name [name]
+bool UniformQueue::removeUniform(const std::string &name)
+{
+    // check if the uniform already exists
+    if (uniforms.find(name) == uniforms.end()) {
+        std::cout << "Uniform \"" << name << "\"  doesn't exists!" << std::endl;
+        return false;
+    }
+
+    if (uniforms[name].type() == typeid(UNIFORM_SAMPLER2D_t)) {
+        Sampler2D &f = std::any_cast<UNIFORM_SAMPLER2D_t &>(uniforms[name]).val;
+        if (getRenderer() != nullptr && getRenderer()->isLooping())
+            getRenderer()->deleteTextureMsg(f.texture_index);
+        else
+            glDeleteTextures(1, &f.texture_index);
+    }
+    uniforms.erase(uniforms.find(name));
+    return true;
 }
 
 // Set new value to an existing uniform
@@ -315,88 +336,124 @@ void UniformQueue::sendAllUniforms() {
 // or from Renderer loop with MSG_NEW_TEXTURE message
 void UniformQueue::setAllSampler2D()
 {
+    // make a vector to store all th nTexture number already used
+    std::vector<int> nTextures;
+    for (auto &[name, uniform]: uniforms) {
+        const std::type_info &t = uniforms[name].type();
+        if (t == typeid(UNIFORM_SAMPLER2D_t)) {
+            Sampler2D sampler = std::any_cast<UNIFORM_SAMPLER2D_t &>(uniform).val;
+            nTextures.push_back(sampler.nTexture);
+        }
+    }
+
     int n = 0;
     for (auto &[name, uniform]: uniforms) {
         const std::type_info &t = uniforms[name].type();
 
         if (t == typeid(UNIFORM_SAMPLER2D_t)) {
             Sampler2D &sampler = std::any_cast<UNIFORM_SAMPLER2D_t &>(uniform).val;
-            sampler.genTexture(n);
-            setSampler2D(name, programObject, sampler);
-            // debug(name);
-            n++;
+            if (!sampler.data.empty())
+            {
+                // Find a new [nTexture] if not already set
+                // If it is already set the new sampler.data is given to replace the existing
+                if (sampler.nTexture == -1)
+                {
+                    while ( n < 32 && std::find(nTextures.begin(), nTextures.end(), n) != nTextures.end() )
+                        n++;
+                } else
+                    n = sampler.nTexture;
+
+                if (n < 32) {
+                    std::cout << "setAllSampler2D " << name << "  nTexture: " << n << "  size: " << sampler.width << "x" << sampler.height << std::endl;
+                    sampler.genTexture(n);
+                    setSampler2D(name, programObject, sampler);
+                    nTextures.push_back(n);
+                    // debug(name);
+                }
+            }
         }
     }
 }
 
+bool UniformQueue::replaceSampler2D(const std::string &name, int w, int h, unsigned char *rawData)
+{
+    // check if the uniform already exists
+    if (uniforms.find(name) == uniforms.end()) {
+        std::cout << "Uniform \"" << name << "\"  doesn't exists!" << std::endl;
+        return false;
+    }
+    Sampler2D &sampler = std::any_cast<UNIFORM_SAMPLER2D_t &>(uniforms[name]).val;
+    std::cout << "replaceSampler2D \"" << name << std::endl;
+    sampler.replaceTexture(w, h, rawData);
+    return true;
+}
+
+
 // ------------------------------------------------------------------------
-void setBool(const std::string &name, GLuint po, bool value) {
+void UniformQueue::setBool(const std::string &name, GLuint po, bool value) {
     glUniform1i(glGetUniformLocation(po, name.c_str()), (int) value);
 }
 
 // ------------------------------------------------------------------------
-void setInt(const std::string &name, GLuint po, int value) {
+void UniformQueue::setInt(const std::string &name, GLuint po, int value) {
     glUniform1i(glGetUniformLocation(po, name.c_str()), value);
 }
 
 // ------------------------------------------------------------------------
-void setFloat(const std::string &name, GLuint po, float value) {
+void UniformQueue::setFloat(const std::string &name, GLuint po, float value) {
     glUniform1f(glGetUniformLocation(po, name.c_str()), value);
 }
 
 // ------------------------------------------------------------------------
-void setVec2(const std::string &name, GLuint po, const glm::vec2 &value) {
+void UniformQueue::setVec2(const std::string &name, GLuint po, const glm::vec2 &value) {
     glUniform2fv(glGetUniformLocation(po, name.c_str()), 1, &value[0]);
 }
 
-void setVec2(const std::string &name, GLuint po, float x, float y) {
+void UniformQueue::setVec2(const std::string &name, GLuint po, float x, float y) {
     glUniform2f(glGetUniformLocation(po, name.c_str()), x, y);
 }
 
 // ------------------------------------------------------------------------
-void setVec3(const std::string &name, GLuint po, const glm::vec3 &value) {
+void UniformQueue::setVec3(const std::string &name, GLuint po, const glm::vec3 &value) {
     glUniform3fv(glGetUniformLocation(po, name.c_str()), 1, &value[0]);
 }
 
-void setVec3(const std::string &name, GLuint po, float x, float y, float z) {
+void UniformQueue::setVec3(const std::string &name, GLuint po, float x, float y, float z) {
     glUniform3f(glGetUniformLocation(po, name.c_str()), x, y, z);
 }
 
 // ------------------------------------------------------------------------
-void setVec4(const std::string &name, GLuint po, const glm::vec4 &value) {
+void UniformQueue::setVec4(const std::string &name, GLuint po, const glm::vec4 &value) {
     glUniform4fv(glGetUniformLocation(po, name.c_str()), 1, &value[0]);
 }
 
-void setVec4(const std::string &name, GLuint po, float x, float y, float z, float w) {
+void UniformQueue::setVec4(const std::string &name, GLuint po, float x, float y, float z, float w) {
     glUniform4f(glGetUniformLocation(po, name.c_str()), x, y, z, w);
 }
 
 // ------------------------------------------------------------------------
-void setMat2(const std::string &name, GLuint po, const glm::mat2 &mat) {
+void UniformQueue::setMat2(const std::string &name, GLuint po, const glm::mat2 &mat) {
     glUniformMatrix2fv(glGetUniformLocation(po, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
 // ------------------------------------------------------------------------
-void setMat3(const std::string &name, GLuint po, const glm::mat3 &mat) {
+void UniformQueue::setMat3(const std::string &name, GLuint po, const glm::mat3 &mat) {
     glUniformMatrix3fv(glGetUniformLocation(po, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
 // ------------------------------------------------------------------------
-void setMat4(const std::string &name, GLuint po, const glm::mat4 &mat) {
+void UniformQueue::setMat4(const std::string &name, GLuint po, const glm::mat4 &mat) {
     glUniformMatrix4fv(glGetUniformLocation(po, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
 // ------------------------------------------------------------------------
-void setSampler2D(const std::string &name, GLuint po, Sampler2D &data) {
+void UniformQueue::setSampler2D(const std::string &name, GLuint po, Sampler2D &data) {
 
     glUniform1i(
         glGetUniformLocation(po, name.c_str()),
         data.nTexture
     );
 
-#if defined _IS_ANDROID_ /*|| defined _IS_WIN_*/
-    // this seems only needed in Android
     glActiveTexture(GL_TEXTURE0 + data.nTexture);
-#endif
     glBindTexture(GL_TEXTURE_2D, data.texture_index);
 }

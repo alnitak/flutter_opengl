@@ -7,18 +7,33 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="set new texture without generating a new one">
-      <change afterPath="$PROJECT_DIR$/example/lib/states.dart" afterDir="false" />
+    <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="refactor example using riverpod">
+      <change afterPath="$PROJECT_DIR$/example/lib/controls/ShaderButtons.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/lib/controls/controls.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/lib/controls/texture_chooser.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/lib/controls/texture_sizes.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/controls.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/controls.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/assets/texture.png" beforeDir="false" afterPath="$PROJECT_DIR$/example/assets/flutter.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/controls.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/shader_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/shader_widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/shaders.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/shadertoy.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/shadertoy.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/test_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/test_widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/states.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/states.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/linux/my_application.cc" beforeDir="false" afterPath="$PROJECT_DIR$/example/linux/my_application.cc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/flutter_opengl_method_channel_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/flutter_opengl_method_channel_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/flutter_opengl_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/flutter_opengl_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/flutter_opengl_ffi.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/flutter_opengl_ffi.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/ogl_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/ogl_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Renderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Sampler2D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler2D.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Sampler2D.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler2D.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Shader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Shader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/common.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ffi.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ffi.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ffi.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/ffi.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uniformQueue.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/uniformQueue.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/uniformQueue.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/uniformQueue.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +54,14 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -56,7 +79,7 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../yoda" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../tmp/media_kit" />
     <property name="settings.editor.selected.configurable" value="preferences.customizations" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
@@ -65,6 +88,7 @@
       <recent name="$PROJECT_DIR$/android" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/example/lib/controls" />
       <recent name="$PROJECT_DIR$/lib/src" />
     </key>
   </component>
@@ -111,7 +135,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675505829096</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="refactor example using riverpod">
+      <created>1675519255647</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1675519255647</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -130,6 +161,7 @@
     <MESSAGE value="added texture support and widget example (tested on linux only)" />
     <MESSAGE value="added gif demo" />
     <MESSAGE value="set new texture without generating a new one" />
-    <option name="LAST_COMMIT_MESSAGE" value="set new texture without generating a new one" />
+    <MESSAGE value="refactor example using riverpod" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor example using riverpod" />
   </component>
 </project>

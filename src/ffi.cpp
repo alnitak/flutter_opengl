@@ -227,6 +227,21 @@ addUniform(
 }
 
 ///////////////////////////////////
+// Remove uniform
+extern "C" FFI_PLUGIN_EXPORT bool
+removeUniform(const char *name) {
+    if (renderer == nullptr) {
+        LOGD(LOG_TAG_FFI, "addUniform: Renderer not yet created!");
+        return false;
+    }
+    if (renderer->getShader() == nullptr) {
+        LOGD(LOG_TAG_FFI, "addUniform: shader not yet binded!");
+        return false;
+    }
+    return renderer->getShader()->getUniforms().removeUniform(name);
+}
+
+///////////////////////////////////
 // Set uniform
 extern "C" FFI_PLUGIN_EXPORT bool
 setUniform(
@@ -244,9 +259,9 @@ setUniform(
 }
 
 ///////////////////////////////////
-// Set Sampler2D uniform
+// Add Sampler2D uniform
 //* val should be a list of RGBA32 values
-//* Use setUniform() to set a new value
+//* Use setUniform() to set a new value with a texture with the same size
 extern "C" FFI_PLUGIN_EXPORT bool
 addSampler2DUniform(const char *name, int width, int height, void *val)
 {
@@ -258,12 +273,36 @@ addSampler2DUniform(const char *name, int width, int height, void *val)
         LOGD(LOG_TAG_FFI, "addUniform: shader not yet binded!");
         return false;
     }
+    bool ret = false;
     Sampler2D sampler = Sampler2D();
     sampler.add_RGBA32(width, height, (unsigned char*)val);
-    renderer->getShader()->getUniforms()
+    ret = renderer->getShader()->getUniforms()
         .addUniform(name, UNIFORM_SAMPLER2D, (void*)&sampler);
 
-    if (renderer->isLooping())
+    if (ret && renderer->isLooping())
         renderer->setNewTextureMsg();
-    return true;
+    return ret;
+}
+
+///////////////////////////////////
+// Replace Sampler2D uniform
+//* val should be a list of RGBA32 values
+//* Used when replacing textures of different sizes
+extern "C" FFI_PLUGIN_EXPORT bool
+replaceSampler2DUniform(const char *name, int width, int height, void *val)
+{
+    if (renderer == nullptr) {
+        LOGD(LOG_TAG_FFI, "replaceSampler2DUniform: Renderer not yet created!");
+        return false;
+    }
+    if (renderer->getShader() == nullptr) {
+        LOGD(LOG_TAG_FFI, "replaceSampler2DUniform: shader not yet binded!");
+        return false;
+    }
+    bool replaced = renderer->getShader()->getUniforms()
+        .replaceSampler2D(name, width, height, (unsigned char *)val);
+
+    if (replaced && renderer->isLooping())
+        renderer->setNewTextureMsg();
+    return replaced;
 }

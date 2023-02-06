@@ -205,15 +205,14 @@ class FlutterOpenGLFfi {
     PointerEventType eventType,
     Size twSize,
   ) {
-
     return _setMousePosition(
-        pos.dx,
-        pos.dy,
-        eventType == PointerEventType.onPointerDown ||
-        eventType == PointerEventType.onPointerMove
-            ? startingPos.dx
-            : -startingPos.dx,
-        -startingPos.dy,
+      pos.dx,
+      pos.dy,
+      eventType == PointerEventType.onPointerDown ||
+              eventType == PointerEventType.onPointerMove
+          ? startingPos.dx
+          : -startingPos.dx,
+      -startingPos.dy,
       twSize.width,
       twSize.height,
     );
@@ -221,10 +220,10 @@ class FlutterOpenGLFfi {
 
   late final _setMousePositionPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Void Function(ffi.Double, ffi.Double, ffi.Double,
-              ffi.Double, ffi.Double, ffi.Double)>>('setMousePosition');
-  late final _setMousePosition = _setMousePositionPtr
-      .asFunction<void Function(double, double, double, double, double, double)>();
+          ffi.Void Function(ffi.Double, ffi.Double, ffi.Double, ffi.Double,
+              ffi.Double, ffi.Double)>>('setMousePosition');
+  late final _setMousePosition = _setMousePositionPtr.asFunction<
+      void Function(double, double, double, double, double, double)>();
 
   /// ***********************************************
   /// **** GET FPS
@@ -265,7 +264,7 @@ class FlutterOpenGLFfi {
   /// ***********************************************
   /// ***********************************************
   /// ***********************************************
-  /// **** ADD custom UNIFORMs
+  /// **** ADD UNIFORMs
   /// * add BOOL
   bool addBoolUniform(String name, bool val) {
     ffi.Pointer<ffi.Bool> valT = calloc(ffi.sizeOf<ffi.Bool>());
@@ -436,6 +435,21 @@ class FlutterOpenGLFfi {
       int Function(ffi.Pointer<ffi.Char>, int, ffi.Pointer<ffi.Void>)>();
 
   /// ***********************************************
+  /// **** REMOVE UNIFORM
+  bool removeUniform(String name) {
+    int ret = _removeUniform(
+      name.toNativeUtf8().cast<ffi.Char>(),
+    );
+    return ret == 0 ? false : true;
+  }
+
+  late final _removeUniformPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Char>)>>(
+          'removeUniform');
+  late final _removeUniform =
+      _removeUniformPtr.asFunction<int Function(ffi.Pointer<ffi.Char>)>();
+
+  /// ***********************************************
   /// **** ADD SAMPLER2D UNIFORM
   ///
   /// * add SAMPLER2D RGBA32
@@ -470,6 +484,43 @@ class FlutterOpenGLFfi {
           ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Int32, ffi.Int32,
               ffi.Pointer<ffi.Void>)>>('addSampler2DUniform');
   late final _addSampler2DUniform = _addSampler2DUniformPtr.asFunction<
+      int Function(ffi.Pointer<ffi.Char>, int, int, ffi.Pointer<ffi.Void>)>();
+
+  /// ***********************************************
+  /// **** REPLACE SAMPLER2D UNIFORM
+  ///
+  /// * replace SAMPLER2D texture with another one with different size
+  bool replaceSampler2DUniform(
+    String name,
+    int width,
+    int height,
+    Uint8List val,
+  ) {
+    assert(
+        val.length == width * height * 4,
+        "\nAssert error: RGBA32 raw image length mismatch."
+        "\nYou have passed a Uint8list with ${val.length}"
+        "\nIt should be $width x $height * 4 = ${width * height * 4}");
+    ffi.Pointer<ffi.Int8> valT = calloc(ffi.sizeOf<ffi.Int8>() * val.length);
+    for (int i = 0; i < val.length; ++i) {
+      valT[i] = val[i];
+    }
+
+    int ret = _replaceSampler2DUniform(
+      name.toNativeUtf8().cast<ffi.Char>(),
+      width,
+      height,
+      valT.cast<ffi.Void>(),
+    );
+    calloc.free(valT);
+    return ret == 0 ? false : true;
+  }
+
+  late final _replaceSampler2DUniformPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Int32, ffi.Int32,
+              ffi.Pointer<ffi.Void>)>>('replaceSampler2DUniform');
+  late final _replaceSampler2DUniform = _replaceSampler2DUniformPtr.asFunction<
       int Function(ffi.Pointer<ffi.Char>, int, int, ffi.Pointer<ffi.Void>)>();
 
   /// ***********************************************

@@ -36,10 +36,16 @@ extern "C" FFI_PLUGIN_EXPORT bool addUniform(
         const char *name,
         UniformType type,
         void *val);
+extern "C" FFI_PLUGIN_EXPORT bool removeUniform(const char *name);
 extern "C" FFI_PLUGIN_EXPORT bool setUniform(
         const char *name,
         void *val);
 extern "C" FFI_PLUGIN_EXPORT bool addSampler2DUniform(
+        const char *name, 
+        int width, 
+        int height, 
+        void *val);
+extern "C" FFI_PLUGIN_EXPORT bool replaceSampler2DUniform(
         const char *name, 
         int width, 
         int height, 
