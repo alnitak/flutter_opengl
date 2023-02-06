@@ -14,7 +14,18 @@ class CapturedWidget {
   ByteData byteData; // uncompressed 32bit RGBA image data
   Size size;
 
-  CapturedWidget(this.byteData, this.size) {}
+  CapturedWidget(this.byteData, this.size);
+}
+
+enum AddMethod {
+  /// Add Sampler2D uniform if not already exists
+  add,
+
+  /// Replace Sampler2D uniform with another with different size
+  replace,
+
+  /// Set a new Sampler2D uniform with the same size
+  set,
 }
 
 class OGLUtils {
@@ -38,8 +49,10 @@ class OGLUtils {
 
   /// Load an asset image, flip vertically and
   /// add it to the shader uniform with the name [uniformName]
-  static setAssetTexture(String uniformName, String assetName,
-      {bool toCreate = false}) async {
+  /// [toReplace] if true replace the texture with another
+  /// one with different size.
+  static Future<bool> setAssetTexture(String uniformName, String assetName,
+      {AddMethod method = AddMethod.replace}) async {
     final Uint8List inputImg =
         (await rootBundle.load(assetName)).buffer.asUint8List();
     final decoder = img.PngDecoder();
@@ -56,13 +69,22 @@ class OGLUtils {
 
     final decodedBytes = rgba.getBytes(order: img.ChannelOrder.rgba);
 
-    if (toCreate) {
-      OpenGLController()
-          .openglFFI
-          .setSampler2DUniform(uniformName, decodedBytes);
-    } else {
-      OpenGLController().openglFFI.addSampler2DUniform(
-          uniformName, rgba.width, rgba.height, decodedBytes);
+    bool ret = false;
+    switch (method) {
+      case AddMethod.add:
+        ret = OpenGLController().openglFFI.addSampler2DUniform(
+            uniformName, rgba.width, rgba.height, decodedBytes);
+        break;
+      case AddMethod.replace:
+        ret = OpenGLController().openglFFI.replaceSampler2DUniform(
+            uniformName, rgba.width, rgba.height, decodedBytes);
+        break;
+      case AddMethod.set:
+        ret = OpenGLController()
+            .openglFFI
+            .setSampler2DUniform(uniformName, decodedBytes);
+        break;
     }
+    return ret;
   }
 }

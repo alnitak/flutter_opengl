@@ -6,32 +6,33 @@
 /// are currently supported
 
 List<Map<String, String>> shaderToy = [
-  // {
-//     'url': 'TEXTURE TEST',
-//     'fragment':
-// '''
-// void mainImage( out vec4 fragColor, in vec2 fragCoord )
-// {
-//     vec2 iR = iResolution.xy;
-//     vec2 uv = fragCoord/iR;
-//
-//     float n = .5;
-//     if (uv.x >= n-0.01 && uv.x <= n+0.01)
-//         fragColor = vec4(1., 1., 0., 1.0);
-//
-//     else
-//     if (uv.y >= n-0.01 && uv.y <= n+0.01)
-//         fragColor = vec4(1., 1., 0., 1.0);
-//
-//     else
-//     if (uv.x > n) {
-//         fragColor = texture(iChannel0, uv);
-//     } else {
-//         fragColor = texture(iChannel1, uv);
-//     }
-// }
-// '''
-//   },
+  {
+    'url': 'TEXTURE TEST',
+    'fragment':
+'''
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    vec2 iR = iResolution.xy;
+    vec2 uv = fragCoord/iR;
+
+    float n = .5;
+    if (uv.x >= n-0.01 && uv.x <= n+0.01)
+        fragColor = vec4(1., 1., 0., 1.0);
+
+    else
+    if (uv.y >= n-0.01 && uv.y <= n+0.01)
+        fragColor = vec4(1., 1., 0., 1.0);
+
+    else
+    if (uv.x < n) {
+        fragColor = texture(iChannel0, uv);
+    } else {
+       fragColor = texture(iChannel1, uv);
+      // fragColor = vec4(0.,0.,0.,0.);
+    }
+}
+'''
+  },
 
   { // https://www.shadertoy.com/view/XsjXW1
     'url': 'https://www.shadertoy.com/view/XsjXW1',

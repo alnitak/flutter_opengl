@@ -1,12 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_opengl/flutter_opengl.dart';
-import 'package:flutter_opengl_example/controls.dart';
+import 'package:flutter_opengl_example/controls/controls.dart';
 import 'package:flutter_opengl_example/edit_shader.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'controls_texture.dart';
 import 'states.dart';
 import 'test_widget.dart';
 
@@ -101,9 +100,11 @@ class UpperText extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-            '$fps\n${textureSize.width.toInt()} x '
+            '${fps.toStringAsFixed(1)} FPS\n'
+                '${textureSize.width.toInt()} x '
                 '${textureSize.height.toInt()}',
-            textScaleFactor: 1.3),
+            textAlign: TextAlign.center,
+            textScaleFactor: 1.2),
         const SizedBox(width: 30),
         RichText(
           text: TextSpan(
