@@ -99,6 +99,8 @@ public:
 
     void setSampler2D(const std::string &name, GLuint po, Sampler2D &data);
 
+    Sampler2D *getSampler2D(const std::string &name);
+
     template<typename T>
     struct UniformStruct {
         UniformType type;
@@ -121,7 +123,6 @@ public:
 
     std::map<std::string, std::any> uniforms;
 
-private:
     static GLuint programObject;
 };
 

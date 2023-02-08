@@ -25,6 +25,21 @@ class ShaderButtons extends ConsumerWidget {
           runSpacing: 4,
           spacing: 4,
           children: [
+            ElevatedButton(
+              onPressed: () {
+                bool ret = OpenGLController()
+                    .openglFFI
+                    .startCameraOnSampler2D('iChannel0', 640, 360);
+              },
+              child: const Text('open'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                bool ret = OpenGLController().openglFFI.stopCamera();
+              },
+              child: const Text('stop'),
+            ),
+
             /// Build button for each fragments stored in [shaderToy] list
             ...List.generate(shaderToy.length, (i) {
               bool hasIChannel0 =

@@ -12,8 +12,9 @@
 #include <EGL/eglext.h>
 
 #elif _IS_LINUX_
+    #include "uniformQueue.h"
 #elif _IS_WIN_
-#include <GL/glew.h>
+    #include <GL/glew.h>
 #endif
 
 
@@ -23,11 +24,12 @@
 Renderer::Renderer(OpenglPluginContext *textureStruct)
         : self(textureStruct),
           frameRate(0.0),
+          camera(nullptr),
           shader(new Shader(textureStruct)),
           isShaderToy(false),
-          loopRunning(false),
-          isDrawing(false),
-          msg(MSG_NONE) {
+          loopRunning(false)
+{
+    msg.push_back(MSG_NONE);
 }
 
 Renderer::~Renderer() {
@@ -35,6 +37,8 @@ Renderer::~Renderer() {
         shader.reset();
         shader.release();
     }
+
+    if (camera != nullptr) stopCamera();
 
 #ifdef _IS_WIN_
     if (self->hrc) {
@@ -249,7 +253,7 @@ bool Renderer::initOpenGL()
     {
       /* Problem: glewInit failed, something is seriously wrong. */
       LOGD(LOG_TAG_RENDERER, "Error: %s", glewGetErrorString(err));
-      msg = MSG_STOP_RENDERER;
+      msg.push_back(MSG_STOP_RENDERER);
       return false;
     }
 
@@ -265,7 +269,7 @@ void Renderer::destroyGL()
 #endif
 
 void Renderer::stop() {
-    msg = MSG_STOP_RENDERER;
+    msg.push_back(MSG_STOP_RENDERER);
 }
 
 // Set the message for the main loop that a new shader should be used
@@ -278,9 +282,9 @@ std::string Renderer::setShader(bool isContinuous,
     newShaderFragmentSource = fragmentSource;
     newShaderVertexSource = vertexSource;
     newShaderIsContinuous = isContinuous;
-    msg = MSG_NEW_SHADER;
+    msg.push_back(MSG_NEW_SHADER);
     if (loopRunning)
-        while (msg == MSG_NEW_SHADER);
+        while (msg.back() == MSG_NEW_SHADER);
     return compileError;
 }
 
@@ -292,10 +296,40 @@ std::string Renderer::setShaderToy(const char *fragmentSource) {
     newShaderFragmentSource = fragmentSource;
     newShaderVertexSource = "";
     newShaderIsContinuous = true;
-    msg = MSG_NEW_SHADER;
+    msg.push_back(MSG_NEW_SHADER);
     if (loopRunning)
-        while (msg == MSG_NEW_SHADER);
+        while (msg.back() == MSG_NEW_SHADER);
     return compileError;
+}
+
+OpenCVCamera *Renderer::getOpenCVCamera() 
+{ 
+    return camera; 
+}
+
+bool Renderer::openCamera(std::string uniformName, int width, int height)
+{
+    if (camera != nullptr) return false;
+    camera = new OpenCVCamera();
+    bool opened = camera->open(uniformName, width, height);
+    if (!opened)
+    {
+        free(camera);
+        camera = nullptr;
+        return false;
+    }
+    return true;
+}
+
+bool Renderer::stopCamera()
+{
+    if (camera == nullptr) return false;
+    camera->stop();
+    while (camera->message == MSG_CAMERA_STOP);
+    free(camera);
+    camera = nullptr;
+    LOGD(LOG_TAG_RENDERER, "CAMERA STOPPED");
+    return true;
 }
 
 // The main renderiing loop
@@ -316,30 +350,37 @@ void Renderer::loop() {
     double MAX_FPS = 1.0 / 100.0;
     loopRunning = true;
 #if defined _IS_ANDROID_ || defined _IS_WIN_
-    msg = MSG_INIT_OPENGL;
+    msg.push_back(MSG_INIT_OPENGL);
 #endif
+
+    Sampler2D *sampler;
+    RenderThreadMessage _msg;
 
     while (loopRunning) {
         mutex.lock();
 
-        switch (msg) {
+        if (msg.size() == 0) _msg = MSG_NONE;
+        else { _msg = msg.back(); msg.pop_back(); }
+
+        switch (_msg) {
             case MSG_INIT_OPENGL:
-                msg = MSG_NONE;
-#if defined _IS_ANDROID_ || defined _IS_WIN_
-                // On Android the GL context is created in initOpenGL()
-                // and must be created in the loop thread.
-                // On linux it is created by the Flutter engine
-                // initOpenGL() must be called and if a shader
-                // is already been set, initialize it!
-                if (!initOpenGL()) {
-                    LOGD(LOG_TAG_RENDERER, "ERROR: Main Loop error initializing OpenGL!");
-                    msg = MSG_STOP_RENDERER;
-                }
-                if (shader != nullptr)
-                    msg = MSG_NEW_SHADER;
-#endif
+                #if defined _IS_ANDROID_ || defined _IS_WIN_
+                    // On Android the GL context is created in initOpenGL()
+                    // and must be created in the loop thread.
+                    // On linux it is created by the Flutter engine
+                    // initOpenGL() must be called and if a shader
+                    // is already been set, initialize it!
+                    if (!initOpenGL()) {
+                        LOGD(LOG_TAG_RENDERER, "ERROR: Main Loop error initializing OpenGL!");
+                        msg.push_back(MSG_STOP_RENDERER);
+                    }
+                    if (shader != nullptr)
+                        msg.push_back(MSG_NEW_SHADER);
+                #endif
                 break;
+
             case MSG_NEW_SHADER:
+                stopCamera();
                 if (shader.get() != nullptr)
                     shader.reset();
                 shader = std::make_unique<Shader>(self);
@@ -351,21 +392,49 @@ void Renderer::loop() {
                     compileError = shader->initShaderToy();
                 else
                     compileError = shader->initShader();
+                break;
 
-                msg = MSG_NONE;
+            case MSG_START_CAMERA_ON_UNIFORM:
+                #ifdef _IS_LINUX_
+                    gdk_gl_context_make_current(self->context);
+                #elif _IS_WIN_
+                    wglMakeCurrent(self->hdc, self->hrc);
+                #endif
+
+                sampler = shader->getUniforms().getSampler2D(uniformToSetCamera);
+                if (sampler != nullptr && camera != nullptr) 
+                    camera->start(sampler);
+
+                #ifdef _IS_LINUX_
+                    gdk_gl_context_clear_current();
+                #endif
                 break;
 
             case MSG_NEW_TEXTURE:
+                #ifdef _IS_LINUX_
+                    gdk_gl_context_make_current(self->context);
+                #elif _IS_WIN_
+                    wglMakeCurrent(self->hdc, self->hrc);
+                #endif
+                    shader->getUniforms().setAllSampler2D();
+                #ifdef _IS_LINUX_
+                    gdk_gl_context_clear_current();
+                #endif
+            break;
+
+            case MSG_SET_TEXTURE:
                 #ifdef _IS_LINUX_
                         gdk_gl_context_make_current(self->context);
                 #elif _IS_WIN_
                         wglMakeCurrent(self->hdc, self->hrc);
                 #endif
-                        shader->getUniforms().setAllSampler2D();
+
+                shader->getUniforms().setSampler2D("iChannel0", shader->getUniforms().programObject, sampler2DToSet);
+                shader->getUniforms().setAllSampler2D();
+                
                 #ifdef _IS_LINUX_
                         gdk_gl_context_clear_current();
                 #endif
-                msg = MSG_NONE;
             break;
 
             case MSG_DELETE_TEXTURE:
@@ -378,7 +447,6 @@ void Renderer::loop() {
                 #ifdef _IS_LINUX_
                         gdk_gl_context_clear_current();
                 #endif
-                msg = MSG_NONE;
             break;
 
             case MSG_STOP_RENDERER:

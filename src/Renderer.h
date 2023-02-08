@@ -12,9 +12,10 @@
 #include <android/surface_texture_jni.h>
 
 #elif _IS_LINUX_
-#include "../linux/include/fl_my_texture_gl.h"
+    #include "../linux/include/fl_my_texture_gl.h"
+    #include "../linux/opencv_camera.h"
 #elif _IS_WIN_
-#include "../windows/flutter_opengl_plugin.h"
+    #include "../windows/flutter_opengl_plugin.h"
 #endif
 
 
@@ -56,21 +57,40 @@ public:
 
     inline Shader *getShader() { return shader.get(); };
 
+    OpenCVCamera *getOpenCVCamera();
+
     inline bool isLooping() { return loopRunning; };
 
     inline double getFrameRate() { return frameRate; };
 
-    inline void setNewTextureMsg() { msg = MSG_NEW_TEXTURE; };
+    inline void setStartCameraOnUniformMsg(const std::string &name) { 
+        uniformToSetCamera = name;
+        msg.push_back(MSG_START_CAMERA_ON_UNIFORM); 
+    };
+
+    inline void setNewTextureMsg() { msg.push_back(MSG_NEW_TEXTURE); };
+
+    // set new data for a texture of the same size
+    inline void setTextureMsg(const Sampler2D &sampler) { 
+        sampler2DToSet = sampler; 
+        msg.push_back(MSG_SET_TEXTURE);
+    };
 
     inline void deleteTextureMsg(unsigned int textureId) { 
         textureIdToDelete = textureId; 
-        msg = MSG_DELETE_TEXTURE; 
+        msg.push_back(MSG_DELETE_TEXTURE);
     };
+
+    bool openCamera(std::string uniformName, int width, int height);
+
+    bool stopCamera();
 
 private:
     OpenglPluginContext *self;
     std::mutex mutex;
     double frameRate;
+
+    OpenCVCamera *camera;
 
     std::string compileError;
     std::unique_ptr<Shader> shader;
@@ -80,10 +100,11 @@ private:
 
     bool isShaderToy;
     bool loopRunning;
-    bool isDrawing;
+    Sampler2D sampler2DToSet;
+    std::string uniformToSetCamera;
     unsigned int textureIdToDelete;
 
-    enum RenderThreadMessage {
+    enum RenderThreadMessage : int {
         MSG_NONE = 0,
         MSG_DATA_RECEIVED,   // when new data is ready, the draw function is called which must then free its memory
         MSG_INIT_OPENGL, // only in Android, this must be called in the loop thread(?)
@@ -91,8 +112,10 @@ private:
         MSG_NEW_SHADER,
         MSG_NEW_TEXTURE,
         MSG_DELETE_TEXTURE,
+        MSG_SET_TEXTURE,    // set new data for a texture of the same size
+        MSG_START_CAMERA_ON_UNIFORM
     };
-    enum RenderThreadMessage msg;
+    std::vector<RenderThreadMessage> msg;
 
 };
 

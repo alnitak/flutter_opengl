@@ -35,7 +35,7 @@ UniformQueue::~UniformQueue() {
 void UniformQueue::debug(const std::string &name) {
     auto uniform = uniforms[name];
     const std::type_info &t = uniforms[name].type();
-    std::cout;
+    
     if (t == typeid(UNIFORM_BOOL_t)) {
         std::cout << std::left << std::setw(15) << name <<
              std::left << std::setw(7) << "bool: " <<
@@ -382,10 +382,30 @@ bool UniformQueue::replaceSampler2D(const std::string &name, int w, int h, unsig
         std::cout << "Uniform \"" << name << "\"  doesn't exists!" << std::endl;
         return false;
     }
-    Sampler2D &sampler = std::any_cast<UNIFORM_SAMPLER2D_t &>(uniforms[name]).val;
-    std::cout << "replaceSampler2D \"" << name << std::endl;
-    sampler.replaceTexture(w, h, rawData);
-    return true;
+    const std::type_info &t = uniforms[name].type();
+
+    if (t == typeid(UNIFORM_SAMPLER2D_t)) {
+        Sampler2D &sampler = std::any_cast<UNIFORM_SAMPLER2D_t &>(uniforms[name]).val;
+        std::cout << "replaceSampler2D \"" << name << std::endl;
+        sampler.replaceTexture(w, h, rawData);
+        return true;
+    }
+    return false;
+}
+
+Sampler2D *UniformQueue::getSampler2D(const std::string &name)
+{
+    if (uniforms.find(name) == uniforms.end()) {
+        std::cout << "Uniform \"" << name << "\"  doesn't exists!" << std::endl;
+        return nullptr;
+    }
+
+    const std::type_info &t = uniforms[name].type();
+    if (t == typeid(UNIFORM_SAMPLER2D_t)) {
+        return &std::any_cast<UNIFORM_SAMPLER2D_t &>(uniforms[name]).val;
+    }
+    std::cout << "Uniform \"" << name << "\"  is not a Sampler2D!" << std::endl;
+    return nullptr;
 }
 
 

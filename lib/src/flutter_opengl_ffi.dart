@@ -695,4 +695,37 @@ class FlutterOpenGLFfi {
               ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Void>)>>('setUniform');
   late final _setUniform = _setUniformPtr
       .asFunction<int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Void>)>();
+
+  /// * Start CAMERA (Linux only)
+  ///
+  bool startCameraOnSampler2D(String name, int width, int height) {
+    int ret = _startCamera(
+      name.toNativeUtf8().cast<ffi.Char>(),
+      width,
+      height,
+    );
+    return ret == 0 ? false : true;
+  }
+
+  late final _startCameraPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.Char>, ffi.Int32, ffi.Int32)>>('startCameraOnSampler2D');
+  late final _startCamera = _startCameraPtr
+      .asFunction<int Function(ffi.Pointer<ffi.Char>, int, int)>();
+
+  /// * Stop CAMERA (Linux only)
+  ///
+  bool stopCamera() {
+    int ret = _stopCamera();
+    return ret == 0 ? false : true;
+  }
+
+  late final _stopCameraPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function()>>('stopCamera');
+  late final _stopCamera = _stopCameraPtr
+      .asFunction<int Function()>();
+
+
 }

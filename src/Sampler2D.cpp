@@ -22,9 +22,6 @@ void Sampler2D::replaceTexture(int w, int h, unsigned char *rawData)
     if (nTexture == -1) return;
     
     data.clear();
-    // glDeleteTextures(1, &texture_index);
-    // glFlush();
-    // nTexture = -1;
     add_RGBA32(w, h, rawData);
 }
 

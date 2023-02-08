@@ -4,6 +4,7 @@
 #include "uniformQueue.h"
 #include "Sampler2D.h"
 
+
 Renderer *renderer = nullptr;
 
 #define LOG_TAG_FFI "NATIVE FFI"
@@ -305,4 +306,37 @@ replaceSampler2DUniform(const char *name, int width, int height, void *val)
     if (replaced && renderer->isLooping())
         renderer->setNewTextureMsg();
     return replaced;
+}
+
+
+
+///////////////////////////////////
+// Start camera
+extern "C" FFI_PLUGIN_EXPORT bool
+startCameraOnSampler2D(const char *name, int width, int height)
+{
+    if (renderer == nullptr) {
+        LOGD(LOG_TAG_FFI, "startCameraOnSampler2D: Renderer not yet created!");
+        return false;
+    }
+
+    renderer->openCamera(name, width, height);
+    // Force a resample of sampler2D
+    char dummy[width * height *4];
+    replaceSampler2DUniform(name, width, height, (void*)&dummy);
+    renderer->setStartCameraOnUniformMsg(name);
+
+    return true;
+}
+
+///////////////////////////////////
+// Start camera
+extern "C" FFI_PLUGIN_EXPORT bool
+stopCamera()
+{
+    if (renderer == nullptr) {
+        LOGD(LOG_TAG_FFI, "stopCamera: Renderer not yet created!");
+        return false;
+    }
+    return renderer->stopCamera();
 }

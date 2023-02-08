@@ -167,6 +167,16 @@ class TextureWidget extends ConsumerWidget {
           channelId: channelId,
           assetImage: 'assets/rgba-noise-small.png',
           text: '96x96'),
+      SizedBox(
+        width: 64,
+        height: 64,
+        child: IconButton(
+          onPressed: () {
+              bool ret = OpenGLController().openglFFI.startCameraOnSampler2D('iChannel0', 640, 360);
+            },
+          icon: const Icon(Icons.camera, size: 64),
+        ),
+      ),
     ];
   }
 }

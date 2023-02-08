@@ -62,6 +62,8 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE flutter)
 target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
 
 find_package(OpenGL REQUIRED COMPONENTS OpenGL EGL)
+find_package(OpenCV REQUIRED COMPONENTS core highgui imgproc imgcodecs)
+include_directories( ${OpenCV_INCLUDE_DIRS} )
 target_link_libraries(${PLUGIN_NAME} PRIVATE 
   # OpenGL::OpenGL 
   GLEW
@@ -81,6 +83,9 @@ set(flutter_opengl_bundled_libraries
   # PARENT_SCOPE
 )
 
+message(STATUS "************* OpenCV_DIR = ${OpenCV_DIR}")
+message(STATUS "************* OpenCV_INCLUDE_DIRS = ${OpenCV_INCLUDE_DIRS}")
+message(STATUS "************* OpenCV_LIBS = ${OpenCV_LIBS}")
 
 # set(CMAKE_EXE_LINKER_FLAGS "-Xlinker -v -v")
 # target_compile_options(${PLUGIN_NAME} PRIVATE -v)

@@ -11,6 +11,7 @@ void createRenderer(OpenglPluginContext *textureStruct);
 
 Renderer *getRenderer();
 
+
 extern "C" FFI_PLUGIN_EXPORT bool rendererStatus();
 extern "C" FFI_PLUGIN_EXPORT void getTextureSize(int32_t *width, int32_t *height);
 extern "C" FFI_PLUGIN_EXPORT void startThread();
@@ -50,5 +51,10 @@ extern "C" FFI_PLUGIN_EXPORT bool replaceSampler2DUniform(
         int width, 
         int height, 
         void *val);
+extern "C" FFI_PLUGIN_EXPORT bool startCameraOnSampler2D(
+        const char *name, 
+        int width, 
+        int height);
+extern "C" FFI_PLUGIN_EXPORT bool stopCamera();
 
 #endif // FFI_H
