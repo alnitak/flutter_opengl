@@ -33,12 +33,12 @@ Renderer::Renderer(OpenglPluginContext *textureStruct)
 }
 
 Renderer::~Renderer() {
+    if (camera != nullptr) stopCamera();
+   
     if (shader.get() != nullptr) {
         shader.reset();
         shader.release();
     }
-
-    if (camera != nullptr) stopCamera();
 
 #ifdef _IS_WIN_
     if (self->hrc) {
@@ -268,6 +268,34 @@ void Renderer::destroyGL()
 }
 #endif
 
+OpenCVCamera *Renderer::getOpenCVCamera() 
+{ 
+    return camera; 
+}
+
+bool Renderer::openCamera(std::string uniformName, int width, int height)
+{
+    if (camera != nullptr) return false;
+    camera = new OpenCVCamera();
+    bool opened = camera->open(uniformName, width, height);
+    if (!opened)
+    {
+        delete camera;
+        camera = nullptr;
+        return false;
+    }
+    return true;
+}
+
+bool Renderer::stopCamera()
+{
+    if (camera == nullptr) return false;
+    delete camera;
+    camera = nullptr;
+    LOGD(LOG_TAG_RENDERER, "CAMERA STOPPED");
+    return true;
+}
+
 void Renderer::stop() {
     msg.push_back(MSG_STOP_RENDERER);
 }
@@ -302,37 +330,7 @@ std::string Renderer::setShaderToy(const char *fragmentSource) {
     return compileError;
 }
 
-OpenCVCamera *Renderer::getOpenCVCamera() 
-{ 
-    return camera; 
-}
-
-bool Renderer::openCamera(std::string uniformName, int width, int height)
-{
-    if (camera != nullptr) return false;
-    camera = new OpenCVCamera();
-    bool opened = camera->open(uniformName, width, height);
-    if (!opened)
-    {
-        free(camera);
-        camera = nullptr;
-        return false;
-    }
-    return true;
-}
-
-bool Renderer::stopCamera()
-{
-    if (camera == nullptr) return false;
-    camera->stop();
-    while (camera->message == MSG_CAMERA_STOP);
-    free(camera);
-    camera = nullptr;
-    LOGD(LOG_TAG_RENDERER, "CAMERA STOPPED");
-    return true;
-}
-
-// The main renderiing loop
+// The main rendering loop
 void Renderer::loop() {
     if (DEBUG)
         LOGD(LOG_TAG_RENDERER, "ENTERING LOOP");
@@ -380,7 +378,9 @@ void Renderer::loop() {
                 break;
 
             case MSG_NEW_SHADER:
+                // Eventually stop the camera
                 stopCamera();
+                
                 if (shader.get() != nullptr)
                     shader.reset();
                 shader = std::make_unique<Shader>(self);

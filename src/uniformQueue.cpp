@@ -364,7 +364,7 @@ void UniformQueue::setAllSampler2D()
                     n = sampler.nTexture;
 
                 if (n < 32) {
-                    std::cout << "setAllSampler2D " << name << "  nTexture: " << n << "  size: " << sampler.width << "x" << sampler.height << std::endl;
+                    // std::cout << "setAllSampler2D " << name << "  nTexture: " << n << "  size: " << sampler.width << "x" << sampler.height << std::endl;
                     sampler.genTexture(n);
                     setSampler2D(name, programObject, sampler);
                     nTextures.push_back(n);

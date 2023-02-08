@@ -68,6 +68,11 @@ OpenCVCamera::OpenCVCamera()
 {
 }
 
+OpenCVCamera::~OpenCVCamera()
+{
+	if (cameraThredRunning) stop();
+}
+
 bool OpenCVCamera::open(std::string uniformName, int width, int height)
 {
 	if (cap.isOpened())
@@ -105,9 +110,11 @@ void OpenCVCamera::stop()
 	if (!cameraThredRunning)
 	{
 		std::cerr << "ERROR! Camera thread already stopped!" << std::endl;
+		if (cap.isOpened()) cap.release();
 		return;
 	}
 	message = MSG_CAMERA_STOP;
+    while (isCameraThredRunning());
 }
 
 void OpenCVCamera::start(Sampler2D *sampler)
@@ -118,18 +125,19 @@ void OpenCVCamera::start(Sampler2D *sampler)
 		std::cerr << "ERROR! Camera thread already running!" << std::endl;
 		return;
 	}
-	cameraThredRunning = true;
+	std::cout << "Starting camera thread!" << std::endl;
 
 	std::thread camera_thread([](OpenCVCamera *me,
-								 Sampler2D *sampler,
-								 Renderer *renderer)
+								 Sampler2D *sampler)
 							  {
-	// cv::Mat frame;
+	Renderer *renderer = getRenderer();
+	me->cameraThredRunning = true;
 	for (;;) {
 		if (me->message == MSG_CAMERA_STOP) {
 			me->cap.release();
 			me->cameraThredRunning = false;
 			me->message = MSG_CAMERA_NONE;
+			std::cout << "Stopping camera thread!" << std::endl;
 			return;
 		}
 
@@ -140,13 +148,17 @@ void OpenCVCamera::start(Sampler2D *sampler)
 		cv::cvtColor(me->frame, me->frame, cv::COLOR_BGR2RGBA);
 		cv::flip(me->frame, me->frame,0);
 
-		// sampler->replaceTexture(me->width, me->height, buffer.data());
-		sampler->replaceTexture(me->width, me->height, me->frame.data);
-		renderer->setTextureMsg(*sampler);
+		renderer = getRenderer();
+		if (renderer != nullptr) 
+		{
+			// sampler->replaceTexture(me->width, me->height, buffer.data());
+			sampler->replaceTexture(me->width, me->height, me->frame.data);
+			getRenderer()->setTextureMsg(*sampler);
+		} else
+			me->message = MSG_CAMERA_NONE;
 	} },
 							  this,
-							  sampler,
-							  getRenderer());
+							  sampler);
 
 	camera_thread.detach();
 }
@@ -155,11 +167,5 @@ cv::Mat OpenCVCamera::getCurrentMatFrame()
 {
 	if (!cameraThredRunning || message != MSG_CAMERA_NONE)
 		return cv::Mat();
-	// std::thread getFrame_thread([](OpenCVCamera *me) {
-	//   me->message = MSG_CAMERA_GET_MAT_FRAME;
-	//   while (me->message != MSG_NONE);
-	// }, this);
-	// getFrame_thread.join();
-	// return currentFrame;
 	return frame;
 }

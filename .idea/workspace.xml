@@ -8,20 +8,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="added remove texture functionality">
-      <change afterPath="$PROJECT_DIR$/linux/opencv_camera.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/linux/opencv_camera.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/controls/ShaderButtons.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/controls/ShaderButtons.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/controls/texture_chooser.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/controls/texture_chooser.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/flutter_opengl_ffi.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/flutter_opengl_ffi.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/linux/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/linux/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/linux/opencv_camera.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/linux/opencv_camera.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Renderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sampler2D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler2D.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ffi.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ffi.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ffi.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/ffi.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/uniformQueue.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/uniformQueue.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/uniformQueue.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/uniformQueue.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

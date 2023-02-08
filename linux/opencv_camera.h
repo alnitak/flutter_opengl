@@ -19,6 +19,7 @@ class OpenCVCamera {
 
 public:
     OpenCVCamera();
+    ~OpenCVCamera();
     bool open(std::string uniformName, int width, int height);
     cv::Mat getNewFrame();
     void start(Sampler2D *sampler);

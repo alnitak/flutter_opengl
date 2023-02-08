@@ -16,6 +16,9 @@ Renderer *renderer = nullptr;
 void deleteRenderer() {
     if (renderer != nullptr) {
         if (renderer->isLooping()) {
+            // eventually stop the camera
+            if (renderer->getOpenCVCamera() != nullptr) renderer->stopCamera();
+
             while (bool b = renderer->isLooping()) renderer->stop();
         }
         delete renderer;
@@ -321,10 +324,10 @@ startCameraOnSampler2D(const char *name, int width, int height)
     }
 
     renderer->openCamera(name, width, height);
-    // Force a resample of sampler2D
+    renderer->setStartCameraOnUniformMsg(name);
+    // Force a resample of sampler2D texture
     char dummy[width * height *4];
     replaceSampler2DUniform(name, width, height, (void*)&dummy);
-    renderer->setStartCameraOnUniformMsg(name);
 
     return true;
 }
