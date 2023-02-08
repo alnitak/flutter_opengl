@@ -22,6 +22,7 @@ add_library(
       ${PLUGIN_NAME} SHARED
       flutter_opengl_plugin.cc
       fl_my_texture_gl.cc
+      opencv_camera.cpp
       # test.cpp
 
       ../src/common.h
@@ -30,6 +31,8 @@ add_library(
       ../src/Shader.cpp
       ../src/uniformQueue.cpp
       ../src/Sampler2D.cpp
+
+      
 )
 
 # Apply a standard set of build settings that are configured in the
@@ -62,6 +65,12 @@ find_package(OpenGL REQUIRED COMPONENTS OpenGL EGL)
 target_link_libraries(${PLUGIN_NAME} PRIVATE 
   # OpenGL::OpenGL 
   GLEW
+  opencv_core
+  opencv_highgui
+  opencv_imgproc
+  opencv_imgcodecs
+  lapack
+  cblas
 )
 
 # List of absolute paths to libraries that should be bundled with the plugin.

@@ -7,34 +7,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="refactor example using riverpod">
-      <change afterPath="$PROJECT_DIR$/example/lib/controls/ShaderButtons.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/lib/controls/controls.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/lib/controls/texture_chooser.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/lib/controls/texture_sizes.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/assets/texture.png" beforeDir="false" afterPath="$PROJECT_DIR$/example/assets/flutter.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/controls.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/shaders.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/shadertoy.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/shadertoy.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/states.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/states.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/linux/my_application.cc" beforeDir="false" afterPath="$PROJECT_DIR$/example/linux/my_application.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/flutter_opengl_ffi.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/flutter_opengl_ffi.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/ogl_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/ogl_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Renderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sampler2D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler2D.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sampler2D.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler2D.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Shader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Shader.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/common.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ffi.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ffi.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ffi.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/ffi.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/uniformQueue.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/uniformQueue.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/uniformQueue.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/uniformQueue.h" afterDir="false" />
-    </list>
+    <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="added remove texture functionality" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -142,7 +115,21 @@
       <option name="project" value="LOCAL" />
       <updated>1675519255647</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="example UI redesigned with texture chooser">
+      <created>1675700477610</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1675700477610</updated>
+    </task>
+    <task id="LOCAL-00007" summary="added remove texture functionality">
+      <created>1675700526186</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1675700526186</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -162,6 +149,8 @@
     <MESSAGE value="added gif demo" />
     <MESSAGE value="set new texture without generating a new one" />
     <MESSAGE value="refactor example using riverpod" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor example using riverpod" />
+    <MESSAGE value="example UI redesigned with texture chooser" />
+    <MESSAGE value="added remove texture functionality" />
+    <option name="LAST_COMMIT_MESSAGE" value="added remove texture functionality" />
   </component>
 </project>
