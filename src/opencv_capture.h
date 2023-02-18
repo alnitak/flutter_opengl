@@ -1,13 +1,14 @@
-#ifndef OPENCV_CAMERA_H
-#define OPENCV_CAMERA_H
+#ifndef OPENCV_CAPTURE_H
+#define OPENCV_CAPTURE_H
 
-#include "../src/Sampler2D.h"
+#include "Sampler2D.h"
 
 #include <vector>
 #include <atomic>
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/video/video.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 enum CameraMsg {
     MSG_CAMERA_NONE,
@@ -15,27 +16,31 @@ enum CameraMsg {
     MSG_CAMERA_GET_MAT_FRAME
 };
 
-class OpenCVCamera {
+class OpenCVCapture {
 
 public:
-    OpenCVCamera();
-    ~OpenCVCamera();
-    bool open(std::string uniformName, int width, int height);
+    OpenCVCapture();
+    ~OpenCVCapture();
+    bool open(const std::string& uniformName,
+              const std::string& completeFilePath,
+              int *width, int *height);
     cv::Mat getNewFrame();
     void start(Sampler2D *sampler);
     void stop();
     cv::Mat getCurrentMatFrame();
-    inline bool isCameraThredRunning() { return cameraThredRunning; }
+    inline bool isCameraThreadRunning() { return cameraThreadRunning; }
     inline std::string getUniformName() { return uniformName; }
     std::atomic<CameraMsg> message;
 
 private:
     cv::Mat frame;
-    bool cameraThredRunning;
+    bool cameraThreadRunning;
     cv::VideoCapture cap;
     int width;
     int height;
     std::string uniformName;
+    double fps;
+    double frameDuration;
 };
 
-#endif //OPENCV_CAMERA_H
+#endif //OPENCV_CAPTURE_H
