@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_opengl/flutter_opengl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,37 +55,50 @@ class Controls extends ConsumerWidget {
 
               const SizedBox(width: 16),
 
-              /// START STOP
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  /// START
-                  ElevatedButton(
-                    onPressed: () {
-                      OpenGLController().openglFFI.startThread();
-                      fpsTimer?.cancel();
-                      fpsTimer =
-                          Timer.periodic(const Duration(seconds: 1), (timer) {
-                        double fps = OpenGLController().openglFFI.getFps();
-                        ref.read(stateFPS.notifier).state = fps;
-                      });
-                    },
-                    child: const Text('start'),
-                  ),
-                  const SizedBox(width: 8),
+              /// START
+              ElevatedButton(
+                onPressed: () {
+                  OpenGLController().openglFFI.startThread();
+                  fpsTimer?.cancel();
+                  fpsTimer =
+                      Timer.periodic(const Duration(seconds: 1), (timer) {
+                    double fps = OpenGLController().openglFFI.getFps();
+                    ref.read(stateFPS.notifier).state = fps;
+                  });
+                },
+                child: const Text('start'),
+              ),
+              const SizedBox(width: 8),
 
-                  /// STOP
-                  ElevatedButton(
-                    onPressed: () {
-                      fpsTimer?.cancel();
-                      OpenGLController().openglFFI.stopThread();
-                      ref.read(stateTextureCreated.notifier).state = false;
-                      ref.read(stateShaderIndex.notifier).state = -1;
-                    },
-                    child: const Text('stop'),
-                  ),
-                ],
+              /// STOP
+              ElevatedButton(
+                onPressed: () {
+                  fpsTimer?.cancel();
+                  OpenGLController().openglFFI.stopThread();
+                  ref.read(stateTextureCreated.notifier).state = false;
+                  ref.read(stateShaderIndex.notifier).state = -1;
+                },
+                child: const Text('stop'),
+              ),
+
+              const SizedBox(width: 16),
+
+              /// PICK VIDEO FILE
+              ElevatedButton(
+                onPressed: () async {
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles(
+                        type: FileType.video,
+                      );
+
+                  if (result != null) {
+                    ref.read(statePickedVideo.notifier).state =
+                        result.files.single.path!;
+                  } else {
+                    // User canceled the picker
+                  }
+                },
+                child: const Text('pick a\nvideo'),
               ),
             ],
           ),
@@ -105,7 +119,3 @@ class Controls extends ConsumerWidget {
     );
   }
 }
-
-
-
-

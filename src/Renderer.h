@@ -6,14 +6,15 @@
 
 #ifdef _IS_ANDROID_
 
-#include <android/native_window.h>
-#include <android/native_window_jni.h>
-#include <android/surface_texture.h>
-#include <android/surface_texture_jni.h>
+    #include <android/native_window.h>
+    #include <android/native_window_jni.h>
+    #include <android/surface_texture.h>
+    #include <android/surface_texture_jni.h>
+    #include "opencv_capture.h"
 
 #elif _IS_LINUX_
     #include "../linux/include/fl_my_texture_gl.h"
-    #include "../linux/opencv_camera.h"
+    #include "opencv_capture.h"
 #elif _IS_WIN_
     #include "../windows/flutter_opengl_plugin.h"
 #endif
@@ -57,7 +58,7 @@ public:
 
     inline Shader *getShader() { return shader.get(); };
 
-    OpenCVCamera *getOpenCVCamera();
+    OpenCVCapture *getOpenCVCapture();
 
     inline bool isLooping() { return loopRunning; };
 
@@ -81,16 +82,18 @@ public:
         msg.push_back(MSG_DELETE_TEXTURE);
     };
 
-    bool openCamera(std::string uniformName, int width, int height);
+    bool openCapture(std::string uniformName,
+                    std::string completeFilePath,
+                    int *width, int *height);
 
-    bool stopCamera();
+    bool stopCapture();
 
 private:
     OpenglPluginContext *self;
     std::mutex mutex;
     double frameRate;
 
-    OpenCVCamera *camera;
+    OpenCVCapture *camera;
 
     std::string compileError;
     std::unique_ptr<Shader> shader;

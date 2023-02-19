@@ -85,11 +85,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
           width: 400,
           height: 300,
           child: FutureBuilder(
+            /// The surface size identifies the real texture size and
+            /// it is not related to the above SizedBox size
             future: OpenGLController().openglPlugin.createSurface(300, 200),
             builder: (_, snapshot) {
               if (snapshot.hasError || !snapshot.hasData) {
                 return const SizedBox.shrink();
               }
+              /// When the texture id is got, it will be possible
+              /// to start renderer, set a shader and display it
 
               /// Start renderer thread
               OpenGLController().openglFFI.startThread();
@@ -106,3 +110,5 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     );
   }
 }
+
+

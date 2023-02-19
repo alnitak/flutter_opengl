@@ -12,6 +12,11 @@ final stateTextureSize = StateProvider<Size>((ref) => const Size(600, 337));
 final stateTextureId = StateProvider<int>((ref) => -1);
 final stateShaderIndex = StateProvider<int>((ref) => -1);
 
+final statePickedVideo = StateProvider<String>((ref) => '');
+
+final stateCaptureRunning = StateProvider<bool>((ref) => false);
+
+
 enum TextureFilter {
   nearest,
   linear,

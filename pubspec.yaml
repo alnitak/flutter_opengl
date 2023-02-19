@@ -18,6 +18,9 @@ dependencies:
   #https://pub.dev/packages/image
   image: ^4.0.13
 
+  #https://pub.dev/packages/permission_handler
+  permission_handler: ^10.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

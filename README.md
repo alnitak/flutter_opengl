@@ -68,7 +68,7 @@ Look at *example/lib/main_in_deep.dart* for a full fledged example.
 
 Once the renderer is started all the below methods can be used via *OpenGLController().openglFFI*:
 
-| Android | Windows |
+| method | description |
 | ---- | ---- |
 | bool **rendererStatus**() | Returns true if the texture has been created successfully via *OpenGLController().openglPlugin.createSurface()* |
 | Size **getTextureSize**() | Get the size of the current texture. If not set it returns Size(-1, -1)|
@@ -86,8 +86,8 @@ Once the renderer is started all the below methods can be used via *OpenGLContro
 |bool **replaceSampler2DUniform**(String name, int width, int height, Uint8List val)|Replace a Sampler2D uniform texture with another one with different size.|
 |bool **setBoolUniform**(String name, bool val)<br>bool **setIntUniform**(String name, int val)<br>bool **setFloatUniform**(String name, double val)<br>bool **setVec2Uniform**(String name, List`<double>` val)<br>bool **setVec3Uniform**(String name, List`<double>` val)<br>bool **setVec4Uniform**(String name, List`<double>` val)<br>bool **setMat2Uniform**(String name, List`<double>` val)<br>bool **setMat3Uniform**(String name, List`<double>` val)<br>bool **setMat4Uniform**(String name, List`<double>` val)| Set value of an existing uniform. Return false if the uniform doesn't exist.|
 |bool **setSampler2DUniform**(String name, Uint8List val)|Replace a texture with another image with the same size.<br>Be sure the *val* length is the same as the previously stored image with the uniform named *name*.|
-|bool **startCaptureOnSampler2D**(String name, String completeFilePath)|Set Sampler2D uniform *name* with frames captured by OpenCV VideoCapture<br><br>*completeFilePath* can be:<br>'cam0' for webCam0<br>'cam1' for webCam1<br>a complete local video file path<br><br>Note: this video capture is just for reference on how textures work in real time. It doesn't respect frame rate and on Android camera doesn't work.|
-
+|bool **startCaptureOnSampler2D**(String name, String completeFilePath)|Set Sampler2D uniform *name* with frames captured by OpenCV VideoCapture<br><br>*completeFilePath* can be:<br>- 'cam0' for webCam0<br>- 'cam1' for webCam1<br>- a complete local video file path<br><br>**Note**: this video capture is just for reference on how textures work in real time. It doesn't respect frame rate and on Android camera doesn't work.|
+| bool **stopCapture**() | Stop capturing thread.|
 
 
 # Setup
@@ -115,10 +115,11 @@ you can safely delete all but the *lib* and *include* directories from the clone
 extract the zip and rename its main directory to "glew"
 
 ## Android
-Should be ok.
-The provided OpenCV 4.7.0 in the android/src/opencv dir has been downloaded from here https://github.com/opencv/opencv/releases/download/4.7.0/opencv-4.7.0-android-sdk.zip
+Download OpenCV from here https://github.com/opencv/opencv/releases/download/4.7.0/opencv-4.7.0-android-sdk.zip locate libs and include folders and copy them into android/src/opencv. 
+Or run the script *SCRIPT/setupOpenCV-android.sh*
 
 # TODO
+- better docomentation
 - the c/c++ code is not "state of the art" written! PRs are welcomed :smile:
 - iOS, Mac and Web support
 - ES 3 on Android (now supports 2)

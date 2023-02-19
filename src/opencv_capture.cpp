@@ -94,6 +94,7 @@ bool OpenCVCapture::open(const std::string& uniformName,
 {
     // webCam on Android seems not to work. Probably ffmpeg is needed by OpenCV also
     // to speed up video files
+
     // https://docs.opencv.org/3.4/d4/d15/group__videoio__flags__base.html
 	int apiCamPreference = 0;
 	int apiFilePreference = 0;
@@ -178,7 +179,7 @@ void OpenCVCapture::start(Sampler2D *sampler)
 	me->cameraThreadRunning = true;
     auto start = std::chrono::steady_clock::now();
 	auto end = std::chrono::steady_clock::now();
-	std::chrono::duration<double> elapsed = std::chrono::duration<double>(0);
+	int64_t elapsed;
 
   	for (;;) {
 		if (me->message == MSG_CAMERA_STOP) {
@@ -201,15 +202,14 @@ void OpenCVCapture::start(Sampler2D *sampler)
 		cv::flip(me->frame, me->frame,0);
 
  		end = std::chrono::steady_clock::now();
-		elapsed = end - start;
-		std::cout << "CAMERA Elapsed: " << elapsed.count() << std::endl;
-        // usleep(me->frameDuration - elapsed.count() * 1000000);
-		// cv::waitKey(me->frameDuration);
+		elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+		if (me->frameDuration > elapsed)
+        	usleep(me->frameDuration - elapsed);
 
 		renderer = getRenderer();
 		if (renderer != nullptr) 
 		{
-            if (!me->frame.empty() && elapsed.count() >= me->frameDuration) {
+            if (!me->frame.empty() && elapsed >= me->frameDuration) {
                 sampler->replaceTexture(me->width, me->height, me->frame.clone().data );
                 getRenderer()->setTextureMsg(*sampler);
 				start = std::chrono::steady_clock::now();

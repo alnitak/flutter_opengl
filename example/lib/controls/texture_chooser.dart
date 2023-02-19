@@ -64,19 +64,20 @@ class TextureWidget extends ConsumerWidget {
       children: [
         Stack(
           children: [
+            /// STARMENU POPUP
             StarMenu(
-              params: const StarMenuParameters(
-                  backgroundParams:
-                      BackgroundParams(animatedBlur: true, sigmaX: 12, sigmaY: 12),
+              params: StarMenuParameters(
+                  backgroundParams: const BackgroundParams(
+                      animatedBlur: true, sigmaX: 12, sigmaY: 12),
                   shape: MenuShape.linear,
-                  linearShapeParams: LinearShapeParams(
-                    alignment: LinearAlignment.left,
+                  linearShapeParams: const LinearShapeParams(
+                    alignment: LinearAlignment.center,
                   ),
-                  // boundaryBackground: BoundaryBackground(
-                  //   color: const Color(0xff0e0e0e),
-                  // ),
-                  centerOffset: Offset(0, -100)),
-              items: _items(),
+                  boundaryBackground: BoundaryBackground(
+                    color: const Color(0x800e0e0e),
+                  ),
+                  centerOffset: const Offset(0, -100)),
+              items: _items(ref),
               onItemTapped: (index, controller) {
                 controller.closeMenu!();
               },
@@ -98,6 +99,7 @@ class TextureWidget extends ConsumerWidget {
               ),
             ),
 
+            /// REMOVE TEXTURE
             Positioned(
               right: 9,
               top: 9,
@@ -107,7 +109,7 @@ class TextureWidget extends ConsumerWidget {
                       .openglFFI
                       .removeUniform('iChannel$channelId');
                   if (removed) {
-                    var channelProvider;
+                    StateController<TextureParams> channelProvider;
                     switch (channelId) {
                       case 0:
                         channelProvider = ref.read(stateChannel0.notifier);
@@ -128,20 +130,27 @@ class TextureWidget extends ConsumerWidget {
                         channelProvider.state.copyWith(assetsImage: '');
                   }
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black54,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(width: 1, color: Colors.white),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: Icon(Icons.delete_outline, size: 24),
-                  ),
-                ),
+                child: const Icon(Icons.delete_outline, size: 24),
               ),
             ),
 
+            /// STOP CAPTURE
+            /// since only once instance of capture is available for now
+            /// this is visible on all [TextureChooser]
+            Visibility(
+              visible: ref.watch(stateCaptureRunning),
+              child: Positioned(
+                left: 9,
+                bottom: 9,
+                child: GestureDetector(
+                  onTap: () {
+                    bool ret = OpenGLController().openglFFI.stopCapture();
+                    ref.read(stateCaptureRunning.notifier).state = false;
+                  },
+                  child: const Icon(Icons.stop_circle, size: 24),
+                ),
+              ),
+            ),
           ],
         ),
         Text('iChannel$channelId'),
@@ -149,7 +158,7 @@ class TextureWidget extends ConsumerWidget {
     );
   }
 
-  List<Widget> _items() {
+  List<Widget> _items(WidgetRef ref) {
     return [
       Item(
           channelId: channelId,
@@ -167,15 +176,38 @@ class TextureWidget extends ConsumerWidget {
           channelId: channelId,
           assetImage: 'assets/rgba-noise-small.png',
           text: '96x96'),
-      SizedBox(
-        width: 64,
-        height: 64,
-        child: IconButton(
-          onPressed: () {
-              bool ret = OpenGLController().openglFFI.startCameraOnSampler2D('iChannel0', 640, 360);
-            },
-          icon: const Icon(Icons.camera, size: 64),
-        ),
+      Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 64,
+            height: 64,
+            child: IconButton(
+              onPressed: () {
+                      bool ret = OpenGLController()
+                          .openglFFI
+                          .startCaptureOnSampler2D(
+                              'iChannel$channelId', ref.read(statePickedVideo));
+                      ref.read(stateCaptureRunning.notifier).state = true;
+                    },
+              icon: const Icon(Icons.ondemand_video_outlined, size: 64),
+            ),
+          ),
+          const SizedBox(width: 30),
+          SizedBox(
+            width: 64,
+            height: 64,
+            child: IconButton(
+              onPressed: () {
+                bool ret = OpenGLController()
+                    .openglFFI
+                    .startCaptureOnSampler2D('iChannel$channelId', 'cam0');
+                ref.read(stateCaptureRunning.notifier).state = true;
+              },
+              icon: const Icon(Icons.camera, size: 64),
+            ),
+          ),
+        ],
       ),
     ];
   }
@@ -216,10 +248,11 @@ class Item extends ConsumerWidget {
     }
 
     OGLUtils.setAssetTexture('iChannel$channelId', assetImage, method: method)
-    .then((value) {
-      if (value) channelProvider.state = TextureParams().copyWith(assetsImage: assetImage);
+        .then((value) {
+      if (value)
+        channelProvider.state =
+            TextureParams().copyWith(assetsImage: assetImage);
     });
-
   }
 
   @override

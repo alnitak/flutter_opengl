@@ -52,9 +52,8 @@ extern "C" FFI_PLUGIN_EXPORT bool replaceSampler2DUniform(
         int height, 
         void *val);
 extern "C" FFI_PLUGIN_EXPORT bool startCameraOnSampler2D(
-        const char *name, 
-        int width, 
-        int height);
-extern "C" FFI_PLUGIN_EXPORT bool stopCamera();
+        const char *name,
+        const char *completeFilePath);
+extern "C" FFI_PLUGIN_EXPORT bool stopCapture();
 
 #endif // FFI_H

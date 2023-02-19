@@ -22,7 +22,6 @@ add_library(
       ${PLUGIN_NAME} SHARED
       flutter_opengl_plugin.cc
       fl_my_texture_gl.cc
-      opencv_camera.cpp
       # test.cpp
 
       ../src/common.h
@@ -32,6 +31,7 @@ add_library(
       ../src/uniformQueue.cpp
       ../src/Sampler2D.cpp
 
+      ../src/opencv_capture.cpp
       
 )
 
@@ -62,15 +62,20 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE flutter)
 target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
 
 find_package(OpenGL REQUIRED COMPONENTS OpenGL EGL)
-find_package(OpenCV REQUIRED COMPONENTS core highgui imgproc imgcodecs)
+find_package(OpenCV REQUIRED COMPONENTS 
+  core 
+  highgui 
+  # imgproc 
+  # imgcodecs
+)
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 target_link_libraries(${PLUGIN_NAME} PRIVATE 
   # OpenGL::OpenGL 
   GLEW
   opencv_core
   opencv_highgui
-  opencv_imgproc
-  opencv_imgcodecs
+  # opencv_imgproc
+  # opencv_imgcodecs
   lapack
   cblas
 )

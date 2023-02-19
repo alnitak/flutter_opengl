@@ -108,12 +108,12 @@ void Shader::addShaderToyUniforms() {
 
     // Add black 4x4 texture for each iChannel
     std::vector<unsigned char> rawData(4 * 4 * 4, 0);
-    Sampler2D sampler1;
-    sampler1.add_RGBA32(4, 4, rawData.data());
-    uniformsList.addUniform("iChannel0", UNIFORM_SAMPLER2D, (void *) (&sampler1));
-    uniformsList.addUniform("iChannel1", UNIFORM_SAMPLER2D, (void *) (&sampler1));
-    uniformsList.addUniform("iChannel2", UNIFORM_SAMPLER2D, (void *) (&sampler1));
-    uniformsList.addUniform("iChannel3", UNIFORM_SAMPLER2D, (void *) (&sampler1));
+    Sampler2D sampler;
+    sampler.add_RGBA32(4, 4, rawData.data());
+    uniformsList.addUniform("iChannel0", UNIFORM_SAMPLER2D, (void *) (&sampler));
+    uniformsList.addUniform("iChannel1", UNIFORM_SAMPLER2D, (void *) (&sampler));
+    uniformsList.addUniform("iChannel2", UNIFORM_SAMPLER2D, (void *) (&sampler));
+    uniformsList.addUniform("iChannel3", UNIFORM_SAMPLER2D, (void *) (&sampler));
 }
 
 void Shader::setShadersSize(int w, int h) {
@@ -183,11 +183,9 @@ std::string Shader::initShader() {
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, FBO);
 
     glFramebufferTexture(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, self->texture_name, 0);
+#endif
 
     uniformsList.setAllSampler2D();
-    
-
-#endif
 
 #ifdef _IS_LINUX_
     gdk_gl_context_clear_current();

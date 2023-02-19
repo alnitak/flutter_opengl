@@ -33,7 +33,7 @@ Renderer::Renderer(OpenglPluginContext *textureStruct)
 }
 
 Renderer::~Renderer() {
-    if (camera != nullptr) stopCamera();
+    if (camera != nullptr) stopCapture();
    
     if (shader.get() != nullptr) {
         shader.reset();
@@ -268,16 +268,18 @@ void Renderer::destroyGL()
 }
 #endif
 
-OpenCVCamera *Renderer::getOpenCVCamera() 
+OpenCVCapture *Renderer::getOpenCVCapture() 
 { 
     return camera; 
 }
 
-bool Renderer::openCamera(std::string uniformName, int width, int height)
+bool Renderer::openCapture(std::string uniformName,
+                          std::string completeFilePath,
+                          int *width, int *height)
 {
-    if (camera != nullptr) return false;
-    camera = new OpenCVCamera();
-    bool opened = camera->open(uniformName, width, height);
+    if (camera != nullptr) stopCapture();
+    camera = new OpenCVCapture();
+    bool opened = camera->open(uniformName, completeFilePath, width, height);
     if (!opened)
     {
         delete camera;
@@ -287,7 +289,7 @@ bool Renderer::openCamera(std::string uniformName, int width, int height)
     return true;
 }
 
-bool Renderer::stopCamera()
+bool Renderer::stopCapture()
 {
     if (camera == nullptr) return false;
     delete camera;
@@ -379,7 +381,7 @@ void Renderer::loop() {
 
             case MSG_NEW_SHADER:
                 // Eventually stop the camera
-                stopCamera();
+                stopCapture();
                 
                 if (shader.get() != nullptr)
                     shader.reset();
@@ -429,8 +431,20 @@ void Renderer::loop() {
                         wglMakeCurrent(self->hdc, self->hrc);
                 #endif
 
-                shader->getUniforms().setSampler2D("iChannel0", shader->getUniforms().programObject, sampler2DToSet);
-                shader->getUniforms().setAllSampler2D();
+                // // shader->getUniforms().setSampler2D("iChannel0", shader->getUniforms().programObject, sampler2DToSet);
+                // shader->getUniforms().setAllSampler2D();
+                glActiveTexture(GL_TEXTURE0 + sampler2DToSet.nTexture);
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, sampler2DToSet.texture_index);
+                glTexSubImage2D(
+                    GL_TEXTURE_2D,
+                    0,
+                    0, 0, sampler2DToSet.width, sampler2DToSet.height,
+                    GL_RGBA,
+                    GL_UNSIGNED_BYTE,
+                    sampler2DToSet.data.data()
+                );
+                sampler2DToSet.data.clear();
                 
                 #ifdef _IS_LINUX_
                         gdk_gl_context_clear_current();

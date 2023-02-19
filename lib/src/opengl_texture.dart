@@ -12,33 +12,31 @@ import 'flutter_opengl_ffi.dart';
 /// then feed this widget with id got:
 ///
 /// '''dart
-/// FutureBuilder<int>(
-///   // get texture id
-///   future: OpenGLController().openglPlugin.createSurface(
-///         Utils.captured.size!.width.toInt(),
-///         Utils.captured.size!.height.toInt(),
-///       ),
-///   builder: (context, textureId) {
-///     if (!textureId.hasData || textureId.hasError) {
-///       return const SizedBox.shrink();
-///     }
+/// SizedBox(
+///   width: 400,
+///   height: 300,
+///   child: FutureBuilder(
+///     /// The surface size identifies the real texture size and
+///     /// it is not related to the above SizedBox size
+///     future: OpenGLController().openglPlugin.createSurface(300, 200),
+///     builder: (_, snapshot) {
+///       if (snapshot.hasError || !snapshot.hasData) {
+///         return const SizedBox.shrink();
+///       }
+///       /// When the texture id is retrieved, it will be possible
+///       /// to start the renderer, set a shader and display it.
 ///
-///     // start renderer
-///     OpenGLController().openglFFI.startThread();
+///       /// Start renderer thread
+///       OpenGLController().openglFFI.startThread();
 ///
-///     // set your shader and texture here
-///     OpenGLController().openglFFI.setShaderToy(
-///       fragmentShaderString,
-///     );
+///       /// Set the fragment shader
+///       OpenGLController().openglFFI.setShaderToy(fShader);
 ///
-///     return SizedBox(
-///       width: width,
-///       height: height,
-///       child: OpenGLTexture(
-///         id: textureId,
-///       ),
-///     );
-///   })
+///       /// build the texture widget
+///       return OpenGLTexture(id: snapshot.data!);
+///     },
+///   ),
+/// )
 /// '''
 class OpenGLTexture extends StatelessWidget {
   /// the texture id got by

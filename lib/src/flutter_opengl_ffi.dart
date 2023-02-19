@@ -41,7 +41,7 @@ class FlutterOpenGLFfi {
 
   /// ***********************************************
   /// **** GET RENDERER STATUS
-  /// Returns true if the texture has been created and a shader can be choosen
+  /// Returns true if the texture has been created successfully
   bool rendererStatus() {
     return _rendererStatus() == 0 ? false : true;
   }
@@ -52,8 +52,8 @@ class FlutterOpenGLFfi {
 
   /// ***********************************************
   /// **** GET TEXTURE SIZE
-  /// Get the size of the shader already set.
-  /// If not set it return Size(-1, -1)
+  /// Get the size of the current texture.
+  /// If not set it returns Size(-1, -1)
   Size getTextureSize() {
     ffi.Pointer<ffi.Int32> w = calloc(ffi.sizeOf<ffi.Int32>());
     ffi.Pointer<ffi.Int32> h = calloc(ffi.sizeOf<ffi.Int32>());
@@ -98,6 +98,12 @@ class FlutterOpenGLFfi {
   /// ***********************************************
   /// **** SET SHADER
   /// Set the shader to be used in the current texture.
+  ///
+  /// [isContinuous] not used yet
+  /// [vertexShader] String of the vertex shader source
+  /// [fragmentShader] String of the fragment shader source
+  ///
+  /// returns the compiling shader error string or an empty string if no errors.
   String setShader(
     bool isContinuous,
     String vertexShader,
@@ -125,12 +131,13 @@ class FlutterOpenGLFfi {
   /// Set the shader to be used in the current texture.
   /// These are only fragment shaders taken from ShaderToy.com
   /// Many of the shaders can be copy/pasted, but they must have
-  /// only the "image" layer (no iChannel, no buffer etc).
-  /// Also many of them are heavy for mobile devices (few FPS).
-  /// The uniforms actually available and aumatically registered are:
+  /// only the "image" layer (ie no buffer).
+  /// Also many of them could be heavy for mobile devices (few FPS).
+  /// The uniforms actually available and automatically registered are:
   /// float iTime
   /// vec4 iMouse
   /// vec3 iResolution
+  /// Sampler2D iChannel[0-3]
   String setShaderToy(String fragmentShader) {
     return _setShaderToy(
       fragmentShader.toNativeUtf8().cast<ffi.Char>(),
@@ -178,7 +185,8 @@ class FlutterOpenGLFfi {
   /// vec4 iMouse
   /// vec3 iResolution
   /// float iTime
-  /// These are automatically sett when using [setShaderToy]
+  /// Sampler2D iChannel[0-3]
+  /// These are automatically set when using [setShaderToy]
   void addShaderToyUniforms() {
     return _addShaderToyUniforms();
   }
@@ -191,14 +199,18 @@ class FlutterOpenGLFfi {
   /// ***********************************************
   /// **** SET MOUSE POS
   /// Set the iMouse uniform
-  // Shows how to use the mouse input (only left button supported):
-  //
-  //      mouse.xy  = mouse position during last button down
-  //  abs(mouse.zw) = mouse position during last button click
-  // sign(mouze.z)  = button is down
-  // sign(mouze.w)  = button is clicked
-  // https://www.shadertoy.com/view/llySRh
-  // https://www.shadertoy.com/view/Mss3zH
+  /// Shows how to use the mouse input (only left button supported):
+  ///
+  ///      mouse.xy  = mouse position during last button down
+  ///  abs(mouse.zw) = mouse position during last button click
+  /// sign(mouze.z)  = button is down
+  /// sign(mouze.w)  = button is clicked
+  ///
+  /// This is automatically processed by [OpenGLTexture] widget
+  ///
+  /// For reference:
+  /// https://www.shadertoy.com/view/llySRh
+  /// https://www.shadertoy.com/view/Mss3zH
   void setMousePosition(
     Offset startingPos,
     Offset pos,
@@ -452,7 +464,7 @@ class FlutterOpenGLFfi {
   /// ***********************************************
   /// **** ADD SAMPLER2D UNIFORM
   ///
-  /// * add SAMPLER2D RGBA32
+  /// * Add a Sampler2D uniform. The raw image stored in *val* must be in RGBA32 format.
   bool addSampler2DUniform(
     String name,
     int width,
@@ -489,7 +501,7 @@ class FlutterOpenGLFfi {
   /// ***********************************************
   /// **** REPLACE SAMPLER2D UNIFORM
   ///
-  /// * replace SAMPLER2D texture with another one with different size
+  /// * replace Sampler2D uniform texture with another one with different size
   bool replaceSampler2DUniform(
     String name,
     int width,
@@ -674,7 +686,7 @@ class FlutterOpenGLFfi {
   ///
   /// Replace a texture with another image with the same size.
   /// Be sure the [val] length is the same as the previously
-  /// stored image with int the uniform named [name].
+  /// stored image with the uniform named [name].
   bool setSampler2DUniform(String name, Uint8List val) {
     ffi.Pointer<ffi.Int8> valT = calloc(ffi.sizeOf<ffi.Int8>() * val.length);
     for (int i = 0; i < val.length; ++i) {
@@ -696,35 +708,40 @@ class FlutterOpenGLFfi {
   late final _setUniform = _setUniformPtr
       .asFunction<int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Void>)>();
 
-  /// * Start CAMERA (Linux only)
+  /// * Start capturing
   ///
-  bool startCameraOnSampler2D(String name, int width, int height) {
-    int ret = _startCamera(
+  /// Set Sampler2D uniform [name] with frames captured by OpenCV VideoCapture
+  ///
+  /// [completeFilePath] can be:
+  /// 'cam0' for webCam0
+  /// 'cam1' for webCam1
+  /// a complete local video file path
+  bool startCaptureOnSampler2D(String name, String completeFilePath) {
+    int ret = _startCapture(
       name.toNativeUtf8().cast<ffi.Char>(),
-      width,
-      height,
+      completeFilePath.toNativeUtf8().cast<ffi.Char>(),
     );
     return ret == 0 ? false : true;
   }
 
-  late final _startCameraPtr = _lookup<
+  late final _startCapturePtr = _lookup<
       ffi.NativeFunction<
           ffi.Int Function(
-              ffi.Pointer<ffi.Char>, ffi.Int32, ffi.Int32)>>('startCameraOnSampler2D');
-  late final _startCamera = _startCameraPtr
-      .asFunction<int Function(ffi.Pointer<ffi.Char>, int, int)>();
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('startCaptureOnSampler2D');
+  late final _startCapture = _startCapturePtr
+      .asFunction<int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
-  /// * Stop CAMERA (Linux only)
+  /// * Stop capturing
   ///
-  bool stopCamera() {
-    int ret = _stopCamera();
+  bool stopCapture() {
+    int ret = _stopCapture();
     return ret == 0 ? false : true;
   }
 
-  late final _stopCameraPtr = _lookup<
+  late final _stopCapturePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int Function()>>('stopCamera');
-  late final _stopCamera = _stopCameraPtr
+          ffi.Int Function()>>('stopCapture');
+  late final _stopCapture = _stopCapturePtr
       .asFunction<int Function()>();
 
 

@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_opengl/flutter_opengl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,20 +29,6 @@ class ShaderButtons extends ConsumerWidget {
           runSpacing: 4,
           spacing: 4,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                bool ret = OpenGLController()
-                    .openglFFI
-                    .startCameraOnSampler2D('iChannel0', 640, 360);
-              },
-              child: const Text('open'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                bool ret = OpenGLController().openglFFI.stopCamera();
-              },
-              child: const Text('stop'),
-            ),
 
             /// Build button for each fragments stored in [shaderToy] list
             ...List.generate(shaderToy.length, (i) {

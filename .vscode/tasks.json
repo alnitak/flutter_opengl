@@ -3,25 +3,25 @@
     "tasks": [
         {
             "label": "compile linux debug verbose",
-            "command": "cd ${workspaceFolder}/example && flutter build linux --debug --verbose",
+            "command": "cd ${workspaceFolder}/example && flutter build linux -t lib/main_in_deep.dart --debug --verbose",
             // "args": ["build", "linux", "--verbose"],
             "type": "shell"
         },
         {
             "label": "compile linux debug",
-            "command": "cd ${workspaceFolder}/example; flutter build linux --debug",
+            "command": "cd ${workspaceFolder}/example; flutter build linux -t lib/main_in_deep.dart --debug",
             // "args": ["build", "linux"],
             "type": "shell"
         },
         {
             "label": "compile windows debug verbose",
-            "command": "cd ${workspaceFolder}/example; flutter build windows --debug --verbose",
+            "command": "cd ${workspaceFolder}/example; flutter build windows -t lib/main_in_deep.dart --debug --verbose",
             // "args": ["build", "linux"],
             "type": "shell"
         },
         {
             "label": "compile windows debug",
-            "command": "cd ${workspaceFolder}/example; flutter build windows --debug",
+            "command": "cd ${workspaceFolder}/example; flutter build windows -t lib/main_in_deep.dart --debug",
             // "args": ["build", "linux"],
             "type": "shell"
         },

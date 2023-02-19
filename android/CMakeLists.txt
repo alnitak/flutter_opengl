@@ -3,6 +3,7 @@
 
 # Sets the minimum version of CMake required to build the native library.
 cmake_minimum_required(VERSION 3.4.1)
+#cmake_minimum_required(VERSION 3.22.1)
 
 # Project-level configuration.
 set(PROJECT_NAME "flutter_opengl")
@@ -40,6 +41,8 @@ add_library(
         ../src/Shader.cpp
         ../src/uniformQueue.cpp
         ../src/Sampler2D.cpp
+        ../src/Sampler2D.cpp
+        ../src/opencv_capture.cpp
 )
 #set (CMAKE_SHARED_LINKER_FLAGS "-Wl,--gc-sections,--strip-debug -fvisibility=hidden -fuse-ld=lld")
 
@@ -60,24 +63,60 @@ find_library( # Sets the name of the path variable.
 add_subdirectory(src/glm)
 add_library(glm::glm ALIAS glm)
 
+
+set (OPENCV_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/opencv)
+set (OPENCV_LIBS_LOC ${OPENCV_DIR}/${ANDROID_ABI})
+
+set (FFMPEG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/ffmpeg)
+set (FFMPEG_LIBS_LOC ${FFMPEG_DIR}/${ANDROID_ABI})
+
+#set (FFMPEG_DIR ${OPENCV_DIR})
+#set (FFMPEG_LIBS_LOC ${OPENCV_DIR}/${ANDROID_ABI})
+
 target_link_libraries(
         # Specifies the target library.
         ${PLUGIN_NAME}
 
-       # Links the target library to the log library
-       # included in the NDK.
-       ${log-lib}
+        # Links the target library to the log library
+        # included in the NDK.
+        ${log-lib}
 
-       android
+        android
 
-       EGL
+
+        EGL
 #       GLESv1_CM
 #       GLESv2
-       GLESv3
-       glm
-# GLESv3 not supported by many devices
-)
+        GLESv3
+        glm
 
+        dl m mediandk jnigraphics
+
+#        ${OPENCV_LIBS_LOC}/libopencv_core.so
+#        ${OPENCV_LIBS_LOC}/libopencv_highgui.so
+#        ${OPENCV_LIBS_LOC}/libopencv_imgcodecs.so
+#        ${OPENCV_LIBS_LOC}/libopencv_img_hash.so
+#        ${OPENCV_LIBS_LOC}/libopencv_imgproc.so
+#        ${OPENCV_LIBS_LOC}/libopencv_videoio.so
+#        ${OPENCV_LIBS_LOC}/libopencv_video.so
+#        ${OPENCV_LIBS_LOC}/libopencv_videostab.so
+#        ${OPENCV_LIBS_LOC}/libopencv_dnn.so
+#        ${OPENCV_LIBS_LOC}/libopencv_calib3d.so
+#        ${OPENCV_LIBS_LOC}/libopencv_photo.so
+#        ${OPENCV_LIBS_LOC}/libopencv_features2d.so
+#        ${OPENCV_LIBS_LOC}/libopencv_flann.so
+        ${OPENCV_DIR}/${ANDROID_ABI}/libopencv_java4.so
+
+        ${FFMPEG_LIBS_LOC}/libavcodec.so
+        ${FFMPEG_LIBS_LOC}/libavdevice.so
+        ${FFMPEG_LIBS_LOC}/libavfilter.so
+        ${FFMPEG_LIBS_LOC}/libavformat.so
+        ${FFMPEG_LIBS_LOC}/libavutil.so
+        ${FFMPEG_LIBS_LOC}/libswresample.so
+        ${FFMPEG_LIBS_LOC}/libswscale.so
+)
 
 include_directories( ../src )
 include_directories( src/glm/ )
+include_directories( ${OPENCV_DIR}/include )
+include_directories( ${FFMPEG_DIR}/include )

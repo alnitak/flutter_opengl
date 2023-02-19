@@ -326,7 +326,9 @@ void UniformQueue::sendAllUniforms() {
             setMat4(name, programObject, std::any_cast<UNIFORM_MAT4_t &>(uniform).val);
         } else 
         if (t == typeid(UNIFORM_SAMPLER2D_t)) {
-            setSampler2D(name, programObject, std::any_cast<UNIFORM_SAMPLER2D_t &>(uniform).val);
+            Sampler2D &sampler = std::any_cast<UNIFORM_SAMPLER2D_t &>(uniform).val;
+            if (sampler.nTexture != -1)
+                setSampler2D(name, programObject, sampler);
             // debug(name);
         }
     }
@@ -379,14 +381,14 @@ bool UniformQueue::replaceSampler2D(const std::string &name, int w, int h, unsig
 {
     // check if the uniform already exists
     if (uniforms.find(name) == uniforms.end()) {
-        std::cout << "Uniform \"" << name << "\"  doesn't exists!" << std::endl;
+        LOGD("UNIFORMQUEUE", "Uniform ", name.c_str(), "  doesn't exists!");
         return false;
     }
     const std::type_info &t = uniforms[name].type();
 
     if (t == typeid(UNIFORM_SAMPLER2D_t)) {
         Sampler2D &sampler = std::any_cast<UNIFORM_SAMPLER2D_t &>(uniforms[name]).val;
-        std::cout << "replaceSampler2D \"" << name << std::endl;
+        LOGD("UNIFORMQUEUE", "replaceSampler2D ", name.c_str());
         sampler.replaceTexture(w, h, rawData);
         return true;
     }
@@ -469,11 +471,12 @@ void UniformQueue::setMat4(const std::string &name, GLuint po, const glm::mat4 &
 // ------------------------------------------------------------------------
 void UniformQueue::setSampler2D(const std::string &name, GLuint po, Sampler2D &data) {
 
+    glActiveTexture(GL_TEXTURE0 + data.nTexture);
+    glBindTexture(GL_TEXTURE_2D, data.texture_index);
+
     glUniform1i(
         glGetUniformLocation(po, name.c_str()),
         data.nTexture
     );
 
-    glActiveTexture(GL_TEXTURE0 + data.nTexture);
-    glBindTexture(GL_TEXTURE_2D, data.texture_index);
 }

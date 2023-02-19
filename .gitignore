@@ -29,7 +29,11 @@ migrate_working_dir/
 .packages
 build/
 
+android/src/opencv
 WORK/
+BUILD_LIBS/
+SCRIPTS/
+!SCRIPTS/setupOpenCV-android.sh
 
 #libraries to download
 windows/glm/
