@@ -10,10 +10,13 @@ final stateUrl = StateProvider<String>((ref) => '');
 final stateTextureCreated = StateProvider<bool>((ref) => false);
 final stateTextureSize = StateProvider<Size>((ref) => const Size(600, 337));
 final stateTextureId = StateProvider<int>((ref) => -1);
+/// current index in the shaderToy list
 final stateShaderIndex = StateProvider<int>((ref) => -1);
 
+/// Absolute video file path
 final statePickedVideo = StateProvider<String>((ref) => '');
 
+/// The VideoCapture state
 final stateCaptureRunning = StateProvider<bool>((ref) => false);
 
 

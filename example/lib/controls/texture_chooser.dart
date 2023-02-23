@@ -5,7 +5,7 @@ import 'package:star_menu/star_menu.dart';
 
 import '../states.dart';
 
-/// Add the widget to bit a texture to the channel uniforms
+/// Row of 4 TextureWidget that represent the 4 iChannel[0-3]
 ///
 class TextureChooser extends ConsumerWidget {
   const TextureChooser({
@@ -110,24 +110,7 @@ class TextureWidget extends ConsumerWidget {
                       .removeUniform('iChannel$channelId');
                   if (removed) {
                     StateController<TextureParams> channelProvider;
-                    switch (channelId) {
-                      case 0:
-                        channelProvider = ref.read(stateChannel0.notifier);
-                        break;
-                      case 1:
-                        channelProvider = ref.read(stateChannel1.notifier);
-                        break;
-                      case 2:
-                        channelProvider = ref.read(stateChannel2.notifier);
-                        break;
-                      case 3:
-                        channelProvider = ref.read(stateChannel3.notifier);
-                        break;
-                      default:
-                        channelProvider = ref.read(stateChannel0.notifier);
-                    }
-                    channelProvider.state =
-                        channelProvider.state.copyWith(assetsImage: '');
+                    _clearTexture(ref);
                   }
                 },
                 child: const Icon(Icons.delete_outline, size: 24),
@@ -158,6 +141,27 @@ class TextureWidget extends ConsumerWidget {
     );
   }
 
+  _clearTexture(WidgetRef ref) {
+    switch (channelId) {
+      case 0:
+        ref.read(stateChannel0.notifier).state =
+            TextureParams().copyWith(assetsImage: '');
+        break;
+      case 1:
+        ref.read(stateChannel1.notifier).state =
+            TextureParams().copyWith(assetsImage: '');
+        break;
+      case 2:
+        ref.read(stateChannel2.notifier).state =
+            TextureParams().copyWith(assetsImage: '');
+        break;
+      case 3:
+        ref.read(stateChannel3.notifier).state =
+            TextureParams().copyWith(assetsImage: '');
+        break;
+    }
+  }
+
   List<Widget> _items(WidgetRef ref) {
     return [
       Item(
@@ -184,12 +188,11 @@ class TextureWidget extends ConsumerWidget {
             height: 64,
             child: IconButton(
               onPressed: () {
-                      bool ret = OpenGLController()
-                          .openglFFI
-                          .startCaptureOnSampler2D(
-                              'iChannel$channelId', ref.read(statePickedVideo));
-                      ref.read(stateCaptureRunning.notifier).state = true;
-                    },
+                bool ret = OpenGLController().openglFFI.startCaptureOnSampler2D(
+                    'iChannel$channelId', ref.read(statePickedVideo));
+                ref.read(stateCaptureRunning.notifier).state = true;
+                _clearTexture(ref);
+              },
               icon: const Icon(Icons.ondemand_video_outlined, size: 64),
             ),
           ),
@@ -203,6 +206,7 @@ class TextureWidget extends ConsumerWidget {
                     .openglFFI
                     .startCaptureOnSampler2D('iChannel$channelId', 'cam0');
                 ref.read(stateCaptureRunning.notifier).state = true;
+                _clearTexture(ref);
               },
               icon: const Icon(Icons.camera, size: 64),
             ),
@@ -249,9 +253,10 @@ class Item extends ConsumerWidget {
 
     OGLUtils.setAssetTexture('iChannel$channelId', assetImage, method: method)
         .then((value) {
-      if (value)
+      if (value) {
         channelProvider.state =
             TextureParams().copyWith(assetsImage: assetImage);
+      }
     });
   }
 

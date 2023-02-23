@@ -31,6 +31,7 @@ list(APPEND PLUGIN_SOURCES
   ../src/Shader.cpp
   ../src/Sampler2D.cpp
   ../src/uniformQueue.cpp
+  ../src/opencv_capture.cpp
 )
 
 # Define the plugin library target. Its name must not be changed (see comment
@@ -65,9 +66,20 @@ target_include_directories(${PLUGIN_NAME} PUBLIC
   "${POWERVR}/include"
   "${GLM}"
   "${GLEW}/include"
+  "${OPENCV_INCLUDE_DIRS}"
   )
 
 find_package(OpenGL REQUIRED)
+
+# set(OpenCV_DIR ${CMAKE_CURRENT_LIST_DIR}/../SCRIPTS/opencv/build/x64/vc16/lib)
+find_package(OpenCV REQUIRED 
+    PATHS ${CMAKE_CURRENT_LIST_DIR}/../SCRIPTS/opencv/build/x64/vc16/lib 
+    NO_DEFAULT_PATH)
+message(STATUS "*************************OpenCV_LIBS ${OpenCV_LIBS}")
+message(STATUS "*************************OpenCV_INCLUDE_DIRS ${OpenCV_INCLUDE_DIRS}")
+message(STATUS "*************************CONFIGURATIONS ${CONFIGURATIONS}")
+message(STATUS "*************************CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES}")
+message(STATUS "*************************IS_MULTICONFIG ${IS_MULTICONFIG}")
 target_link_libraries(${PLUGIN_NAME} PRIVATE 
   flutter 
   flutter_wrapper_plugin
@@ -76,20 +88,50 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
   "${POWERVR}/lib/Windows_x86_64/libGLESv2.lib"
   "${GLEW}/lib/Release/x64/glew32.lib"
   "${GLEW}/lib/Release/x64/glew32s.lib"
+  "${OpenCV_LIBS}"
   )
+
+  # import OpenCV debug or release lib
+  target_link_libraries(${PLUGIN_NAME} PRIVATE 
+    optimized "${CMAKE_CURRENT_LIST_DIR}/../SCRIPTS/opencv/build/x64/vc16/lib/opencv_world470.lib"
+    debug "${CMAKE_CURRENT_LIST_DIR}/../SCRIPTS/opencv/build/x64/vc16/lib/opencv_world470d.lib"
+    )
 
 
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
-set(flutter_opengl_bundled_libraries
+## why openCV in debug mode doesn't work with release libs??
+if(IS_MULTICONFIG)
+  set(flutter_opengl_bundled_libraries
+    ""
+    "${POWERVR}/lib/Windows_x86_64/libEGL.dll"
+    "${POWERVR}/lib/Windows_x86_64/libGLESv2.dll"
+    "${GLEW}/bin/Release/x64/glew32.dll"
+    "${CMAKE_CURRENT_LIST_DIR}/../SCRIPTS/opencv/build/x64/vc16/bin/opencv_world470.dll"
+    "${CMAKE_CURRENT_LIST_DIR}/../SCRIPTS/opencv/build/x64/vc16/bin/opencv_videoio_msmf470_64.dll"
+    "${CMAKE_CURRENT_LIST_DIR}/../SCRIPTS/opencv/build/x64/vc16/bin/opencv_world470d.dll"
+    "${CMAKE_CURRENT_LIST_DIR}/../SCRIPTS/opencv/build/x64/vc16/bin/opencv_videoio_msmf470_64d.dll"
+    PARENT_SCOPE
+  )
+elseif( CMAKE_BUILD_TYPE STREQUAL "Debug" )
+  set(flutter_opengl_bundled_libraries
+    ""
+    "${POWERVR}/lib/Windows_x86_64/libEGL.dll"
+    "${POWERVR}/lib/Windows_x86_64/libGLESv2.dll"
+    "${GLEW}/bin/Release/x64/glew32.dll"
+    "${CMAKE_CURRENT_LIST_DIR}/../SCRIPTS/opencv/build/x64/vc16/bin/opencv_world470d.dll"
+    "${CMAKE_CURRENT_LIST_DIR}/../SCRIPTS/opencv/build/x64/vc16/bin/opencv_videoio_msmf470_64d.dll"
+    PARENT_SCOPE
+  )
+elseif( CMAKE_BUILD_TYPE STREQUAL "Release" )
+  set(flutter_opengl_bundled_libraries
   ""
-  # "${POWERVR}/lib/Windows_x86_64/libEGL.lib"
   "${POWERVR}/lib/Windows_x86_64/libEGL.dll"
-  # "${POWERVR}/lib/Windows_x86_64/libGLESv2.lib"
   "${POWERVR}/lib/Windows_x86_64/libGLESv2.dll"
   "${GLEW}/bin/Release/x64/glew32.dll"
-  "${GLEW}/lib/Release/x64/glew32.lib"
-  "${GLEW}/lib/Release/x64/glew32s.lib"
+  "${CMAKE_CURRENT_LIST_DIR}/../SCRIPTS/opencv/build/x64/vc16/bin/opencv_world470.dll"
+  "${CMAKE_CURRENT_LIST_DIR}/../SCRIPTS/opencv/build/x64/vc16/bin/opencv_videoio_msmf470_64.dll"
   PARENT_SCOPE
-)
+  )
+endif()

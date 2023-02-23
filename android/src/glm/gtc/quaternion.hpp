@@ -144,7 +144,7 @@ namespace glm
 	/// Build a look at quaternion based on the default handedness.
 	///
 	/// @param direction Desired forward direction. Needs to be normalized.
-	/// @param up Up vector, how the camera is oriented. Typically (0, 1, 0).
+	/// @param up Up vector, how the capture is oriented. Typically (0, 1, 0).
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL qua<T, Q> quatLookAt(
 		vec<3, T, Q> const& direction,
@@ -153,7 +153,7 @@ namespace glm
 	/// Build a right-handed look at quaternion.
 	///
 	/// @param direction Desired forward direction onto which the -z-axis gets mapped. Needs to be normalized.
-	/// @param up Up vector, how the camera is oriented. Typically (0, 1, 0).
+	/// @param up Up vector, how the capture is oriented. Typically (0, 1, 0).
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL qua<T, Q> quatLookAtRH(
 		vec<3, T, Q> const& direction,
@@ -162,7 +162,7 @@ namespace glm
 	/// Build a left-handed look at quaternion.
 	///
 	/// @param direction Desired forward direction onto which the +z-axis gets mapped. Needs to be normalized.
-	/// @param up Up vector, how the camera is oriented. Typically (0, 1, 0).
+	/// @param up Up vector, how the capture is oriented. Typically (0, 1, 0).
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL qua<T, Q> quatLookAtLH(
 		vec<3, T, Q> const& direction,

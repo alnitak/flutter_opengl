@@ -7,82 +7,40 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="test set textures with OpenCV VideoCapture">
-      <change afterPath="$PROJECT_DIR$/SCRIPTS/setupOpenCV-android.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/flutter_OpenGL-video.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="3b9c58de-fbef-48a3-bea4-173fa4f71787" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/tasks.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/tasks.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/glm/ext/matrix_transform.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/glm/ext/matrix_transform.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/glm/gtc/quaternion.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/glm/gtc/quaternion.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/controls/ShaderButtons.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/controls/ShaderButtons.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/controls/controls.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/controls/controls.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/controls/texture_chooser.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/controls/texture_chooser.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/shadertoy.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/shadertoy.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/states.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/states.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/example/windows/flutter/generated_plugins.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/flutter_opengl_ffi.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/flutter_opengl_ffi.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/opengl_texture.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/opengl_texture.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/linux/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/linux/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/linux/flutter_opengl_plugin.cc" beforeDir="false" afterPath="$PROJECT_DIR$/linux/flutter_opengl_plugin.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Renderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sampler2D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler2D.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Shader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Shader.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ffi.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ffi.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ffi.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/ffi.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/opencv_capture.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/opencv_capture.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/uniformQueue.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/uniformQueue.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/windows/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/windows/CMakeLists.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Dart File" />
-      </list>
-    </option>
-  </component>
-  <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="texture" />
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="ROOT_SYNC" value="DONT_SYNC" />
-  </component>
-  <component name="GitSEFilterConfiguration">
-    <file-type-list>
-      <filtered-out-file-type name="LOCAL_BRANCH" />
-      <filtered-out-file-type name="REMOTE_BRANCH" />
-      <filtered-out-file-type name="TAG" />
-      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
-    </file-type-list>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2HmcdPrOAe7Ysj1DJ3EbwSgVAmv" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="2M3dQI7PTj0YYUugh8ijYXZy8eD" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -91,25 +49,16 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
-    <property name="android.sdk.path" value="$USER_HOME$/Android/Sdk" />
+    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/2/flutter_OpenGL.mp4" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.DirectoryMappings" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/example/android" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/android" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/example/lib/controls" />
-      <recent name="$PROJECT_DIR$/lib/src" />
-    </key>
-  </component>
   <component name="RunManager" selected="Flutter.main_in_deep">
-    <configuration name="main" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
       <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
       <method v="2" />
     </configuration>
@@ -119,128 +68,18 @@
     </configuration>
     <list>
       <item itemvalue="Flutter.main_in_deep" />
-      <item itemvalue="Flutter.main" />
+      <item itemvalue="Flutter.main.dart" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b93aca1d-ef4e-4391-8665-49ac3c5ec3cc" name="Changes" comment="" />
-      <created>1668893785348</created>
+      <changelist id="3b9c58de-fbef-48a3-bea4-173fa4f71787" name="Changes" comment="" />
+      <created>1677000184032</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1668893785348</updated>
+      <updated>1677000184032</updated>
     </task>
-    <task id="LOCAL-00001" summary="support Android, Linux, Windows">
-      <created>1674382609545</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1674382609546</updated>
-    </task>
-    <task id="LOCAL-00002" summary="added texture support and widget example (tested on linux only)">
-      <created>1674991116604</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1674991116604</updated>
-    </task>
-    <task id="LOCAL-00003" summary="added gif demo">
-      <created>1675353495991</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1675353495991</updated>
-    </task>
-    <task id="LOCAL-00004" summary="set new texture without generating a new one">
-      <created>1675505829096</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1675505829096</updated>
-    </task>
-    <task id="LOCAL-00005" summary="refactor example using riverpod">
-      <created>1675519255647</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1675519255647</updated>
-    </task>
-    <task id="LOCAL-00006" summary="example UI redesigned with texture chooser">
-      <created>1675700477610</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1675700477610</updated>
-    </task>
-    <task id="LOCAL-00007" summary="added remove texture functionality">
-      <created>1675700526186</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1675700526186</updated>
-    </task>
-    <task id="LOCAL-00008" summary="added simple example">
-      <created>1676738856097</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1676738856097</updated>
-    </task>
-    <task id="LOCAL-00009" summary="added OpenCV videoCapture to test textures">
-      <created>1676752562422</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1676752562422</updated>
-    </task>
-    <task id="LOCAL-00010" summary="docs updated but not yet finished">
-      <created>1676754957103</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1676754957103</updated>
-    </task>
-    <option name="localTasksCounter" value="11" />
     <servers />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <ignored-roots>
-      <path value="$PROJECT_DIR$/BUILD_LIBS/buildOpenCV/build" />
-      <path value="$PROJECT_DIR$/BUILD_LIBS/buildFfmpeg/ffmpeg-kit" />
-      <path value="$PROJECT_DIR$/BUILD_LIBS/buildFfmpeg/ffmpeg-kit/src/cpu-features" />
-      <path value="$PROJECT_DIR$/BUILD_LIBS/buildFfmpeg/ffmpeg-kit/src/ffmpeg" />
-      <path value="$PROJECT_DIR$/BUILD_LIBS/buildOpenCV/build/opencv" />
-      <path value="$PROJECT_DIR$/BUILD_LIBS/buildOpenCV/build/opencv_contrib" />
-      <path value="$PROJECT_DIR$/windows/Native_SDK" />
-      <path value="$PROJECT_DIR$/windows/Native_SDK/external/VulkanMemoryAllocator/source" />
-      <path value="$PROJECT_DIR$/windows/Native_SDK/external/glm/source" />
-      <path value="$PROJECT_DIR$/windows/Native_SDK/external/glslang/source" />
-      <path value="$PROJECT_DIR$/windows/Native_SDK/external/pugixml/source" />
-      <path value="$PROJECT_DIR$/windows/glm" />
-    </ignored-roots>
-    <MESSAGE value="support Android, Linux, Windows" />
-    <MESSAGE value="added texture support and widget example (tested on linux only)" />
-    <MESSAGE value="added gif demo" />
-    <MESSAGE value="set new texture without generating a new one" />
-    <MESSAGE value="refactor example using riverpod" />
-    <MESSAGE value="example UI redesigned with texture chooser" />
-    <MESSAGE value="added remove texture functionality" />
-    <MESSAGE value="added simple example" />
-    <MESSAGE value="added OpenCV videoCapture to test textures" />
-    <MESSAGE value="docs updated but not yet finished" />
-    <MESSAGE value="test set textures with OpenCV VideoCapture" />
-    <option name="LAST_COMMIT_MESSAGE" value="test set textures with OpenCV VideoCapture" />
   </component>
 </project>

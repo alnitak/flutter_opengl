@@ -31,6 +31,8 @@ class ShaderButtons extends ConsumerWidget {
           children: [
 
             /// Build button for each fragments stored in [shaderToy] list
+            /// Each button display also if a iChannelN is present
+            /// displaying the iChannel number below the button number
             ...List.generate(shaderToy.length, (i) {
               bool hasIChannel0 =
                   shaderToy[i]['fragment']!.contains('iChannel0');
@@ -46,16 +48,23 @@ class ShaderButtons extends ConsumerWidget {
                   OpenGLController().openglFFI.setShaderToy(
                         shaderToy[i]['fragment']!,
                       );
-                  Size size = OpenGLController().openglFFI.getTextureSize();
-                  if (size.width != -1) {
-                    ref.read(stateShaderIndex.notifier).state = i;
-                  } else {
-                    ref.read(stateShaderIndex.notifier).state = -1;
-                  }
+                  // Size size = OpenGLController().openglFFI.getTextureSize();
+                  ref.read(stateShaderIndex.notifier).state = i;
+
+                  /// reset bottom TextureChooser
                   ref.read(stateChannel0.notifier).state =
                       TextureParams().copyWith(assetsImage: '');
                   ref.read(stateChannel1.notifier).state =
                       TextureParams().copyWith(assetsImage: '');
+                  ref.read(stateChannel2.notifier).state =
+                      TextureParams().copyWith(assetsImage: '');
+                  ref.read(stateChannel3.notifier).state =
+                      TextureParams().copyWith(assetsImage: '');
+                  /// stop capturing
+                  if (ref.read(stateCaptureRunning)) {
+                    OpenGLController().openglFFI.stopCapture();
+                    ref.read(stateCaptureRunning.notifier).state = false;
+                  }
                 },
                 style: ButtonStyle(
                   fixedSize: const MaterialStatePropertyAll(Size(65, 45)),
@@ -68,10 +77,6 @@ class ShaderButtons extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('${i + 1}'),
-                    if (hasIChannel0 ||
-                        hasIChannel1 ||
-                        hasIChannel2 ||
-                        hasIChannel3)
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

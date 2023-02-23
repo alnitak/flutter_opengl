@@ -62,6 +62,7 @@
 
 #include <opencv2/core/utils/logger.hpp>
 #include <thread>
+#include <chrono>
 
 #ifdef _IS_ANDROID_
 #include "EGL/eglext.h"
@@ -69,6 +70,9 @@
 #include <unistd.h> // for usleep
 #endif
 #ifdef _IS_LINUX_
+#include <GL/glew.h>
+#endif
+#ifdef _IS_WIN_
 #include <GL/glew.h>
 #endif
 
@@ -104,12 +108,18 @@ bool OpenCVCapture::open(const std::string& uniformName,
 	#ifdef _IS_LINUX_
         apiCamPreference = cv::CAP_V4L2;
     #endif
+	#ifdef _IS_WIN_
+        apiCamPreference = cv::CAP_DSHOW;
+    #endif
 
 	#ifdef _IS_ANDROID_
         apiFilePreference = cv::CAP_ANDROID;
 	#endif
 	#ifdef _IS_LINUX_
         apiFilePreference = cv::CAP_ANY;
+	#endif
+	#ifdef _IS_WIN_
+        apiFilePreference = cv::CAP_MSMF;
 	#endif
 
     if (completeFilePath == "cam0")
@@ -120,8 +130,8 @@ bool OpenCVCapture::open(const std::string& uniformName,
         cap.open(completeFilePath, apiFilePreference);
 
 
-	cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
-	cap.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+	// cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+	// cap.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
 
 	if (!cap.isOpened())
 	{
@@ -135,11 +145,12 @@ bool OpenCVCapture::open(const std::string& uniformName,
     *height = this->height = (int)cap.get(cv::CAP_PROP_FRAME_HEIGHT);
 	this->uniformName = std::move(uniformName);
     fps = (int)cap.get(cv::CAP_PROP_FPS);
+	if (fps == 0) fps = 30;
 	frameDuration = 1000000.0 / fps;
 
 	// Set the capture mode to BGR
 	// https://docs.opencv.org/3.4/d4/d15/group__videoio__flags__base.html#gad0f42b32af0d89d2cee80dae0ea62b3d
-//	 cap.set(cv::CAP_PROP_MODE, 1);
+	 cap.set(cv::CAP_PROP_MODE, 1);
 	return true;
 }
 
@@ -154,7 +165,7 @@ void OpenCVCapture::stop()
 {
 	if (!cameraThreadRunning)
 	{
-		LOGD("OCV CAPTURE", "ERROR! Camera thread already stopped!");
+		LOGD("OCV CAPTURE", "ERROR! Capture thread already stopped!");
 		if (cap.isOpened()) cap.release();
 		return;
 	}
@@ -167,10 +178,10 @@ void OpenCVCapture::start(Sampler2D *sampler)
 
 	if (cameraThreadRunning)
 	{
-		LOGD("OCV CAPTURE", "ERROR! Camera thread already running!");
+		LOGD("OCV CAPTURE", "ERROR! Capture thread already running!");
 		return;
 	}
-	LOGD("OCV CAPTURE", "Starting camera thread!");
+	LOGD("OCV CAPTURE", "Starting capture thread!");
 
 	std::thread camera_thread([](OpenCVCapture *me,
 								 Sampler2D *sampler)
@@ -186,7 +197,7 @@ void OpenCVCapture::start(Sampler2D *sampler)
 			me->cap.release();
 			me->cameraThreadRunning = false;
 			me->message = MSG_CAMERA_NONE;
-            LOGD("OCV CAPTURE", "Stopping camera thread!");
+            LOGD("OCV CAPTURE", "Stopping capture thread!");
 			return;
 		}
 
@@ -196,7 +207,7 @@ void OpenCVCapture::start(Sampler2D *sampler)
 		#ifdef _IS_ANDROID_
 			cv::cvtColor(me->frame, me->frame, cv::COLOR_RGB2RGBA);
         #endif
-		#ifdef _IS_LINUX_
+		#if defined _IS_LINUX_ || defined _IS_WIN_
 			cv::cvtColor(me->frame, me->frame, cv::COLOR_BGR2RGBA);
 		#endif
 		cv::flip(me->frame, me->frame,0);
@@ -204,7 +215,8 @@ void OpenCVCapture::start(Sampler2D *sampler)
  		end = std::chrono::steady_clock::now();
 		elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 		if (me->frameDuration > elapsed)
-        	usleep(me->frameDuration - elapsed);
+        	std::this_thread::sleep_for(std::chrono::microseconds((int)(me->frameDuration - elapsed)));
+			// usleep(me->frameDuration - elapsed);
 
 		renderer = getRenderer();
 		if (renderer != nullptr) 

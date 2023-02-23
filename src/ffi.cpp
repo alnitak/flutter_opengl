@@ -16,7 +16,7 @@ Renderer *renderer = nullptr;
 void deleteRenderer() {
     if (renderer != nullptr) {
         if (renderer->isLooping()) {
-            // eventually stop the camera
+            // eventually stop the capture
             if (renderer->getOpenCVCapture() != nullptr) renderer->stopCapture();
 
             while (bool b = renderer->isLooping()) renderer->stop();
@@ -314,7 +314,7 @@ replaceSampler2DUniform(const char *name, int width, int height, void *val)
 
 
 ///////////////////////////////////
-// Start camera
+// Start capture
 extern "C" FFI_PLUGIN_EXPORT bool
 startCaptureOnSampler2D(const char *name, const char *completeFilePath) {
     if (renderer == nullptr) {
@@ -338,7 +338,7 @@ startCaptureOnSampler2D(const char *name, const char *completeFilePath) {
 }
 
 ///////////////////////////////////
-// Start camera
+// Start capture
 extern "C" FFI_PLUGIN_EXPORT bool
 stopCapture()
 {

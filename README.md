@@ -26,7 +26,7 @@ The starting idea developing this plugin, was not just to use GLSL, but also tak
 
 For now it's possible to copy/paste shaders from ShaderToy, but only those which have only one layer.
 
-Be aware that on a real device, many shaders could be very slow because they are hungry of power and some others needs ES 3 and for now is not supported on Android (ie shaders 13, 14 and 15 in the example).
+Be aware that on a real device, many shaders could be very slow because they are hungry of power and some others needs ES 3 and for now is not supported on Android (ie latest 3 shaders in the *lib/main_in_deep.dart* example).
 
 ***iResolution***, ***iTime***, ***iMouse***, ***iChannel[0-3]*** are supported, other uniforms can be added at run-time.
 
@@ -64,7 +64,7 @@ SizedBox(
     ),
 )
 ```
-Look at *example/lib/main_in_deep.dart* for a full fledged example.
+Look at ***example/lib/main_in_deep.dart*** for a full fledged example.
 
 Once the renderer is started all the below methods can be used via *OpenGLController().openglFFI*:
 
@@ -86,7 +86,7 @@ Once the renderer is started all the below methods can be used via *OpenGLContro
 |bool **replaceSampler2DUniform**(String name, int width, int height, Uint8List val)|Replace a Sampler2D uniform texture with another one with different size.|
 |bool **setBoolUniform**(String name, bool val)<br>bool **setIntUniform**(String name, int val)<br>bool **setFloatUniform**(String name, double val)<br>bool **setVec2Uniform**(String name, List`<double>` val)<br>bool **setVec3Uniform**(String name, List`<double>` val)<br>bool **setVec4Uniform**(String name, List`<double>` val)<br>bool **setMat2Uniform**(String name, List`<double>` val)<br>bool **setMat3Uniform**(String name, List`<double>` val)<br>bool **setMat4Uniform**(String name, List`<double>` val)| Set value of an existing uniform. Return false if the uniform doesn't exist.|
 |bool **setSampler2DUniform**(String name, Uint8List val)|Replace a texture with another image with the same size.<br>Be sure the *val* length is the same as the previously stored image with the uniform named *name*.|
-|bool **startCaptureOnSampler2D**(String name, String completeFilePath)|Set Sampler2D uniform *name* with frames captured by OpenCV VideoCapture<br><br>*completeFilePath* can be:<br>- 'cam0' for webCam0<br>- 'cam1' for webCam1<br>- a complete local video file path<br><br>**Note**: this video capture is just for reference on how textures work in real time. It doesn't respect frame rate and on Android camera doesn't work.|
+|bool **startCaptureOnSampler2D**(String name, String completeFilePath)|Set Sampler2D uniform *name* with frames captured by OpenCV VideoCapture<br><br>*completeFilePath* can be:<br>- 'cam0' for webCam0<br>- 'cam1' for webCam1<br>- a complete local video file path<br><br>**Note**: this video capture is just for reference on how textures work in real time. Videos FPS are not precise and the camera on Android doesn't work.|
 | bool **stopCapture**() | Stop capturing thread.|
 
 
@@ -114,13 +114,16 @@ you can safely delete all but the *lib* and *include* directories from the clone
 
 extract the zip and rename its main directory to "glew"
 
+- run "SCRIPTS\setupOpenCV-windows.bat" or manually download OpenCV and extract it into SCRIPT dir:
+https://github.com/opencv/opencv/releases/download/4.7.0/opencv-4.7.0-windows.exe
+
 ## Android
-Download OpenCV from here https://github.com/opencv/opencv/releases/download/4.7.0/opencv-4.7.0-android-sdk.zip locate libs and include folders and copy them into android/src/opencv. 
-Or run the script *SCRIPT/setupOpenCV-android.sh*
+Run the script *SCRIPT/setupOpenCV-android.sh* or manually download OpenCV from here https://github.com/opencv/opencv/releases/download/4.7.0/opencv-4.7.0-android-sdk.zip locate libs and include folders and copy them into android/src/opencv. 
 
 # TODO
 - better docomentation
-- the c/c++ code is not "state of the art" written! PRs are welcomed :smile:
+- the c/c++ code is not "state of the art" written! PRs are welcomed
 - iOS, Mac and Web support
 - ES 3 on Android (now supports 2)
 - displayed FPS seems not to be correct
+- leave OpenCV into the plugin for further use?

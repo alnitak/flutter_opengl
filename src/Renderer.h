@@ -17,6 +17,7 @@
     #include "opencv_capture.h"
 #elif _IS_WIN_
     #include "../windows/flutter_opengl_plugin.h"
+    #include "opencv_capture.h"
 #endif
 
 
@@ -64,9 +65,9 @@ public:
 
     inline double getFrameRate() { return frameRate; };
 
-    inline void setStartCameraOnUniformMsg(const std::string &name) { 
-        uniformToSetCamera = name;
-        msg.push_back(MSG_START_CAMERA_ON_UNIFORM); 
+    inline void setStartCameraOnUniformMsg(const std::string &name) {
+        uniformToSetCapture = name;
+        msg.push_back(MSG_START_CAPTURE_ON_UNIFORM);
     };
 
     inline void setNewTextureMsg() { msg.push_back(MSG_NEW_TEXTURE); };
@@ -93,7 +94,7 @@ private:
     std::mutex mutex;
     double frameRate;
 
-    OpenCVCapture *camera;
+    OpenCVCapture *capture;
 
     std::string compileError;
     std::unique_ptr<Shader> shader;
@@ -104,7 +105,7 @@ private:
     bool isShaderToy;
     bool loopRunning;
     Sampler2D sampler2DToSet;
-    std::string uniformToSetCamera;
+    std::string uniformToSetCapture;
     unsigned int textureIdToDelete;
 
     enum RenderThreadMessage : int {
@@ -116,7 +117,7 @@ private:
         MSG_NEW_TEXTURE,
         MSG_DELETE_TEXTURE,
         MSG_SET_TEXTURE,    // set new data for a texture of the same size
-        MSG_START_CAMERA_ON_UNIFORM
+        MSG_START_CAPTURE_ON_UNIFORM
     };
     std::vector<RenderThreadMessage> msg;
 

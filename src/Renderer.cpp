@@ -24,7 +24,7 @@
 Renderer::Renderer(OpenglPluginContext *textureStruct)
         : self(textureStruct),
           frameRate(0.0),
-          camera(nullptr),
+          capture(nullptr),
           shader(new Shader(textureStruct)),
           isShaderToy(false),
           loopRunning(false)
@@ -33,7 +33,7 @@ Renderer::Renderer(OpenglPluginContext *textureStruct)
 }
 
 Renderer::~Renderer() {
-    if (camera != nullptr) stopCapture();
+    if (capture != nullptr) stopCapture();
    
     if (shader.get() != nullptr) {
         shader.reset();
@@ -270,30 +270,32 @@ void Renderer::destroyGL()
 
 OpenCVCapture *Renderer::getOpenCVCapture() 
 { 
-    return camera; 
+    return capture;
 }
 
 bool Renderer::openCapture(std::string uniformName,
                           std::string completeFilePath,
                           int *width, int *height)
 {
-    if (camera != nullptr) stopCapture();
-    camera = new OpenCVCapture();
-    bool opened = camera->open(uniformName, completeFilePath, width, height);
+    stopCapture();
+    capture = new OpenCVCapture();
+    bool opened = capture->open(uniformName, completeFilePath, width, height);
     if (!opened)
     {
-        delete camera;
-        camera = nullptr;
+        delete capture;
+        capture = nullptr;
         return false;
     }
     return true;
 }
 
+std::mutex captureMutex;
 bool Renderer::stopCapture()
 {
-    if (camera == nullptr) return false;
-    delete camera;
-    camera = nullptr;
+    std::lock_guard<std::mutex> guard(captureMutex);
+    if (capture == nullptr) return false;
+    delete capture;
+    capture = nullptr;
     LOGD(LOG_TAG_RENDERER, "CAMERA STOPPED");
     return true;
 }
@@ -328,7 +330,7 @@ std::string Renderer::setShaderToy(const char *fragmentSource) {
     newShaderIsContinuous = true;
     msg.push_back(MSG_NEW_SHADER);
     if (loopRunning)
-        while (msg.back() == MSG_NEW_SHADER);
+        while (msg.size() > 0 /* && msg.back() == MSG_NEW_SHADER*/);
     return compileError;
 }
 
@@ -380,7 +382,7 @@ void Renderer::loop() {
                 break;
 
             case MSG_NEW_SHADER:
-                // Eventually stop the camera
+                // Eventually stop the capture
                 stopCapture();
                 
                 if (shader.get() != nullptr)
@@ -396,16 +398,16 @@ void Renderer::loop() {
                     compileError = shader->initShader();
                 break;
 
-            case MSG_START_CAMERA_ON_UNIFORM:
+            case MSG_START_CAPTURE_ON_UNIFORM:
                 #ifdef _IS_LINUX_
                     gdk_gl_context_make_current(self->context);
                 #elif _IS_WIN_
                     wglMakeCurrent(self->hdc, self->hrc);
                 #endif
 
-                sampler = shader->getUniforms().getSampler2D(uniformToSetCamera);
-                if (sampler != nullptr && camera != nullptr) 
-                    camera->start(sampler);
+                sampler = shader->getUniforms().getSampler2D(uniformToSetCapture);
+                if (sampler != nullptr && capture != nullptr)
+                    capture->start(sampler);
 
                 #ifdef _IS_LINUX_
                     gdk_gl_context_clear_current();

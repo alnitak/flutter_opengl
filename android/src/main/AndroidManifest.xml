@@ -2,10 +2,10 @@
   package="com.example.flutter_opengl">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
-    <uses-feature android:name="android.hardware.camera.front"/>
-    <uses-feature android:name="android.hardware.camera.front.autofocus"/>
+    <uses-feature android:name="android.hardware.capture"/>
+    <uses-feature android:name="android.hardware.capture.autofocus"/>
+    <uses-feature android:name="android.hardware.capture.front"/>
+    <uses-feature android:name="android.hardware.capture.front.autofocus"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Required only if your app needs to access images or photos
