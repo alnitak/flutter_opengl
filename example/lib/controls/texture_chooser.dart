@@ -205,7 +205,7 @@ class TextureWidget extends ConsumerWidget {
                 bool ret = OpenGLController()
                     .openglFFI
                     .startCaptureOnSampler2D('iChannel$channelId', 'cam0');
-                ref.read(stateCaptureRunning.notifier).state = true;
+                ref.read(stateCaptureRunning.notifier).state = ret;
                 _clearTexture(ref);
               },
               icon: const Icon(Icons.camera, size: 64),
