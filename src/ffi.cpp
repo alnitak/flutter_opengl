@@ -17,7 +17,9 @@ void deleteRenderer() {
     if (renderer != nullptr) {
         if (renderer->isLooping()) {
             // eventually stop the capture
-            if (renderer->getOpenCVCapture() != nullptr) renderer->stopCapture();
+            #ifdef WITH_OPENCV
+                if (renderer->getOpenCVCapture() != nullptr) renderer->stopCapture();
+            #endif
 
             while (bool b = renderer->isLooping()) renderer->stop();
         }
@@ -317,24 +319,29 @@ replaceSampler2DUniform(const char *name, int width, int height, void *val)
 // Start capture
 extern "C" FFI_PLUGIN_EXPORT bool
 startCaptureOnSampler2D(const char *name, const char *completeFilePath) {
-    if (renderer == nullptr) {
-        LOGD(LOG_TAG_FFI, "startCaptureOnSampler2D: Renderer not yet created!");
+    #ifndef WITH_OPENCV
+        LOGD(LOG_TAG_FFI, "Error startCaptureOnSampler2D(): OPENCV is not yet supported on this platform!");
         return false;
-    }
+    #else
+        if (renderer == nullptr) {
+            LOGD(LOG_TAG_FFI, "startCaptureOnSampler2D: Renderer not yet created!");
+            return false;
+        }
 
-    int width;
-    int height;
-    if (renderer->openCapture(name, completeFilePath, &width, &height)) {
-        renderer->setStartCameraOnUniformMsg(name);
-        // Force a resample of sampler2D texture
-//        char dummy[width * height * 4];
-        auto * dummy = (unsigned char *) malloc(width * height * 4);
-        replaceSampler2DUniform(name, width, height, (void *) dummy);
-        free(dummy);
-        return true;
-    }
+        int width;
+        int height;
+        if (renderer->openCapture(name, completeFilePath, &width, &height)) {
+            renderer->setStartCameraOnUniformMsg(name);
+            // Force a resample of sampler2D texture
+    //        char dummy[width * height * 4];
+            auto * dummy = (unsigned char *) malloc(width * height * 4);
+            replaceSampler2DUniform(name, width, height, (void *) dummy);
+            free(dummy);
+            return true;
+        }
 
-    return false;
+        return false;
+    #endif
 }
 
 ///////////////////////////////////
@@ -342,9 +349,14 @@ startCaptureOnSampler2D(const char *name, const char *completeFilePath) {
 extern "C" FFI_PLUGIN_EXPORT bool
 stopCapture()
 {
-    if (renderer == nullptr) {
-        LOGD(LOG_TAG_FFI, "stopCapture: Renderer not yet created!");
+    #ifndef WITH_OPENCV
+        LOGD(LOG_TAG_FFI, "Error stopCapture(): OPENCV is not yet supported on this platform!");
         return false;
-    }
-    return renderer->stopCapture();
+    #else
+        if (renderer == nullptr) {
+            LOGD(LOG_TAG_FFI, "stopCapture: Renderer not yet created!");
+            return false;
+        }
+        return renderer->stopCapture();
+    #endif
 }

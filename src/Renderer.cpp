@@ -24,7 +24,9 @@
 Renderer::Renderer(OpenglPluginContext *textureStruct)
         : self(textureStruct),
           frameRate(0.0),
-          capture(nullptr),
+          #ifdef WITH_OPENCV
+            capture(nullptr),
+          #endif
           shader(new Shader(textureStruct)),
           isShaderToy(false),
           loopRunning(false)
@@ -33,7 +35,9 @@ Renderer::Renderer(OpenglPluginContext *textureStruct)
 }
 
 Renderer::~Renderer() {
-    if (capture != nullptr) stopCapture();
+    #ifdef WITH_OPENCV
+        if (capture != nullptr) stopCapture();
+    #endif
    
     if (shader.get() != nullptr) {
         shader.reset();
@@ -268,6 +272,7 @@ void Renderer::destroyGL()
 }
 #endif
 
+#ifdef WITH_OPENCV
 OpenCVCapture *Renderer::getOpenCVCapture() 
 { 
     return capture;
@@ -299,6 +304,7 @@ bool Renderer::stopCapture()
     LOGD(LOG_TAG_RENDERER, "CAMERA STOPPED");
     return true;
 }
+#endif
 
 void Renderer::stop() {
     msg.push_back(MSG_STOP_RENDERER);
@@ -383,7 +389,9 @@ void Renderer::loop() {
 
             case MSG_NEW_SHADER:
                 // Eventually stop the capture
-                stopCapture();
+                #ifdef WITH_OPENCV
+                    stopCapture();
+                #endif
                 
                 if (shader.get() != nullptr)
                     shader.reset();
@@ -405,9 +413,11 @@ void Renderer::loop() {
                     wglMakeCurrent(self->hdc, self->hrc);
                 #endif
 
-                sampler = shader->getUniforms().getSampler2D(uniformToSetCapture);
-                if (sampler != nullptr && capture != nullptr)
-                    capture->start(sampler);
+                #ifdef WITH_OPENCV
+                    sampler = shader->getUniforms().getSampler2D(uniformToSetCapture);
+                    if (sampler != nullptr && capture != nullptr)
+                        capture->start(sampler);
+                #endif
 
                 #ifdef _IS_LINUX_
                     gdk_gl_context_clear_current();

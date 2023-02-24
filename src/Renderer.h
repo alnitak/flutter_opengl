@@ -10,14 +10,20 @@
     #include <android/native_window_jni.h>
     #include <android/surface_texture.h>
     #include <android/surface_texture_jni.h>
-    #include "opencv_capture.h"
+    #ifdef WITH_OPENCV
+        #include "opencv_capture.h"
+    #endif
 
 #elif _IS_LINUX_
     #include "../linux/include/fl_my_texture_gl.h"
-    #include "opencv_capture.h"
+    #ifdef WITH_OPENCV
+        #include "opencv_capture.h"
+    #endif
 #elif _IS_WIN_
     #include "../windows/flutter_opengl_plugin.h"
-    #include "opencv_capture.h"
+    #ifdef WITH_OPENCV
+        #include "opencv_capture.h"
+    #endif
 #endif
 
 
@@ -59,16 +65,9 @@ public:
 
     inline Shader *getShader() { return shader.get(); };
 
-    OpenCVCapture *getOpenCVCapture();
-
     inline bool isLooping() { return loopRunning; };
 
     inline double getFrameRate() { return frameRate; };
-
-    inline void setStartCameraOnUniformMsg(const std::string &name) {
-        uniformToSetCapture = name;
-        msg.push_back(MSG_START_CAPTURE_ON_UNIFORM);
-    };
 
     inline void setNewTextureMsg() { msg.push_back(MSG_NEW_TEXTURE); };
 
@@ -82,19 +81,31 @@ public:
         textureIdToDelete = textureId; 
         msg.push_back(MSG_DELETE_TEXTURE);
     };
+    
+    #ifdef WITH_OPENCV
+        OpenCVCapture *getOpenCVCapture();
 
-    bool openCapture(std::string uniformName,
-                    std::string completeFilePath,
-                    int *width, int *height);
+        inline void setStartCameraOnUniformMsg(const std::string &name) {
+            uniformToSetCapture = name;
+            msg.push_back(MSG_START_CAPTURE_ON_UNIFORM);
+        };
 
-    bool stopCapture();
+        bool openCapture(std::string uniformName,
+                        std::string completeFilePath,
+                        int *width, int *height);
+
+        bool stopCapture();
+    #endif
 
 private:
     OpenglPluginContext *self;
     std::mutex mutex;
     double frameRate;
 
-    OpenCVCapture *capture;
+    #ifdef WITH_OPENCV
+        OpenCVCapture *capture;
+        std::string uniformToSetCapture;
+    #endif
 
     std::string compileError;
     std::unique_ptr<Shader> shader;
@@ -105,7 +116,6 @@ private:
     bool isShaderToy;
     bool loopRunning;
     Sampler2D sampler2DToSet;
-    std::string uniformToSetCapture;
     unsigned int textureIdToDelete;
 
     enum RenderThreadMessage : int {

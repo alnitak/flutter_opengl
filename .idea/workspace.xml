@@ -7,10 +7,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b9c58de-fbef-48a3-bea4-173fa4f71787" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+    <list default="true" id="3b9c58de-fbef-48a3-bea4-173fa4f71787" name="Changes" comment="gif demo resampled">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/controls/texture_chooser.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/controls/texture_chooser.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ffi.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ffi.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +63,35 @@
       <option name="presentableId" value="Default" />
       <updated>1677000184032</updated>
     </task>
+    <task id="LOCAL-00001" summary="OpenCV merged">
+      <created>1677172242135</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1677172242135</updated>
+    </task>
+    <task id="LOCAL-00002" summary="gif demo resampled">
+      <created>1677172622321</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1677172622321</updated>
+    </task>
+    <task id="LOCAL-00003" summary="gif demo resampled">
+      <created>1677172779807</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1677172779807</updated>
+    </task>
+    <task id="LOCAL-00004" summary="gif demo resampled">
+      <created>1677233729291</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1677233729292</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -76,5 +104,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="OpenCV merged" />
+    <MESSAGE value="gif demo resampled" />
+    <option name="LAST_COMMIT_MESSAGE" value="gif demo resampled" />
   </component>
 </project>

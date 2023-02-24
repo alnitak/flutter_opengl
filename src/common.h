@@ -4,10 +4,13 @@
 // On Android, also __linux__ is defined. So make my own
 #ifdef __ANDROID__
     #define _IS_ANDROID_ 1
+    #define WITH_OPENCV
 #elif __linux__
     #define _IS_LINUX_ 1
+    #define WITH_OPENCV
 #elif _WIN32 | _WIN64
     #define _IS_WIN_ 1
+    #define WITH_OPENCV
 #endif
 
 #ifdef _IS_ANDROID_
