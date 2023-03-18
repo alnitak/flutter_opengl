@@ -67,8 +67,9 @@ add_library(glm::glm ALIAS glm)
 set (OPENCV_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/opencv)
 set (OPENCV_LIBS_LOC ${OPENCV_DIR}/${ANDROID_ABI})
 
-set (FFMPEG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/ffmpeg)
-set (FFMPEG_LIBS_LOC ${FFMPEG_DIR}/${ANDROID_ABI})
+# trying to use OpenCV camera with ffmpeg. No success for now
+#set (FFMPEG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/ffmpeg)
+#set (FFMPEG_LIBS_LOC ${FFMPEG_DIR}/${ANDROID_ABI})
 
 #set (FFMPEG_DIR ${OPENCV_DIR})
 #set (FFMPEG_LIBS_LOC ${OPENCV_DIR}/${ANDROID_ABI})
@@ -107,13 +108,13 @@ target_link_libraries(
 #        ${OPENCV_LIBS_LOC}/libopencv_flann.so
         ${OPENCV_DIR}/${ANDROID_ABI}/libopencv_java4.so
 
-        ${FFMPEG_LIBS_LOC}/libavcodec.so
-        ${FFMPEG_LIBS_LOC}/libavdevice.so
-        ${FFMPEG_LIBS_LOC}/libavfilter.so
-        ${FFMPEG_LIBS_LOC}/libavformat.so
-        ${FFMPEG_LIBS_LOC}/libavutil.so
-        ${FFMPEG_LIBS_LOC}/libswresample.so
-        ${FFMPEG_LIBS_LOC}/libswscale.so
+#        ${FFMPEG_LIBS_LOC}/libavcodec.so
+#        ${FFMPEG_LIBS_LOC}/libavdevice.so
+#        ${FFMPEG_LIBS_LOC}/libavfilter.so
+#        ${FFMPEG_LIBS_LOC}/libavformat.so
+#        ${FFMPEG_LIBS_LOC}/libavutil.so
+#        ${FFMPEG_LIBS_LOC}/libswresample.so
+#        ${FFMPEG_LIBS_LOC}/libswscale.so
 )
 
 include_directories( ../src )
